@@ -92,8 +92,12 @@ create table public.voucher_campaigns (
                 check (status in ('draft', 'active', 'paused')),
   priority      integer not null default 0,
   weight        integer not null default 1,
-  is_fallback   boolean not null default false,  -- evergreen consolation (spec §13)
-  created_at    timestamptz not null default now()
+  is_fallback   boolean not null default false,  -- evergreen consolation (spec §13); trigger/conditions/quota are ignored for fallbacks
+  created_at    timestamptz not null default now(),
+  constraint static_code_required
+    check (code_mode <> 'static' or static_code is not null),
+  constraint valid_active_window
+    check (active_from is null or active_to is null or active_to > active_from)
 );
 
 alter table public.brands            enable row level security;
@@ -118,3 +122,9 @@ grant select on public.gag_scripts       to anon, authenticated;
 grant select on public.gag_anchors       to anon, authenticated;
 grant select on public.personas          to anon, authenticated;
 grant select on public.voucher_campaigns to anon, authenticated;
+
+-- Studio editors see comment-on-column text, not SQL file comments.
+comment on column public.gag_scripts.timeline is
+  'Event timeline JSON: {"duration_s": int, "events": [{"t": sec, "type": "eta|move|chat|incident|sabotage|finale", ...}]}. See migration file for full example.';
+comment on column public.voucher_campaigns.conditions is
+  'All present keys must pass. Valid keys/values: service (food|ride|parcel|mart|date), finale_type (e.g. canal), persona_rarity (common|rare|legendary), min_tier (silver|gold|platinum|vip — exact lowercase), nth_fail (int), day_of_week (array, isodow 1=Mon..7=Sun), hour_range ([start,end) hours), first_time_event (bool).';
