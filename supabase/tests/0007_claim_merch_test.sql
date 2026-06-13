@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(8);
+select plan(11);
 
 select has_function('public', 'claim_merch', array['uuid'], 'claim_merch exists');
 select has_function('public', 'redeem_claim', array['text'], 'redeem_claim exists');
@@ -27,6 +27,13 @@ values ('00000000-0000-0000-0000-0000000000a1', '00000000-0000-0000-0000-0000000
 
 insert into public.voucher_campaigns (id, title, trigger_event, status)
 values ('00000000-0000-0000-0000-0000000000c9', 'ev', 'order_failed', 'active');
+
+insert into public.merch_items (id, shop_id, name, voucher_price, stock, required_campaign_id)
+values ('00000000-0000-0000-0000-0000000000a2', '00000000-0000-0000-0000-0000000000f1',
+        'เสื้อลิมิเต็ด', 1, 5, '00000000-0000-0000-0000-0000000000c9');
+
+insert into public.voucher_campaigns (id, title, trigger_event, status)
+values ('00000000-0000-0000-0000-0000000000c8', 'other camp', 'order_failed', 'active');
 insert into public.vouchers (user_id, campaign_id, status) values
  ('00000000-0000-0000-0000-0000000000d1', '00000000-0000-0000-0000-0000000000c9', 'active'),
  ('00000000-0000-0000-0000-0000000000d1', '00000000-0000-0000-0000-0000000000c9', 'active');
@@ -70,6 +77,38 @@ select throws_ok(
   $$ select public.redeem_claim(
        (select redemption_code from public.claims limit 1)) $$,
   'NOT_BRAND_MEMBER', 'non-member cannot redeem');
+
+-- campaign-gated item: wrong-campaign vouchers don't count
+reset role;
+insert into public.vouchers (user_id, campaign_id, status) values
+ ('00000000-0000-0000-0000-0000000000d1', '00000000-0000-0000-0000-0000000000c8', 'active');
+set local role authenticated;
+select set_config('request.jwt.claims',
+  '{"sub":"00000000-0000-0000-0000-0000000000d1","role":"authenticated"}', true);
+select throws_ok(
+  $$ select public.claim_merch('00000000-0000-0000-0000-0000000000a2') $$,
+  'INSUFFICIENT_VOUCHERS', 'wrong-campaign voucher cannot buy gated merch');
+
+-- ...right-campaign voucher works
+reset role;
+insert into public.vouchers (user_id, campaign_id, status) values
+ ('00000000-0000-0000-0000-0000000000d1', '00000000-0000-0000-0000-0000000000c9', 'active');
+set local role authenticated;
+select set_config('request.jwt.claims',
+  '{"sub":"00000000-0000-0000-0000-0000000000d1","role":"authenticated"}', true);
+select matches(
+  (select redemption_code from public.claim_merch('00000000-0000-0000-0000-0000000000a2')),
+  '^WHEN-[0-9A-F]{12}$', 'right-campaign voucher buys gated merch');
+
+-- double redemption is rejected (the hat claim was already redeemed above)
+select set_config('request.jwt.claims',
+  '{"sub":"00000000-0000-0000-0000-0000000000d2","role":"authenticated"}', true);
+select throws_ok(
+  $$ select public.redeem_claim(
+       (select redemption_code from public.claims c
+         join public.merch_items mi on mi.id = c.merch_item_id
+        where mi.id = '00000000-0000-0000-0000-0000000000a1' limit 1)) $$,
+  'ALREADY_REDEEMED', 'double redemption rejected');
 
 select * from finish();
 rollback;

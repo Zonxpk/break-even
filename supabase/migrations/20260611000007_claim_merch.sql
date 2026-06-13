@@ -29,12 +29,16 @@ begin
 
   select array_agg(id) into v_voucher_ids
     from (
+      -- FOR UPDATE + LIMIT under READ COMMITTED: rows another claim has spent
+      -- are re-checked (EvalPlanQual) and dropped WITHOUT replacement, so a
+      -- concurrent claimant comes up short and fails closed (INSUFFICIENT_VOUCHERS)
+      -- rather than double-spending. Do not "fix" the shortfall by re-querying.
       select id from public.vouchers
        where user_id = v_uid
          and status = 'active'
          and (v_item.required_campaign_id is null
               or campaign_id = v_item.required_campaign_id)
-       order by granted_at asc
+       order by granted_at asc, id asc
        limit v_item.voucher_price
        for update
     ) s;
