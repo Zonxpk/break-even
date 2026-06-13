@@ -2,10 +2,16 @@ import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient, type SupportedStorage } from '@supabase/supabase-js';
 
-const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
-const anonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+const url = process.env.EXPO_PUBLIC_SUPABASE_URL?.trim();
+const anonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY?.trim();
 if (!url || !anonKey) {
   throw new Error('Missing EXPO_PUBLIC_SUPABASE_URL / EXPO_PUBLIC_SUPABASE_ANON_KEY — copy .env.example to .env');
+}
+if (!/^https?:\/\/.+/i.test(url)) {
+  throw new Error('EXPO_PUBLIC_SUPABASE_URL must be a full https URL (e.g. https://YOUR_REF.supabase.co)');
+}
+if (!/^eyJ[\w-]+\.[\w-]+\.[\w-]+$/.test(anonKey)) {
+  throw new Error('EXPO_PUBLIC_SUPABASE_ANON_KEY must be the Supabase anon JWT from Dashboard → Settings → API (not a search command output)');
 }
 
 const isBrowser = typeof window !== 'undefined';
