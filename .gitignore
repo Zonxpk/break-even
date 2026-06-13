@@ -1,5 +1,7 @@
+.worktrees/
 .superpowers/
 .env
 supabase/.temp/
 supabase/functions/.env
 mobile/.env
+.vercel

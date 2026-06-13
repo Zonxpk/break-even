@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>กี่โมง? — When? Prototype</title>
+  <style>
+    /* ── Flow map (prototype plan) ─────────────────────────────────────
+    Screens:
+      Tab: หน้าแรก — service grid, banners, merch entry
+      Tab: กิจกรรม — order history (all failures)
+      Tab: คูปอง — voucher wallet
+      Tab: โปรไฟล์ — tier, LLM, tie-in form, brand mode
+    Modal flows:
+      Browse → Confirm (฿0) → Track (gag) → Fail → Voucher reveal
+      Dating swipe deck → match → chat stub
+      Merch shop (windowed) → claim
+    State: persisted in localStorage (geemong_proto)
+    ───────────────────────────────────────────────────────────────── */
+
+    :root {
+      --grab: #00b14f;
+      --grab-dark: #008f3f;
+      --grab-light: #e8f8ef;
+      --ink: #1a1a1a;
+      --muted: #6b7280;
+      --bg: #f4f5f7;
+      --card: #ffffff;
+      --danger: #e53935;
+      --gold: #f5a623;
+      --platinum: #7b68ee;
+      --vip: #1a1a2e;
+      --shadow: 0 2px 12px rgba(0,0,0,.08);
+      --radius: 14px;
+      --phone-w: 390px;
+      --phone-h: 844px;
+      --safe-b: 28px;
+      --font: "Sukhumvit Set", "IBM Plex Sans Thai", "Noto Sans Thai", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #0d1117; font-family: var(--font); color: var(--ink); }
+
+    /* ── Desktop chrome ── */
+    .stage {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      gap: 20px;
+    }
+    .stage-header {
+      text-align: center;
+      color: #94a3b8;
+      max-width: 520px;
+    }
+    .stage-header h1 { color: #f1f5f9; font-size: 1.25rem; font-weight: 600; margin-bottom: 6px; }
+    .stage-header p { font-size: .85rem; line-height: 1.5; }
+    .stage-controls {
+      display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    }
+    .stage-controls button {
+      background: #1e293b; border: 1px solid #334155; color: #e2e8f0;
+      padding: 6px 12px; border-radius: 8px; font-size: .75rem; cursor: pointer;
+      font-family: inherit;
+    }
+    .stage-controls button:hover { background: #334155; }
+
+    /* ── Phone frame ── */
+    .phone {
+      width: var(--phone-w);
+      height: var(--phone-h);
+      background: #000;
+      border-radius: 44px;
+      padding: 12px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.55), inset 0 0 0 2px #333;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .phone-screen {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      border-radius: 34px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    /* ── App shell ── */
+    .app-header {
+      background: var(--grab);
+      color: #fff;
+      padding: 16px 16px 14px;
+      flex-shrink: 0;
+    }
+    .app-header .row { display: flex; align-items: center; justify-content: space-between; }
+    .app-header .logo { font-size: 1.35rem; font-weight: 800; letter-spacing: -.02em; }
+    .app-header .sub { font-size: .72rem; opacity: .9; margin-top: 2px; }
+    .app-header .loc { font-size: .78rem; display: flex; align-items: center; gap: 4px; margin-top: 8px; opacity: .95; }
+    .app-body { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+    .tab-bar {
+      display: flex; background: var(--card); border-top: 1px solid #e5e7eb;
+      padding-bottom: var(--safe-b); flex-shrink: 0;
+    }
+    .tab-btn {
+      flex: 1; border: none; background: none; padding: 8px 4px 6px;
+      font-family: inherit; font-size: .62rem; color: var(--muted); cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+    }
+    .tab-btn.active { color: var(--grab); font-weight: 600; }
+    .tab-btn .ico { font-size: 1.25rem; line-height: 1; }
+
+    /* ── Panels ── */
+    .panel { display: none; padding: 14px 16px 20px; min-height: 100%; }
+    .panel.active { display: block; }
+
+    /* ── Service grid ── */
+    .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+    .svc-card {
+      background: var(--card); border-radius: var(--radius); padding: 14px 8px;
+      text-align: center; box-shadow: var(--shadow); cursor: pointer;
+      border: 2px solid transparent; transition: transform .15s, border-color .15s;
+    }
+    .svc-card:hover { transform: translateY(-2px); border-color: var(--grab-light); }
+    .svc-card .emoji { font-size: 1.75rem; display: block; margin-bottom: 6px; }
+    .svc-card .lbl { font-size: .72rem; font-weight: 600; }
+    .svc-card.wide { grid-column: span 3; display: flex; align-items: center; gap: 12px; text-align: left; padding: 14px 16px; }
+    .svc-card.wide .emoji { margin: 0; font-size: 2rem; }
+
+    .banner {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #fff; border-radius: var(--radius); padding: 14px 16px;
+      margin-bottom: 12px; cursor: pointer; position: relative; overflow: hidden;
+    }
+    .banner::after {
+      content: ""; position: absolute; right: -20px; top: -20px;
+      width: 80px; height: 80px; background: rgba(255,255,255,.06); border-radius: 50%;
+    }
+    .banner .tag { font-size: .65rem; background: var(--gold); color: #000; padding: 2px 8px; border-radius: 99px; display: inline-block; margin-bottom: 6px; font-weight: 700; }
+    .banner h3 { font-size: .9rem; margin-bottom: 4px; }
+    .banner p { font-size: .72rem; opacity: .85; }
+
+    .merch-teaser {
+      background: var(--card); border-radius: var(--radius); padding: 14px;
+      box-shadow: var(--shadow); margin-bottom: 12px; border: 2px dashed var(--grab);
+      cursor: pointer;
+    }
+    .merch-teaser.closed { border-color: #d1d5db; opacity: .85; }
+    .merch-teaser .row { display: flex; justify-content: space-between; align-items: center; }
+    .merch-teaser h3 { font-size: .88rem; }
+    .merch-teaser .countdown { font-size: .75rem; color: var(--danger); font-weight: 700; font-variant-numeric: tabular-nums; }
+    .pill {
+      display: inline-block; font-size: .65rem; padding: 3px 10px; border-radius: 99px;
+      background: var(--grab-light); color: var(--grab-dark); font-weight: 600;
+    }
+    .pill.live { background: var(--grab); color: #fff; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.7} }
+
+    /* ── Section titles ── */
+    .sec-title { font-size: .82rem; font-weight: 700; margin: 16px 0 10px; color: var(--ink); }
+
+    /* ── Catalog cards ── */
+    .catalog-list { display: flex; flex-direction: column; gap: 10px; }
+    .cat-item {
+      background: var(--card); border-radius: var(--radius); padding: 12px;
+      display: flex; gap: 12px; box-shadow: var(--shadow); cursor: pointer;
+      align-items: center;
+    }
+    .cat-item .thumb {
+      width: 64px; height: 64px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.8rem;
+      background: var(--grab-light);
+    }
+    .cat-item .info { flex: 1; min-width: 0; }
+    .cat-item .name { font-size: .85rem; font-weight: 600; }
+    .cat-item .meta { font-size: .7rem; color: var(--muted); margin-top: 2px; }
+    .cat-item .stars { color: var(--gold); font-size: .68rem; }
+
+    /* ── Order history ── */
+    .hist-item {
+      background: var(--card); border-radius: var(--radius); padding: 12px 14px;
+      margin-bottom: 10px; box-shadow: var(--shadow); border-left: 4px solid var(--danger);
+    }
+    .hist-item .svc { font-size: .68rem; color: var(--muted); }
+    .hist-item .title { font-size: .85rem; font-weight: 600; margin: 4px 0; }
+    .hist-item .fail { font-size: .72rem; color: var(--danger); }
+    .hist-item .xp { font-size: .68rem; color: var(--grab); margin-top: 4px; }
+
+    /* ── Vouchers ── */
+    .voucher-card {
+      background: linear-gradient(135deg, var(--grab) 0%, var(--grab-dark) 100%);
+      color: #fff; border-radius: var(--radius); padding: 16px; margin-bottom: 12px;
+      position: relative; overflow: hidden;
+    }
+    .voucher-card::before {
+      content: ""; position: absolute; left: -8px; top: 50%; transform: translateY(-50%);
+      width: 16px; height: 16px; background: var(--bg); border-radius: 50%;
+    }
+    .voucher-card::after {
+      content: ""; position: absolute; right: -8px; top: 50%; transform: translateY(-50%);
+      width: 16px; height: 16px; background: var(--bg); border-radius: 50%;
+    }
+    .voucher-card .brand { font-size: .7rem; opacity: .9; }
+    .voucher-card .title { font-size: 1rem; font-weight: 700; margin: 4px 0; }
+    .voucher-card .code {
+      font-family: ui-monospace, monospace; font-size: .85rem;
+      background: rgba(0,0,0,.2); padding: 6px 10px; border-radius: 8px; margin-top: 8px;
+      display: inline-block;
+    }
+
+    /* ── Profile ── */
+    .profile-hero {
+      background: var(--card); border-radius: var(--radius); padding: 20px 16px;
+      text-align: center; box-shadow: var(--shadow); margin-bottom: 14px;
+    }
+    .avatar {
+      width: 72px; height: 72px; border-radius: 50%; background: var(--grab-light);
+      display: flex; align-items: center; justify-content: center; font-size: 2rem;
+      margin: 0 auto 10px; border: 3px solid var(--grab);
+    }
+    .tier-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 12px; border-radius: 99px; font-size: .75rem; font-weight: 700;
+      margin-top: 6px;
+    }
+    .tier-silver { background: #e8e8e8; color: #555; }
+    .tier-gold { background: #fff3cd; color: #856404; }
+    .tier-platinum { background: #e8e0ff; color: #5b4bb4; }
+    .tier-vip { background: var(--vip); color: #ffd700; }
+    .xp-bar-wrap { margin-top: 12px; text-align: left; }
+    .xp-bar-wrap label { font-size: .68rem; color: var(--muted); }
+    .xp-bar { height: 8px; background: #e5e7eb; border-radius: 99px; margin-top: 4px; overflow: hidden; }
+    .xp-fill { height: 100%; background: var(--grab); border-radius: 99px; transition: width .4s; }
+
+    .menu-list { background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .menu-item {
+      padding: 14px 16px; border-bottom: 1px solid #f0f0f0;
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; font-size: .85rem;
+    }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-item:hover { background: #fafafa; }
+    .menu-item .arrow { color: var(--muted); }
+
+    /* ── Modals / overlays ── */
+    .overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,.45);
+      z-index: 200; display: none; align-items: flex-end; justify-content: center;
+    }
+    .overlay.open { display: flex; }
+    .sheet {
+      background: var(--card); width: 100%; max-height: 92%;
+      border-radius: 20px 20px 0 0; overflow: hidden;
+      display: flex; flex-direction: column;
+      animation: slideUp .3s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .sheet-hdr {
+      padding: 14px 16px; border-bottom: 1px solid #eee;
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .sheet-hdr h2 { font-size: 1rem; }
+    .sheet-body { flex: 1; overflow-y: auto; padding: 16px; }
+    .sheet-ftr { padding: 12px 16px calc(12px + var(--safe-b)); border-top: 1px solid #eee; flex-shrink: 0; }
+    .btn-close {
+      background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--muted); padding: 4px;
+    }
+    .btn-primary {
+      width: 100%; padding: 14px; border: none; border-radius: 12px;
+      background: var(--grab); color: #fff; font-size: .95rem; font-weight: 700;
+      font-family: inherit; cursor: pointer;
+    }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-primary.danger { background: var(--danger); }
+    .btn-secondary {
+      width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px;
+      background: #fff; font-size: .85rem; font-family: inherit; cursor: pointer; margin-top: 8px;
+    }
+
+    /* ── Confirm screen ── */
+    .price-zero { font-size: 1.5rem; font-weight: 800; color: var(--grab); text-align: center; margin: 16px 0; }
+    .price-zero span { font-size: .85rem; color: var(--muted); font-weight: 400; display: block; }
+    .confirm-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: .82rem; border-bottom: 1px solid #f0f0f0; }
+
+    /* ── Tracking / gag ── */
+    .map-area {
+      height: 200px; background: linear-gradient(180deg, #c8e6c9 0%, #a5d6a7 40%, #81c784 100%);
+      border-radius: var(--radius); position: relative; overflow: hidden; margin-bottom: 12px;
+    }
+    .map-road {
+      position: absolute; background: #fff; opacity: .7; border-radius: 2px;
+    }
+    .map-rider {
+      position: absolute; font-size: 1.5rem; transition: left 1.2s linear, top 1.2s linear;
+      z-index: 5; filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+    }
+    .map-pin { position: absolute; font-size: 1.2rem; }
+    .map-canal {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
+      background: linear-gradient(180deg, transparent, #4fc3f7);
+      opacity: 0; transition: opacity .5s;
+    }
+    .map-canal.show { opacity: 1; }
+    .eta-box {
+      background: var(--card); border-radius: var(--radius); padding: 12px 14px;
+      box-shadow: var(--shadow); margin-bottom: 10px;
+    }
+    .eta-box .eta { font-size: 1.4rem; font-weight: 800; color: var(--grab); }
+    .eta-box .eta.late { color: var(--danger); animation: shake .5s; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+    .chat-feed { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; max-height: 160px; overflow-y: auto; }
+    .chat-bubble {
+      max-width: 85%; padding: 8px 12px; border-radius: 14px; font-size: .78rem; line-height: 1.4;
+    }
+    .chat-bubble.rider { background: #e8f5e9; align-self: flex-start; border-bottom-left-radius: 4px; }
+    .chat-bubble.sys { background: #fff3e0; align-self: center; font-size: .7rem; color: #e65100; text-align: center; }
+    .sabotage-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .sabotage-btn {
+      flex: 1; min-width: calc(50% - 4px); padding: 10px 8px; border: 1px solid var(--grab);
+      background: #fff; border-radius: 10px; font-size: .72rem; font-family: inherit;
+      cursor: pointer; color: var(--grab-dark);
+    }
+    .sabotage-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* ── Voucher reveal ── */
+    .reveal {
+      text-align: center; padding: 20px 0;
+    }
+    .reveal .emoji-big { font-size: 4rem; animation: pop .5s ease; }
+    @keyframes pop { 0%{transform:scale(0)} 70%{transform:scale(1.1)} 100%{transform:scale(1)} }
+    .reveal h2 { font-size: 1.1rem; margin: 12px 0 6px; }
+    .reveal p { font-size: .82rem; color: var(--muted); }
+
+    /* ── Dating swipe ── */
+    .swipe-stack { position: relative; height: 380px; margin: 10px 0; }
+    .persona-card {
+      position: absolute; inset: 0; background: var(--card); border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.15); overflow: hidden;
+      transition: transform .3s, opacity .3s;
+    }
+    .persona-card .photo {
+      height: 260px; display: flex; align-items: center; justify-content: center;
+      font-size: 5rem; background: linear-gradient(180deg, #fce4ec, #f8bbd9);
+    }
+    .persona-card .details { padding: 14px 16px; }
+    .persona-card .name { font-size: 1.1rem; font-weight: 700; }
+    .persona-card .bio { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+    .persona-card .dist { font-size: .7rem; color: var(--danger); margin-top: 6px; }
+    .persona-card .rarity {
+      position: absolute; top: 12px; right: 12px; font-size: .65rem;
+      padding: 3px 8px; border-radius: 99px; font-weight: 700;
+    }
+    .rarity-common { background: #e0e0e0; }
+    .rarity-rare { background: #b3e5fc; color: #0277bd; }
+    .rarity-legendary { background: linear-gradient(90deg,#ffd700,#ff8c00); color: #000; }
+    .swipe-actions { display: flex; justify-content: center; gap: 24px; margin-top: 12px; }
+    .swipe-btn {
+      width: 56px; height: 56px; border-radius: 50%; border: none; font-size: 1.5rem;
+      cursor: pointer; box-shadow: var(--shadow);
+    }
+    .swipe-btn.nope { background: #fff; color: var(--danger); }
+    .swipe-btn.like { background: var(--grab); color: #fff; }
+    .match-toast {
+      position: absolute; inset: 0; background: rgba(0,177,79,.92); z-index: 300;
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      color: #fff; text-align: center; padding: 24px;
+    }
+    .match-toast.show { display: flex; animation: fadeIn .3s; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+    /* ── Merch shop ── */
+    .merch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .merch-item {
+      background: var(--card); border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .merch-item .img {
+      height: 100px; display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; background: #f9fafb;
+    }
+    .merch-item .body { padding: 10px; }
+    .merch-item .name { font-size: .78rem; font-weight: 600; }
+    .merch-item .price { font-size: .72rem; color: var(--grab); font-weight: 700; margin-top: 4px; }
+    .merch-item .stock { font-size: .65rem; color: var(--muted); }
+    .merch-item button {
+      width: 100%; margin-top: 8px; padding: 8px; border: none; border-radius: 8px;
+      background: var(--grab); color: #fff; font-size: .72rem; font-weight: 600;
+      font-family: inherit; cursor: pointer;
+    }
+    .merch-item button:disabled { background: #ccc; }
+
+    /* ── Form ── */
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: .75rem; font-weight: 600; margin-bottom: 6px; color: var(--muted); }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px;
+      font-family: inherit; font-size: .85rem;
+    }
+    .form-group textarea { min-height: 80px; resize: vertical; }
+    .form-error { font-size: .72rem; color: var(--danger); margin-top: 4px; display: none; }
+    .form-error.show { display: block; }
+
+    /* ── Toast ── */
+    .toast {
+      position: absolute; top: 16px; left: 16px; right: 16px; z-index: 400;
+      background: #1a1a1a; color: #fff; padding: 12px 16px; border-radius: 12px;
+      font-size: .8rem; transform: translateY(-120%); transition: transform .3s;
+      text-align: center;
+    }
+    .toast.show { transform: translateY(0); }
+
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
+    .empty-state .big { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state p { font-size: .82rem; line-height: 1.5; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="stage-header">
+      <h1>กี่โมง? (When?) — Interactive Prototype</h1>
+      <p>Parody super app: สั่งได้ ฿0 เสมอ แต่ไรเดอร์ไม่เคยมาถึง — ทุกความล้มเหลวจบด้วยคูปองจากแบรนด์พาร์ทเนอร์</p>
+    </div>
+    <div class="stage-controls">
+      <button type="button" onclick="Proto.reset()">รีเซ็ตสถานะ</button>
+      <button type="button" onclick="Proto.jumpTab('home')">หน้าแรก</button>
+      <button type="button" onclick="Proto.startOrder('food')">ทดสอบสั่งอาหาร</button>
+      <button type="button" onclick="Proto.openDating()">ทดสอบเดท</button>
+      <button type="button" onclick="Proto.setMerchOpen(true)">เปิดร้าน merch</button>
+    </div>
+
+    <div class="phone" id="phone">
+      <div class="phone-screen">
+        <header class="app-header" id="appHeader">
+          <div class="row">
+            <div>
+              <div class="logo">กี่โมง?</div>
+              <div class="sub">When? — ส่งช้า แต่ให้คูปองเร็ว</div>
+            </div>
+            <div style="font-size:1.4rem">🔔</div>
+          </div>
+          <div class="loc">📍 สุขุมวิท ซ.11 · <span id="tierLabel">🥈 Silver</span></div>
+        </header>
+
+        <div class="app-body" id="appBody">
+          <!-- HOME -->
+          <div class="panel active" id="panel-home">
+            <div class="svc-grid">
+              <div class="svc-card" data-svc="food" onclick="Proto.startOrder('food')">
+                <span class="emoji">🍜</span><span class="lbl">อาหาร</span>
+              </div>
+              <div class="svc-card" data-svc="ride" onclick="Proto.startOrder('ride')">
+                <span class="emoji">🏍️</span><span class="lbl">เรียกรถ</span>
+              </div>
+              <div class="svc-card" data-svc="parcel" onclick="Proto.startOrder('parcel')">
+                <span class="emoji">📦</span><span class="lbl">ส่งพัสดุ</span>
+              </div>
+              <div class="svc-card" data-svc="mart" onclick="Proto.startOrder('mart')">
+                <span class="emoji">🛒</span><span class="lbl">มาร์ท</span>
+              </div>
+              <div class="svc-card wide" data-svc="dating" onclick="Proto.openDating()">
+                <span class="emoji">💘</span>
+                <div>
+                  <div class="lbl" style="font-size:.9rem">นัดเดท</div>
+                  <div style="font-size:.68rem;color:var(--muted)">ปัดขวาแล้วโดน ghost — ได้ XP + คูปอง</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="banner" onclick="Proto.openTiein()">
+              <span class="tag">พาร์ทเนอร์</span>
+              <h3>แบรนด์ของคุณอยากเข้าร่วมไหม?</h3>
+              <p>วางคูปอง · มาสคอต · merch drop — ลงทะเบียนร่วมเป็นพาร์ทเนอร์</p>
+            </div>
+
+            <div class="sec-title">ร้าน merch ป๊อปอัพ</div>
+            <div class="merch-teaser" id="merchTeaser" onclick="Proto.openMerch()">
+              <div class="row">
+                <div>
+                  <h3>🎁 แลกของจริงด้วยคูปอง</h3>
+                  <div id="merchStatus" class="pill live">เปิดอยู่!</div>
+                </div>
+                <div id="merchCountdown" class="countdown hidden"></div>
+              </div>
+            </div>
+
+            <div class="sec-title">โปรโมชั่นวันนี้</div>
+            <div class="banner" style="background:linear-gradient(135deg,#00b14f,#008f3f)" onclick="Proto.toast('โปร ตกคลอง = คูปอง x2 วันนี้เท่านั้น!')">
+              <h3>🌊 แคมเปญ "ตกคลองแสนแสบ"</h3>
+              <p>สั่งอาหารแล้วไรเดอร์ตกคลอง → คูปอง Mama ซองใหญ่</p>
+            </div>
+          </div>
+
+          <!-- ACTIVITY -->
+          <div class="panel" id="panel-activity">
+            <div class="sec-title">ประวัติความล้มเหลวทั้งหมด</div>
+            <div id="historyList"></div>
+          </div>
+
+          <!-- VOUCHERS -->
+          <div class="panel" id="panel-vouchers">
+            <div class="sec-title">กระเป๋าคูปอง</div>
+            <div id="voucherList"></div>
+          </div>
+
+          <!-- PROFILE -->
+          <div class="panel" id="panel-profile">
+            <div class="profile-hero">
+              <div class="avatar" id="profileAvatar">😎</div>
+              <div style="font-weight:700;font-size:1rem" id="profileName">คุณลูกค้าดี</div>
+              <div class="tier-badge tier-silver" id="profileTier">🥈 Silver</div>
+              <div class="xp-bar-wrap">
+                <label>XP ความทุกข์: <span id="xpText">0</span> / <span id="xpNext">500</span></label>
+                <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+              </div>
+            </div>
+            <div class="menu-list">
+              <div class="menu-item" onclick="Proto.openLLM()">
+                <span>🤖 เชื่อมต่อ AI (แชทเดท)</span><span class="arrow">›</span>
+              </div>
+              <div class="menu-item" onclick="Proto.openTiein()">
+                <span>🏢 ร่วมเป็นพาร์ทเนอร์</span><span class="arrow">›</span>
+              </div>
+              <div class="menu-item" onclick="Proto.toast('โหมดแบรนด์ — สำหรับ brand_members เท่านั้น')">
+                <span>🏪 จัดการร้าน (แบรนด์)</span><span class="arrow">›</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <nav class="tab-bar">
+          <button class="tab-btn active" data-tab="home" onclick="Proto.switchTab('home')">
+            <span class="ico">🏠</span>หน้าแรก
+          </button>
+          <button class="tab-btn" data-tab="activity" onclick="Proto.switchTab('activity')">
+            <span class="ico">📋</span>กิจกรรม
+          </button>
+          <button class="tab-btn" data-tab="vouchers" onclick="Proto.switchTab('vouchers')">
+            <span class="ico">🎫</span>คูปอง
+          </button>
+          <button class="tab-btn" data-tab="profile" onclick="Proto.switchTab('profile')">
+            <span class="ico">👤</span>โปรไฟล์
+          </button>
+        </nav>
+
+        <div class="toast" id="toast"></div>
+
+        <!-- ORDER FLOW OVERLAY -->
+        <div class="overlay" id="orderOverlay">
+          <div class="sheet">
+            <div class="sheet-hdr">
+              <h2 id="orderTitle">สั่งอาหาร</h2>
+              <button class="btn-close" onclick="Proto.closeOrder()" aria-label="ปิด">✕</button>
+            </div>
+            <div class="sheet-body" id="orderBody"></div>
+            <div class="sheet-ftr" id="orderFooter"></div>
+          </div>
+        </div>
+
+        <!-- DATING OVERLAY -->
+        <div class="overlay" id="datingOverlay">
+          <div class="sheet" style="max-height:100%;border-radius:0">
+            <div class="sheet-hdr">
+              <h2>💘 ปัดหาคู่ (ที่จะ ghost)</h2>
+              <button class="btn-close" onclick="Proto.closeDating()">✕</button>
+            </div>
+            <div class="sheet-body" style="position:relative">
+              <p style="font-size:.75rem;color:var(--muted);margin-bottom:8px">เหลือปัดวันนี้: <strong id="swipesLeft">10</strong> ครั้ง · match rate ขึ้นกับ tier</p>
+              <div class="swipe-stack" id="swipeStack"></div>
+              <div class="swipe-actions">
+                <button class="swipe-btn nope" onclick="Proto.swipe('nope')">✕</button>
+                <button class="swipe-btn like" onclick="Proto.swipe('like')">♥</button>
+              </div>
+              <div class="match-toast" id="matchToast">
+                <div style="font-size:3rem">💚</div>
+                <h2 style="font-size:1.4rem;margin:12px 0">It's a Match!</h2>
+                <p id="matchName" style="opacity:.9"></p>
+                <button class="btn-primary" style="margin-top:20px;max-width:200px" onclick="Proto.closeMatchToast()">แชทเลย</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MERCH OVERLAY -->
+        <div class="overlay" id="merchOverlay">
+          <div class="sheet">
+            <div class="sheet-hdr">
+              <h2>🎁 ร้าน merch ป๊อปอัพ</h2>
+              <button class="btn-close" onclick="Proto.closeMerch()">✕</button>
+            </div>
+            <div class="sheet-body">
+              <p style="font-size:.78rem;color:var(--muted);margin-bottom:12px">แลกคูปองเป็นของจริง — รับที่หน้าร้านแบรนด์</p>
+              <div class="merch-grid" id="merchGrid"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TIEIN OVERLAY -->
+        <div class="overlay" id="tieinOverlay">
+          <div class="sheet">
+            <div class="sheet-hdr">
+              <h2>ร่วมเป็นพาร์ทเนอร์</h2>
+              <button class="btn-close" onclick="Proto.closeTiein()">✕</button>
+            </div>
+            <div class="sheet-body">
+              <form id="tieinForm" onsubmit="Proto.submitTiein(event)">
+                <div class="form-group">
+                  <label>ชื่อบริษัท *</label>
+                  <input name="company" required placeholder="บริษัท ตัวอย่าง จำกัด" />
+                  <div class="form-error" data-err="company">กรุณากรอกชื่อบริษัท</div>
+                </div>
+                <div class="form-group">
+                  <label>ผู้ติดต่อ *</label>
+                  <input name="contact" required placeholder="คุณสมชาย · 081-xxx-xxxx" />
+                </div>
+                <div class="form-group">
+                  <label>รายละเอียด merch / คูปอง</label>
+                  <textarea name="merch" placeholder="เสื้อยืด limited, คูปองส่วนลด ฿50..."></textarea>
+                </div>
+                <div class="form-group">
+                  <label>งบประมาณโดยประมาณ</label>
+                  <select name="budget">
+                    <option>ต่ำกว่า 50,000 บาท</option>
+                    <option>50,000 – 200,000 บาท</option>
+                    <option>200,000 – 500,000 บาท</option>
+                    <option>500,000+ บาท</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn-primary" id="tieinSubmit">ส่งคำขอ (→ Discord)</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- LLM OVERLAY -->
+        <div class="overlay" id="llmOverlay">
+          <div class="sheet">
+            <div class="sheet-hdr">
+              <h2>เชื่อมต่อ AI</h2>
+              <button class="btn-close" onclick="Proto.closeLLM()">✕</button>
+            </div>
+            <div class="sheet-body">
+              <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px">ลำดับ fallback: OAuth → on-device → API key → บทสนทนาสำเร็จรูป</p>
+              <div class="menu-list">
+                <div class="menu-item" onclick="Proto.connectLLM('oauth')">
+                  <span>🔐 OAuth (Claude / ChatGPT)</span><span id="llmOauth" class="pill">ยังไม่เชื่อม</span>
+                </div>
+                <div class="menu-item" onclick="Proto.connectLLM('ondevice')">
+                  <span>📱 โมเดลบนเครื่อง</span><span id="llmDevice" class="pill">ยังไม่เชื่อม</span>
+                </div>
+                <div class="menu-item" onclick="Proto.connectLLM('apikey')">
+                  <span>🔑 BYO API Key</span><span id="llmKey" class="pill">ยังไม่เชื่อม</span>
+                </div>
+              </div>
+              <p style="font-size:.72rem;color:var(--muted);margin-top:14px">ถ้าทุกช่องทางล้ม → "อ่านแล้วไม่ตอบ" 😶</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    const TIERS = [
+      { id: 'silver', label: '🥈 Silver', min: 0, next: 500, mult: 1.0, cls: 'tier-silver' },
+      { id: 'gold', label: '🥇 Gold', min: 500, next: 1500, mult: 1.3, cls: 'tier-gold' },
+      { id: 'platinum', label: '💎 Platinum', min: 1500, next: 4000, mult: 1.6, cls: 'tier-platinum' },
+      { id: 'vip', label: '👑 VIP', min: 4000, next: 99999, mult: 2.0, cls: 'tier-vip' },
+    ];
+
+    const SERVICES = {
+      food: { emoji: '🍜', name: 'อาหาร', catalog: [
+        { id: 1, name: 'ก๋วยเตี๋ยวเรือแม่ทองใบ (ปลอม)', emoji: '🍜', rating: 4.7, fee: 15, promo: 'ส่งฟรี* (*ไม่เคยส่ง)' },
+        { id: 2, name: 'ข้าวมันไก่ตีสอง ซ.5', emoji: '🍗', rating: 4.5, fee: 12 },
+        { id: 3, name: '7-11 สาขาที่ปิดแล้ว', emoji: '🏪', rating: 3.2, fee: 20, brand: '7-Eleven' },
+      ]},
+      ride: { emoji: '🏍️', name: 'เรียกรถ', catalog: [
+        { id: 1, name: 'ไป BTS อโศก', emoji: '🚉', rating: 4.9, fee: 0 },
+        { id: 2, name: 'ไปสนามบินสุวรรณภูมิ (ด่วน)', emoji: '✈️', rating: 4.8, fee: 0 },
+      ]},
+      parcel: { emoji: '📦', name: 'ส่งพัสดุ', catalog: [
+        { id: 1, name: 'ซองเอกสาร · สุขุมวิท → สีลม', emoji: '📄', rating: 4.6, fee: 25 },
+      ]},
+      mart: { emoji: '🛒', name: 'มาร์ท', catalog: [
+        { id: 1, name: 'Mama ต้มยำกุ้ง x12', emoji: '🍜', rating: 4.9, fee: 10, brand: 'Mama' },
+        { id: 2, name: 'น้ำดื่มคริสตัล 6L', emoji: '💧', rating: 4.7, fee: 10 },
+        { id: 3, name: 'ไข่ไก่ แพ็ค 10', emoji: '🥚', rating: 4.5, fee: 15 },
+      ]},
+    };
+
+    const GAG_EVENTS = [
+      { t: 0, type: 'chat', msg: 'สวัสดีครับ รับออเดอร์แล้ว กำลังไปร้าน 🏍️' },
+      { t: 8000, type: 'eta', min: 12 },
+      { t: 15000, type: 'chat', msg: 'ถึงร้านแล้วครับ รออาหารอีกนิด' },
+      { t: 25000, type: 'move', x: 35, y: 45 },
+      { t: 32000, type: 'eta', min: 8 },
+      { t: 40000, type: 'chat', msg: 'ขอโทษครับ หลงซอย... แต่ใกล้แล้ว!' },
+      { t: 50000, type: 'sabotage' },
+      { t: 65000, type: 'chat', msg: 'เอ๊ะ ทำไม GPS ชี้ไปทางคลอง 🤔' },
+      { t: 75000, type: 'move', x: 60, y: 75 },
+      { t: 85000, type: 'eta', min: 45, late: true },
+      { t: 95000, type: 'incident', msg: '⚠️ ไรเดอร์หยุดพักที่ 7-11' },
+      { t: 110000, type: 'move', x: 72, y: 82 },
+      { t: 125000, type: 'finale', msg: '🌊 ตกคลองแสนแสบ!!!', finale: 'canal' },
+    ];
+
+    const PERSONAS = [
+      { id: 1, name: 'น้องมิ้นท์', age: 24, emoji: '👩', bio: 'ชอบคาเฟ่และแมว · "ไม่ชอบคนไม่ตรงเวลา" (ironically)', dist: '1.2 กม. (โกหก)', rarity: 'common', matchBase: 0.35 },
+      { id: 2, name: 'คุณบอส (Mama mascot)', age: 99, emoji: '🍜', bio: 'ซองใหญ่ ใจใหญ่ แต่ไม่เคยมาเดทตรงเวลา', dist: '0.3 กม.', rarity: 'legendary', matchBase: 0.08 },
+      { id: 3, name: 'พี่เจ', age: 31, emoji: '🧑', bio: 'Freelance · ตอบช้าเพราะ "meeting"', dist: '4.7 กม.', rarity: 'rare', matchBase: 0.18 },
+      { id: 4, name: 'น้องปิ๋น', age: 22, emoji: '👧', bio: 'ชอบซีรีส์เกาหลี · ghost ระดับ pro', dist: '2.1 กม. (โกหก)', rarity: 'common', matchBase: 0.35 },
+    ];
+
+    const MERCH = [
+      { id: 1, name: 'เสื้อยืด กี่โมง? x Mama', emoji: '👕', cost: 2, stock: 12 },
+      { id: 2, name: 'ถ้วยนoodles limited', emoji: '🍜', cost: 1, stock: 30 },
+      { id: 3, name: 'สติกเกอร์ชุดไรเดอร์ตกคลอง', emoji: '🌊', cost: 1, stock: 50 },
+      { id: 4, name: 'หมวก VIP (tier-gated)', emoji: '👑', cost: 5, stock: 3 },
+    ];
+
+    const VOUCHER_POOL = [
+      { brand: 'Mama', title: 'ซองใหญ่ฟรี 1 ซอง', code: 'MAMA-FAIL' },
+      { brand: '7-Eleven', title: 'Slurpee ฟรี (ถ้าร้านเปิด)', code: '7CANAL' },
+      { brand: 'Crystal', title: 'น้ำดื่ม 600ml', code: 'CRY-H2O' },
+    ];
+
+    const STORAGE_KEY = 'geemong_proto_v1';
+
+    let state = loadState();
+    let gagTimer = null;
+    let gagStart = 0;
+    let gagIdx = 0;
+    let currentOrder = null;
+
+    function defaultState() {
+      return {
+        tab: 'home',
+        xp: 120,
+        nickname: 'คุณลูกค้าดี',
+        history: [],
+        vouchers: [],
+        swipesLeft: 10,
+        personaIdx: 0,
+        merchOpen: true,
+        llm: null,
+        personaDeck: shuffle([...PERSONAS]),
+      };
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return { ...defaultState(), ...JSON.parse(raw) };
+      } catch (_) {}
+      return defaultState();
+    }
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function getTier() {
+      for (let i = TIERS.length - 1; i >= 0; i--) {
+        if (state.xp >= TIERS[i].min) return TIERS[i];
+      }
+      return TIERS[0];
+    }
+
+    function addXP(amount, reason) {
+      const before = getTier();
+      state.xp += amount;
+      const after = getTier();
+      save();
+      renderProfile();
+      if (after.id !== before.id) {
+        toast(`เลื่อนระดับ! ${after.label} 🎉`);
+        grantVoucher({ trigger: 'tier_up', title: `ของขวัญ ${after.label}`, brand: 'กี่โมง?' });
+      } else if (reason) {
+        toast(`+${amount} XP · ${reason}`);
+      }
+    }
+
+    function grantVoucher(opts = {}) {
+      const v = opts.brand
+        ? { brand: opts.brand, title: opts.title, code: opts.code || randCode() }
+        : { ...VOUCHER_POOL[Math.floor(Math.random() * VOUCHER_POOL.length)], code: randCode() };
+      v.id = Date.now();
+      v.grantedAt = new Date().toLocaleString('th-TH');
+      state.vouchers.unshift(v);
+      save();
+      renderVouchers();
+      return v;
+    }
+
+    function randCode() {
+      return 'GM-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+    }
+
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2800);
+    }
+
+    function switchTab(tab) {
+      state.tab = tab;
+      save();
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + tab).classList.add('active');
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === tab);
+      });
+      if (tab === 'activity') renderHistory();
+      if (tab === 'vouchers') renderVouchers();
+      if (tab === 'profile') renderProfile();
+    }
+
+    function renderProfile() {
+      const tier = getTier();
+      document.getElementById('profileName').textContent = state.nickname;
+      document.getElementById('profileTier').textContent = tier.label;
+      document.getElementById('profileTier').className = 'tier-badge ' + tier.cls;
+      document.getElementById('tierLabel').textContent = tier.label;
+      document.getElementById('xpText').textContent = state.xp;
+      document.getElementById('xpNext').textContent = tier.next;
+      const pct = Math.min(100, ((state.xp - tier.min) / (tier.next - tier.min)) * 100);
+      document.getElementById('xpFill').style.width = pct + '%';
+    }
+
+    function renderHistory() {
+      const el = document.getElementById('historyList');
+      if (!state.history.length) {
+        el.innerHTML = '<div class="empty-state"><div class="big">📭</div><p>ยังไม่มีความล้มเหลว<br>สั่งอะไรสักอย่างสิ — รับประกันว่าจะไม่สำเร็จ</p></div>';
+        return;
+      }
+      el.innerHTML = state.history.map(h => `
+        <div class="hist-item">
+          <div class="svc">${h.emoji} ${h.service}</div>
+          <div class="title">${h.item}</div>
+          <div class="fail">${h.finale}</div>
+          <div class="xp">+${h.xp} XP · คูปอง: ${h.voucher}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderVouchers() {
+      const el = document.getElementById('voucherList');
+      if (!state.vouchers.length) {
+        el.innerHTML = '<div class="empty-state"><div class="big">🎫</div><p>ยังไม่มีคูปอง<br>สั่งแล้วรอไรเดอร์ตกคลองก่อนนะ</p></div>';
+        return;
+      }
+      el.innerHTML = state.vouchers.map(v => `
+        <div class="voucher-card">
+          <div class="brand">${v.brand}</div>
+          <div class="title">${v.title}</div>
+          <div class="code">${v.code}</div>
+          <div style="font-size:.65rem;margin-top:8px;opacity:.8">${v.grantedAt}</div>
+        </div>
+      `).join('');
+    }
+
+    function updateMerchTeaser() {
+      const teaser = document.getElementById('merchTeaser');
+      const status = document.getElementById('merchStatus');
+      const cd = document.getElementById('merchCountdown');
+      if (state.merchOpen) {
+        teaser.classList.remove('closed');
+        status.textContent = 'เปิดอยู่!';
+        status.className = 'pill live';
+        cd.classList.add('hidden');
+      } else {
+        teaser.classList.add('closed');
+        status.textContent = 'ปิด';
+        status.className = 'pill';
+        cd.classList.remove('hidden');
+        cd.textContent = 'เปิดอีกทีใน 02:14:33';
+      }
+    }
+
+    /* ── Order flow ── */
+    function startOrder(svc) {
+      currentOrder = { svc, step: 'browse', item: null };
+      document.getElementById('orderOverlay').classList.add('open');
+      renderOrderStep();
+    }
+
+    function closeOrder() {
+      stopGag();
+      document.getElementById('orderOverlay').classList.remove('open');
+      currentOrder = null;
+    }
+
+    function renderOrderStep() {
+      const svc = SERVICES[currentOrder.svc];
+      document.getElementById('orderTitle').textContent = svc.emoji + ' ' + svc.name;
+      const body = document.getElementById('orderBody');
+      const ftr = document.getElementById('orderFooter');
+
+      if (currentOrder.step === 'browse') {
+        body.innerHTML = '<div class="catalog-list">' + svc.catalog.map(c => `
+          <div class="cat-item" onclick="Proto.pickItem(${c.id})">
+            <div class="thumb">${c.emoji}</div>
+            <div class="info">
+              <div class="name">${c.name}</div>
+              <div class="stars">${'★'.repeat(Math.floor(c.rating))} ${c.rating}</div>
+              <div class="meta">ค่าส่ง ฿${c.fee} · ${c.promo || 'พร้อมส่ง (ไม่จริง)'}</div>
+            </div>
+          </div>
+        `).join('') + '</div>';
+        ftr.innerHTML = '';
+      }
+
+      if (currentOrder.step === 'confirm') {
+        const c = currentOrder.item;
+        body.innerHTML = `
+          <div class="cat-item" style="cursor:default">
+            <div class="thumb">${c.emoji}</div>
+            <div class="info"><div class="name">${c.name}</div><div class="meta">ค่าส่ง ฿${c.fee}</div></div>
+          </div>
+          <div class="price-zero">฿0<span>ราคานี้ถูกต้อง — เราไม่เก็บเงินจริง</span></div>
+          <div class="confirm-row"><span>ราคาอาหาร</span><span style="text-decoration:line-through">฿${89 + c.fee}</span></div>
+          <div class="confirm-row"><span>ส่วนลด "กี่โมงพิเศษ"</span><span style="color:var(--grab)">-฿${89 + c.fee}</span></div>
+          <div class="confirm-row" style="font-weight:700;border:none"><span>รวม</span><span style="color:var(--grab)">฿0</span></div>
+        `;
+        ftr.innerHTML = '<button class="btn-primary" onclick="Proto.confirmOrder()">ยืนยันสั่ง (฿0)</button>';
+      }
+
+      if (currentOrder.step === 'track') {
+        body.innerHTML = `
+          <div class="eta-box">
+            <div style="font-size:.72rem;color:var(--muted)">ถึงในอีก</div>
+            <div class="eta" id="trackEta">12 นาที</div>
+            <div style="font-size:.72rem;margin-top:4px" id="riderStatus">ไรเดอร์: คุณช้า กำลังไปร้าน</div>
+          </div>
+          <div class="map-area" id="mapArea">
+            <div class="map-road" style="width:60%;height:4px;top:30%;left:20%;transform:rotate(25deg)"></div>
+            <div class="map-road" style="width:40%;height:4px;top:55%;left:35%;transform:rotate(-15deg)"></div>
+            <div class="map-pin" style="top:15%;left:25%">🏠</div>
+            <div class="map-pin" style="bottom:25%;right:20%">📍</div>
+            <div class="map-rider" id="mapRider" style="left:20%;top:25%">🏍️</div>
+            <div class="map-canal" id="mapCanal"></div>
+          </div>
+          <div class="chat-feed" id="chatFeed"></div>
+          <div class="sabotage-row" id="sabotageRow">
+            <button class="sabotage-btn" onclick="Proto.sabotage('call')">📞 โทรปลุก</button>
+            <button class="sabotage-btn" onclick="Proto.sabotage('pin')">📍 ส่งพิกัด</button>
+            <button class="sabotage-btn" onclick="Proto.sabotage('rush')">⚡ เร่งด่วน</button>
+            <button class="sabotage-btn" onclick="Proto.sabotage('tip')">💰 ทิป ฿0</button>
+          </div>
+        `;
+        ftr.innerHTML = '<button class="btn-secondary" onclick="Proto.skipGag()">ข้าม (เดโมเร็ว)</button>';
+        startGag();
+      }
+
+      if (currentOrder.step === 'fail') {
+        body.innerHTML = `
+          <div class="reveal">
+            <div class="emoji-big">🌊</div>
+            <h2>ออเดอร์ล้มเหลวอย่างมีสไตล์</h2>
+            <p id="failMsg">ไรเดอร์ตกคลองแสนแสบ — แต่คุณได้คูปอง!</p>
+          </div>
+        `;
+        ftr.innerHTML = '<button class="btn-primary" onclick="Proto.showVoucherReveal()">รับคูปองปลอบใจ</button>';
+      }
+
+      if (currentOrder.step === 'voucher') {
+        const v = currentOrder.voucher;
+        body.innerHTML = `
+          <div class="reveal">
+            <div class="emoji-big">🎉</div>
+            <h2>ได้คูปองแล้ว!</h2>
+            <div class="voucher-card" style="margin:16px 0;text-align:left">
+              <div class="brand">${v.brand}</div>
+              <div class="title">${v.title}</div>
+              <div class="code">${v.code}</div>
+            </div>
+            <p>แชร์ความทุกข์ให้เพื่อน — เขาก็จะทุกข์ด้วยกัน</p>
+          </div>
+        `;
+        ftr.innerHTML = `
+          <button class="btn-primary" onclick="Proto.shareFail()">แชร์ 📤</button>
+          <button class="btn-secondary" onclick="Proto.finishOrder()">กลับหน้าแรก</button>
+        `;
+      }
+    }
+
+    function pickItem(id) {
+      const c = SERVICES[currentOrder.svc].catalog.find(x => x.id === id);
+      currentOrder.item = c;
+      currentOrder.step = 'confirm';
+      renderOrderStep();
+    }
+
+    function confirmOrder() {
+      const btn = document.querySelector('#orderFooter .btn-primary');
+      btn.disabled = true;
+      btn.textContent = 'กำลังสั่ง...';
+      setTimeout(() => {
+        currentOrder.step = 'track';
+        currentOrder.scriptSeed = Math.floor(Math.random() * 99999);
+        renderOrderStep();
+      }, 800);
+    }
+
+    function startGag() {
+      stopGag();
+      gagStart = Date.now();
+      gagIdx = 0;
+      tickGag();
+      gagTimer = setInterval(tickGag, 500);
+    }
+
+    function stopGag() {
+      if (gagTimer) clearInterval(gagTimer);
+      gagTimer = null;
+    }
+
+    function tickGag() {
+      const elapsed = Date.now() - gagStart;
+      while (gagIdx < GAG_EVENTS.length && GAG_EVENTS[gagIdx].t <= elapsed) {
+        applyGagEvent(GAG_EVENTS[gagIdx]);
+        gagIdx++;
+      }
+    }
+
+    function applyGagEvent(ev) {
+      const feed = document.getElementById('chatFeed');
+      if (!feed) return;
+
+      if (ev.type === 'chat') {
+        const b = document.createElement('div');
+        b.className = 'chat-bubble rider';
+        b.textContent = ev.msg;
+        feed.appendChild(b);
+        feed.scrollTop = feed.scrollHeight;
+      }
+      if (ev.type === 'eta') {
+        const eta = document.getElementById('trackEta');
+        if (eta) {
+          eta.textContent = ev.min + ' นาที';
+          eta.classList.toggle('late', !!ev.late);
+        }
+      }
+      if (ev.type === 'move') {
+        const rider = document.getElementById('mapRider');
+        if (rider) { rider.style.left = ev.x + '%'; rider.style.top = ev.y + '%'; }
+      }
+      if (ev.type === 'incident') {
+        const b = document.createElement('div');
+        b.className = 'chat-bubble sys';
+        b.textContent = ev.msg;
+        feed.appendChild(b);
+      }
+      if (ev.type === 'sabotage') {
+        document.querySelectorAll('.sabotage-btn').forEach(b => b.disabled = false);
+      }
+      if (ev.type === 'finale') {
+        stopGag();
+        document.getElementById('mapCanal')?.classList.add('show');
+        const rider = document.getElementById('mapRider');
+        if (rider) { rider.textContent = '🌊'; rider.style.fontSize = '2rem'; }
+        setTimeout(() => failOrder(ev), 1500);
+      }
+    }
+
+    function sabotage(action) {
+      const msgs = {
+        call: 'คุณโทรปลุก → ไรเดอร์ตกใจ → หลงเข้าซอยตัน',
+        pin: 'คุณส่งพิกัด → GPS รีเซ็ต → ไปผิดจังหวัด',
+        rush: 'คุณกดเร่งด่วน → ไรเดอร์เร่ง → เบรกแตก',
+        tip: 'ทิป ฿0 → ไรเดอร์ขำ → ลืมออเดอร์',
+      };
+      const feed = document.getElementById('chatFeed');
+      const b = document.createElement('div');
+      b.className = 'chat-bubble sys';
+      b.textContent = '💥 ' + msgs[action];
+      feed.appendChild(b);
+      document.querySelectorAll('.sabotage-btn').forEach(btn => btn.disabled = true);
+      const rider = document.getElementById('mapRider');
+      if (rider) {
+        rider.style.left = (parseFloat(rider.style.left) + 15) + '%';
+        rider.style.top = (parseFloat(rider.style.top) + 10) + '%';
+      }
+    }
+
+    function skipGag() {
+      stopGag();
+      failOrder({ finale: 'canal', msg: '🌊 ตกคลองแสนแสบ (ข้ามเดโม)' });
+    }
+
+    function failOrder(ev) {
+      const svc = SERVICES[currentOrder.svc];
+      const v = grantVoucher();
+      addXP(45, 'ออเดอร์ล้มเหลว');
+      state.history.unshift({
+        emoji: svc.emoji,
+        service: svc.name,
+        item: currentOrder.item.name,
+        finale: ev.msg || 'ความล้มเหลวที่งดงาม',
+        xp: 45,
+        voucher: v.title,
+      });
+      currentOrder.voucher = v;
+      currentOrder.step = 'fail';
+      save();
+      renderOrderStep();
+    }
+
+    function showVoucherReveal() {
+      currentOrder.step = 'voucher';
+      renderOrderStep();
+    }
+
+    function shareFail() {
+      toast('แชร์แล้ว! +15 XP (เพื่อนยังไม่โหลดแอป)');
+      addXP(15, 'แชร์');
+    }
+
+    function finishOrder() {
+      closeOrder();
+      switchTab('vouchers');
+    }
+
+    /* ── Dating ── */
+    function openDating() {
+      document.getElementById('datingOverlay').classList.add('open');
+      renderPersonaCard();
+      document.getElementById('swipesLeft').textContent = state.swipesLeft;
+    }
+
+    function closeDating() {
+      document.getElementById('datingOverlay').classList.remove('open');
+    }
+
+    function renderPersonaCard() {
+      const stack = document.getElementById('swipeStack');
+      if (state.swipesLeft <= 0) {
+        stack.innerHTML = '<div class="empty-state" style="padding-top:80px"><div class="big">😴</div><p>หมดสวิปวันนี้แล้ว<br>กลับมาพรุ่งนี้ — หรือเลื่อน tier</p></div>';
+        return;
+      }
+      const p = state.personaDeck[state.personaIdx % state.personaDeck.length];
+      stack.innerHTML = `
+        <div class="persona-card">
+          <span class="rarity rarity-${p.rarity}">${p.rarity === 'legendary' ? '✨ Legendary' : p.rarity === 'rare' ? 'Rare' : 'Common'}</span>
+          <div class="photo">${p.emoji}</div>
+          <div class="details">
+            <div class="name">${p.name}, ${p.age}</div>
+            <div class="bio">${p.bio}</div>
+            <div class="dist">📍 ห่างจากคุณ ${p.dist}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function swipe(dir) {
+      if (state.swipesLeft <= 0) return;
+      state.swipesLeft--;
+      const tier = getTier();
+      const p = state.personaDeck[state.personaIdx % state.personaDeck.length];
+      state.personaIdx++;
+
+      if (dir === 'nope') {
+        addXP(5, 'โดนปัดซ้าย');
+        toast('เขาปัดซ้ายคุณ 💔 (+5 XP)');
+      } else {
+        const chance = Math.min(0.85, p.matchBase * tier.mult);
+        if (Math.random() < chance) {
+          document.getElementById('matchName').textContent = 'คุณกับ ' + p.name + ' ชอบกัน!';
+          document.getElementById('matchToast').classList.add('show');
+          addXP(20, 'match!');
+        } else {
+          toast('ปัดขวาแล้ว... เงียบกริบ (+8 XP)');
+          addXP(8, 'ปัดขวาไม่ match');
+        }
+      }
+      save();
+      document.getElementById('swipesLeft').textContent = state.swipesLeft;
+      renderPersonaCard();
+    }
+
+    function closeMatchToast() {
+      document.getElementById('matchToast').classList.remove('show');
+      toast('แชทเปิดแล้ว — LLM อาจตอบ "อ่านแล้วไม่ตอบ"');
+      closeDating();
+      setTimeout(() => startOrder('ride'), 400);
+      toast('นัดเดทถูกสร้างเป็นออเดอร์ — จะมา track แล้ว ghost');
+    }
+
+    /* ── Merch ── */
+    function openMerch() {
+      if (!state.merchOpen) {
+        toast('ร้านปิด — รอนับถอยหลัง');
+        return;
+      }
+      document.getElementById('merchOverlay').classList.add('open');
+      renderMerch();
+    }
+
+    function closeMerch() {
+      document.getElementById('merchOverlay').classList.remove('open');
+    }
+
+    function renderMerch() {
+      const grid = document.getElementById('merchGrid');
+      const vc = state.vouchers.length;
+      grid.innerHTML = MERCH.map(m => `
+        <div class="merch-item">
+          <div class="img">${m.emoji}</div>
+          <div class="body">
+            <div class="name">${m.name}</div>
+            <div class="price">🎫 ${m.cost} คูปอง</div>
+            <div class="stock">เหลือ ${m.stock} ชิ้น</div>
+            <button ${vc < m.cost ? 'disabled' : ''} onclick="Proto.claimMerch(${m.id})">
+              ${vc < m.cost ? 'คูปองไม่พอ' : 'แลกเลย'}
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function claimMerch(id) {
+      const m = MERCH.find(x => x.id === id);
+      if (state.vouchers.length < m.cost || m.stock <= 0) return;
+      for (let i = 0; i < m.cost; i++) state.vouchers.pop();
+      m.stock--;
+      const code = 'CLAIM-' + randCode();
+      toast(`แลกสำเร็จ! โค้ด: ${code} — โชว์ที่หน้าร้าน`);
+      save();
+      renderVouchers();
+      renderMerch();
+    }
+
+    function setMerchOpen(open) {
+      state.merchOpen = open;
+      save();
+      updateMerchTeaser();
+      toast(open ? 'เปิดร้าน merch แล้ว' : 'ปิดร้าน merch');
+    }
+
+    /* ── Tie-in ── */
+    function openTiein() {
+      document.getElementById('tieinOverlay').classList.add('open');
+    }
+    function closeTiein() {
+      document.getElementById('tieinOverlay').classList.remove('open');
+    }
+
+    function submitTiein(e) {
+      e.preventDefault();
+      const btn = document.getElementById('tieinSubmit');
+      btn.disabled = true;
+      btn.textContent = 'กำลังส่ง...';
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'ส่งคำขอ (→ Discord)';
+        closeTiein();
+        toast('ส่งคำขอแล้ว! ทีมจะติดต่อกลับ (ผ่าน Discord webhook)');
+        e.target.reset();
+      }, 1200);
+    }
+
+    /* ── LLM ── */
+    function openLLM() {
+      document.getElementById('llmOverlay').classList.add('open');
+      updateLLMUI();
+    }
+    function closeLLM() {
+      document.getElementById('llmOverlay').classList.remove('open');
+    }
+
+    function connectLLM(mode) {
+      state.llm = mode;
+      save();
+      updateLLMUI();
+      toast('เชื่อมต่อ ' + mode + ' สำเร็จ (จำลอง)');
+    }
+
+    function updateLLMUI() {
+      ['oauth', 'ondevice', 'apikey'].forEach(m => {
+        const el = document.getElementById('llm' + (m === 'ondevice' ? 'Device' : m === 'apikey' ? 'Key' : 'Oauth'));
+        if (el) {
+          el.textContent = state.llm === m ? '✓ เชื่อมแล้ว' : 'ยังไม่เชื่อม';
+          el.className = state.llm === m ? 'pill live' : 'pill';
+        }
+      });
+    }
+
+    function reset() {
+      localStorage.removeItem(STORAGE_KEY);
+      state = defaultState();
+      MERCH.forEach(m => { m.stock = m.id === 1 ? 12 : m.id === 4 ? 3 : 30; });
+      save();
+      renderAll();
+      toast('รีเซ็ตสถานะแล้ว');
+    }
+
+    function renderAll() {
+      renderProfile();
+      renderHistory();
+      renderVouchers();
+      updateMerchTeaser();
+      switchTab(state.tab);
+    }
+
+  window.Proto = {
+    switchTab, startOrder, closeOrder, pickItem, confirmOrder, sabotage, skipGag,
+    showVoucherReveal, shareFail, finishOrder, openDating, closeDating, swipe,
+    closeMatchToast, openMerch, closeMerch, claimMerch, setMerchOpen,
+    openTiein, closeTiein, submitTiein, openLLM, closeLLM, connectLLM,
+    reset, toast, jumpTab: switchTab,
+  };
+
+  renderAll();
+  })();
+  </script>
+</body>
+</html>
