@@ -5,3 +5,6 @@ supabase/.temp/
 supabase/functions/.env
 mobile/.env
 .vercel
+.cursor/
+.understand-anything/intermediate/
+.understand-anything/.trash-*/

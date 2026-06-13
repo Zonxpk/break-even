@@ -1,0 +1,4033 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "6859adb24b012ab138d0f5feec06526ad93bd113",
+  "generatedAt": "2026-06-13T14:52:02.845Z",
+  "files": {
+    ".understand-anything/.understandignore": {
+      "filePath": ".understand-anything/.understandignore",
+      "contentHash": "f8efd62cbcf7f014f5f97813da1845f0fe25c2a85772b59e55fbf1aa0b847675",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 29,
+      "hasStructuralAnalysis": false
+    },
+    ".understand-anything/config.json": {
+      "filePath": ".understand-anything/config.json",
+      "contentHash": "4b66f98f8a815dfeb2d3a29eeb73418e07c40ed020a1498c07e908b2254f0c8c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "docs/superpowers/plans/2026-06-11-when-app-core.md": {
+      "filePath": "docs/superpowers/plans/2026-06-11-when-app-core.md",
+      "contentHash": "127fe1c25f03cdc02f113a70e60f862ad3294211fb670b0083d5795be765588c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2637,
+      "hasStructuralAnalysis": true
+    },
+    "docs/superpowers/plans/2026-06-11-when-backend-foundation.md": {
+      "filePath": "docs/superpowers/plans/2026-06-11-when-backend-foundation.md",
+      "contentHash": "88121d127f6d024d2c88e98a3a75dc9bc1c712b84523b0b57d30f8be3cd55e14",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1634,
+      "hasStructuralAnalysis": true
+    },
+    "docs/superpowers/plans/2026-06-13-dating-sim-content-polish.md": {
+      "filePath": "docs/superpowers/plans/2026-06-13-dating-sim-content-polish.md",
+      "contentHash": "02eb09fd0bc63d89e10756ddde183a13bf9866777007896a50db556a54aa7676",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 97,
+      "hasStructuralAnalysis": true
+    },
+    "docs/superpowers/plans/2026-06-13-when-dating-sim.md": {
+      "filePath": "docs/superpowers/plans/2026-06-13-when-dating-sim.md",
+      "contentHash": "4fbd3853e706d714c9df4462a0584197f112e57a337180c554fb8327332744e7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 183,
+      "hasStructuralAnalysis": true
+    },
+    "docs/superpowers/plans/2026-06-13-when-merch-shop.md": {
+      "filePath": "docs/superpowers/plans/2026-06-13-when-merch-shop.md",
+      "contentHash": "ed5f28ba0dc72768348def22c813873a53facb548733d8a630187a6ba8464cbb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 195,
+      "hasStructuralAnalysis": true
+    },
+    "docs/superpowers/RESUME-app-core.md": {
+      "filePath": "docs/superpowers/RESUME-app-core.md",
+      "contentHash": "346d34b9b7dc87afded06bee51458c48effe2b6225bfbf6f82f0de6dcbd292ab",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 23,
+      "hasStructuralAnalysis": true
+    },
+    "docs/superpowers/RESUME-dating-sim.md": {
+      "filePath": "docs/superpowers/RESUME-dating-sim.md",
+      "contentHash": "ccd2832b8f35aca06fc652bd8e6c53f68adf3685a4091bb450634135cf1607ae",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 32,
+      "hasStructuralAnalysis": true
+    },
+    "docs/superpowers/RESUME-merch-shop.md": {
+      "filePath": "docs/superpowers/RESUME-merch-shop.md",
+      "contentHash": "20184aed8ba8b7c4d786e3d2ea1b3ff22c6b1d01a228c1061502f17ae941feb4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "docs/superpowers/specs/2026-06-11-when-geemong-design.html": {
+      "filePath": "docs/superpowers/specs/2026-06-11-when-geemong-design.html",
+      "contentHash": "9a53c2e9f6a1ce97482e80b8f3a64016b1c9f353ad19a87b89d807e6be73eff6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1331,
+      "hasStructuralAnalysis": false
+    },
+    "docs/superpowers/specs/2026-06-11-when-geemong-design.md": {
+      "filePath": "docs/superpowers/specs/2026-06-11-when-geemong-design.md",
+      "contentHash": "528aa8ece0a692838ee79b0eade92673da2824f58035e0fe54a642a3c8f81597",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 252,
+      "hasStructuralAnalysis": true
+    },
+    "docs/superpowers/specs/2026-06-13-dating-sim-content-polish-design.md": {
+      "filePath": "docs/superpowers/specs/2026-06-13-dating-sim-content-polish-design.md",
+      "contentHash": "f69b64681e88a685702adcf9630368f3bcc9788818accbae6f02cc427eecccbe",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 271,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/.claude/settings.json": {
+      "filePath": "mobile/.claude/settings.json",
+      "contentHash": "1e7be1a32a758be623e4897bcd97715f42c1585f3d7389eaa996c230e8fe9834",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 6,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/.env.example": {
+      "filePath": "mobile/.env.example",
+      "contentHash": "4a88079090cca7a14d6246114df1e2aeddf5f7fbd0db5065736a9acdb4da2780",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/AGENTS.md": {
+      "filePath": "mobile/AGENTS.md",
+      "contentHash": "2f9031bc78a538066adaee47e212d2f5f2fd5727c1f35f0a463eb21837037039",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/app.json": {
+      "filePath": "mobile/app.json",
+      "contentHash": "1bc8e3f33b9b644c605d1cd160a4eb90eca4433f583fd4db1dbf2c8abbbe63e3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 45,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/assets/expo.icon/icon.json": {
+      "filePath": "mobile/assets/expo.icon/icon.json",
+      "contentHash": "747c56e178222a6255c6dd61c5de011b286cdc935febe89f04d1b191c3d076fe",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 40,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/CLAUDE.md": {
+      "filePath": "mobile/CLAUDE.md",
+      "contentHash": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/jest.config.js": {
+      "filePath": "mobile/jest.config.js",
+      "contentHash": "574507264f5c0cf2c783a4c8abbbbda19a3ac2cc2dfa6932dacfc5a3c1d3a5bb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/jest.setup.js": {
+      "filePath": "mobile/jest.setup.js",
+      "contentHash": "43b0ab67fa59204b4d011ada5c3d94434dd35b3e261742ea0b0576378a05ad6b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/package.json": {
+      "filePath": "mobile/package.json",
+      "contentHash": "90c4d72afa026d00e763183470c446137a6795a842d680cfc2915400e36a6856",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 57,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/README.md": {
+      "filePath": "mobile/README.md",
+      "contentHash": "81a68c7166fe840f32019fb3bd12eada9cfc466a01fde5f14e073cc6d601a07f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 57,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/scripts/reset-project.js": {
+      "filePath": "mobile/scripts/reset-project.js",
+      "contentHash": "549922a40b983de34068b36d7879fcc8aed6c60b8d45b3c7b866267e766ae9fe",
+      "functions": [
+        {
+          "name": "moveDirectories",
+          "params": [
+            "userInput"
+          ],
+          "exported": false,
+          "lineCount": 52
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 115,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/__tests__/auth.test.ts": {
+      "filePath": "mobile/src/__tests__/auth.test.ts",
+      "contentHash": "4a3ceeab7057a48fbcee392d4fe23850976ae76598e41c989818d5a2e9f6b37a",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@testing-library/react-native",
+          "specifiers": [
+            "act"
+          ]
+        },
+        {
+          "source": "../state/auth",
+          "specifiers": [
+            "useAuth"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 56,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/__tests__/home.smoke.test.tsx": {
+      "filePath": "mobile/src/__tests__/home.smoke.test.tsx",
+      "contentHash": "f3294299c67c09dcd07fd9c6f939cd0979420880a168f20872a1de16569f3c77",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@testing-library/react-native",
+          "specifiers": [
+            "render"
+          ]
+        },
+        {
+          "source": "../app/(tabs)/index",
+          "specifiers": [
+            "Home"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/__tests__/rng.test.ts": {
+      "filePath": "mobile/src/__tests__/rng.test.ts",
+      "contentHash": "d836cdd404e1cb3f3d65a33f02e8ac23f2311d7623f3beffcc3f104fd5a205ab",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../lib/rng",
+          "specifiers": [
+            "mulberry32"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 21,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/api/__tests__/orders.test.ts": {
+      "filePath": "mobile/src/api/__tests__/orders.test.ts",
+      "contentHash": "eb2583d197419c7efc3ccf4b6e177ebf169a9a71b01ac5667d351d4218342a34",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../orders",
+          "specifiers": [
+            "buildFailContext"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/api/__tests__/shop.test.ts": {
+      "filePath": "mobile/src/api/__tests__/shop.test.ts",
+      "contentHash": "5b4d513336b4e7f57d7a3ba37229de3ac7b028dd0bec51e5a86cac1a048d11d3",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../shop",
+          "specifiers": [
+            "claimMerchItem",
+            "ShopError"
+          ]
+        },
+        {
+          "source": "../../lib/supabase",
+          "specifiers": [
+            "supabase"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 26,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/api/content.ts": {
+      "filePath": "mobile/src/api/content.ts",
+      "contentHash": "65a072d88401915969ec6bcf924bc880f6738c9f34cff277295e6f5b62b6cf61",
+      "functions": [
+        {
+          "name": "fetchCatalog",
+          "params": [
+            "service"
+          ],
+          "returnType": "Promise<CatalogItem[]>",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "fetchScripts",
+          "params": [],
+          "returnType": "Promise<GagScriptRow[]>",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "fetchAnchors",
+          "params": [],
+          "returnType": "Promise<GagAnchor[]>",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "fetchPromoCampaigns",
+          "params": [],
+          "returnType": "Promise<VoucherCampaign[]>",
+          "exported": true,
+          "lineCount": 10
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../lib/supabase",
+          "specifiers": [
+            "supabase"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "CatalogItem",
+            "GagAnchor",
+            "GagScriptRow",
+            "Service",
+            "VoucherCampaign"
+          ]
+        }
+      ],
+      "exports": [
+        "fetchCatalog",
+        "fetchScripts",
+        "fetchAnchors",
+        "fetchPromoCampaigns"
+      ],
+      "totalLines": 37,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/api/orders.ts": {
+      "filePath": "mobile/src/api/orders.ts",
+      "contentHash": "0be01b0a3f2d104d1036915ad918d4dbc4f1127acb49b4d23cac05cda568c7d8",
+      "functions": [
+        {
+          "name": "placeOrder",
+          "params": [
+            "opts"
+          ],
+          "returnType": "Promise<OrderRow>",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "getOrder",
+          "params": [
+            "orderId"
+          ],
+          "returnType": "Promise<OrderRow>",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "listOrders",
+          "params": [],
+          "returnType": "Promise<OrderRow[]>",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "buildFailContext",
+          "params": [
+            "opts"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "failOrder",
+          "params": [
+            "order",
+            "finaleKind",
+            "opts"
+          ],
+          "returnType": "Promise<FailResult>",
+          "exported": true,
+          "lineCount": 34
+        },
+        {
+          "name": "listVouchers",
+          "params": [],
+          "returnType": "Promise<(VoucherRow & { voucher_campaigns: { title: string; terms: string | null; redeem_info: string | null } })[]>",
+          "exported": true,
+          "lineCount": 8
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../lib/supabase",
+          "specifiers": [
+            "supabase"
+          ]
+        },
+        {
+          "source": "../engine/pickScript",
+          "specifiers": [
+            "pickScript"
+          ]
+        },
+        {
+          "source": "./content",
+          "specifiers": [
+            "fetchScripts"
+          ]
+        },
+        {
+          "source": "../balance/balance",
+          "specifiers": [
+            "XP",
+            "tierForXp"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "OrderRow",
+            "Service",
+            "VoucherRow"
+          ]
+        }
+      ],
+      "exports": [
+        "placeOrder",
+        "getOrder",
+        "listOrders",
+        "buildFailContext",
+        "failOrder",
+        "listVouchers"
+      ],
+      "totalLines": 89,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/api/personas.ts": {
+      "filePath": "mobile/src/api/personas.ts",
+      "contentHash": "bfda676d497233970d3b20c82d286955da068d80e090b146a4f4ece6bb1bdb54",
+      "functions": [
+        {
+          "name": "fetchPersonas",
+          "params": [],
+          "returnType": "Promise<Persona[]>",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "listMatches",
+          "params": [],
+          "returnType": "Promise<(MatchRow & { personas: Persona | null })[]>",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "getMatch",
+          "params": [
+            "matchId"
+          ],
+          "returnType": "Promise<MatchRow & { personas: Persona | null }>",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "createMatch",
+          "params": [
+            "personaId"
+          ],
+          "returnType": "Promise<MatchRow>",
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "updateMatch",
+          "params": [
+            "matchId",
+            "patch"
+          ],
+          "returnType": "Promise<void>",
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../lib/supabase",
+          "specifiers": [
+            "supabase"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "MatchRow",
+            "Persona"
+          ]
+        }
+      ],
+      "exports": [
+        "fetchPersonas",
+        "listMatches",
+        "getMatch",
+        "createMatch",
+        "updateMatch"
+      ],
+      "totalLines": 46,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/api/shop.ts": {
+      "filePath": "mobile/src/api/shop.ts",
+      "contentHash": "f366265b448a723c0f0fd7327ba75b7cee25e866d46e2f1990bdc39016d9ae82",
+      "functions": [
+        {
+          "name": "fetchActiveShops",
+          "params": [],
+          "returnType": "Promise<ShopRow[]>",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "fetchMerchForShop",
+          "params": [
+            "shopId"
+          ],
+          "returnType": "Promise<MerchItemRow[]>",
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "claimMerchItem",
+          "params": [
+            "itemId"
+          ],
+          "returnType": "Promise<ClaimRow>",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "listMyClaims",
+          "params": [],
+          "returnType": "Promise<(ClaimRow & { merch_items: MerchItemRow | null })[]>",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "getClaim",
+          "params": [
+            "claimId"
+          ],
+          "returnType": "Promise<ClaimRow & { merch_items: MerchItemRow | null }>",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "fetchBrandMemberships",
+          "params": [],
+          "returnType": "Promise<{ brand_id: string; role: string }[]>",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "redeemClaimCode",
+          "params": [
+            "code"
+          ],
+          "returnType": "Promise<ClaimRow>",
+          "exported": true,
+          "lineCount": 10
+        }
+      ],
+      "classes": [
+        {
+          "name": "ShopError",
+          "methods": [
+            "constructor"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "imports": [
+        {
+          "source": "../lib/supabase",
+          "specifiers": [
+            "supabase"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "ClaimRow",
+            "MerchItemRow",
+            "ShopRow"
+          ]
+        }
+      ],
+      "exports": [
+        "ShopError",
+        "fetchActiveShops",
+        "fetchMerchForShop",
+        "claimMerchItem",
+        "listMyClaims",
+        "getClaim",
+        "fetchBrandMemberships",
+        "redeemClaimCode"
+      ],
+      "totalLines": 73,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/_layout.tsx": {
+      "filePath": "mobile/src/app/_layout.tsx",
+      "contentHash": "2e366458b4033470e495613102c1643aee60940835ec4d17c8e45f3496839489",
+      "functions": [
+        {
+          "name": "RootLayout",
+          "params": [],
+          "exported": true,
+          "lineCount": 33
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "Platform",
+            "View",
+            "StyleSheet"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "Stack",
+            "useRouter",
+            "useSegments"
+          ]
+        },
+        {
+          "source": "../state/auth",
+          "specifiers": [
+            "useAuth"
+          ]
+        },
+        {
+          "source": "../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        }
+      ],
+      "exports": [
+        "RootLayout"
+      ],
+      "totalLines": 49,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/(tabs)/_layout.tsx": {
+      "filePath": "mobile/src/app/(tabs)/_layout.tsx",
+      "contentHash": "17f5df30bf1122f2d82ff42855ab13e3fa437e41c2ada735a0eb2d405bfcadab",
+      "functions": [
+        {
+          "name": "Icon",
+          "params": [
+            "{ glyph }"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "TabsLayout",
+          "params": [],
+          "exported": true,
+          "lineCount": 10
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "Tabs"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "Text"
+          ]
+        },
+        {
+          "source": "../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        }
+      ],
+      "exports": [
+        "TabsLayout"
+      ],
+      "totalLines": 19,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/(tabs)/activity.tsx": {
+      "filePath": "mobile/src/app/(tabs)/activity.tsx",
+      "contentHash": "0e2150cffa6646e48bd7ec282e6ccd074f98d873eccd4f157f3b6c194ce3a9a4",
+      "functions": [
+        {
+          "name": "Activity",
+          "params": [],
+          "exported": true,
+          "lineCount": 33
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "FlatList",
+            "Pressable",
+            "StyleSheet"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "useFocusEffect",
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../../api/orders",
+          "specifiers": [
+            "listOrders"
+          ]
+        },
+        {
+          "source": "../../services/config",
+          "specifiers": [
+            "SERVICE_CONFIGS"
+          ]
+        },
+        {
+          "source": "../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        },
+        {
+          "source": "../../types/db",
+          "specifiers": [
+            "OrderRow",
+            "Service"
+          ]
+        }
+      ],
+      "exports": [
+        "Activity"
+      ],
+      "totalLines": 54,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/(tabs)/index.tsx": {
+      "filePath": "mobile/src/app/(tabs)/index.tsx",
+      "contentHash": "f86a9e393a46c9969c94ac39830b958cbcd7ab2510d3dc3ad0b2f6e43bea7069",
+      "functions": [
+        {
+          "name": "Home",
+          "params": [],
+          "exported": true,
+          "lineCount": 58
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "Pressable",
+            "ScrollView",
+            "StyleSheet"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../../api/content",
+          "specifiers": [
+            "fetchPromoCampaigns"
+          ]
+        },
+        {
+          "source": "../../api/shop",
+          "specifiers": [
+            "fetchActiveShops"
+          ]
+        },
+        {
+          "source": "../../state/auth",
+          "specifiers": [
+            "useAuth"
+          ]
+        },
+        {
+          "source": "../../shop/schedule",
+          "specifiers": [
+            "formatCountdown",
+            "isShopOpen",
+            "msUntilNextOpen"
+          ]
+        },
+        {
+          "source": "../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        },
+        {
+          "source": "../../types/db",
+          "specifiers": [
+            "ShopRow",
+            "VoucherCampaign"
+          ]
+        }
+      ],
+      "exports": [
+        "Home"
+      ],
+      "totalLines": 100,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/(tabs)/profile.tsx": {
+      "filePath": "mobile/src/app/(tabs)/profile.tsx",
+      "contentHash": "ef856c634c3591ec733fe0202fc635ab0827171ac9e5801af5f87a25c05f0b5c",
+      "functions": [
+        {
+          "name": "Profile",
+          "params": [],
+          "exported": true,
+          "lineCount": 62
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "Pressable",
+            "StyleSheet",
+            "TextInput",
+            "Alert"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../../api/shop",
+          "specifiers": [
+            "fetchBrandMemberships"
+          ]
+        },
+        {
+          "source": "../../dating/llm",
+          "specifiers": [
+            "setLlmApiKey"
+          ]
+        },
+        {
+          "source": "../../state/auth",
+          "specifiers": [
+            "useAuth"
+          ]
+        },
+        {
+          "source": "../../balance/balance",
+          "specifiers": [
+            "TIERS"
+          ]
+        },
+        {
+          "source": "../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        }
+      ],
+      "exports": [
+        "Profile"
+      ],
+      "totalLines": 94,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/(tabs)/vouchers.tsx": {
+      "filePath": "mobile/src/app/(tabs)/vouchers.tsx",
+      "contentHash": "4df74283f7bc0aebfa2aac429e918aeb07a852f181b4044b5bf70add3e2238cf",
+      "functions": [
+        {
+          "name": "Vouchers",
+          "params": [],
+          "exported": true,
+          "lineCount": 47
+        },
+        {
+          "name": "statusText",
+          "params": [
+            "status"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "claimStatus",
+          "params": [
+            "status"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "FlatList",
+            "StyleSheet",
+            "RefreshControl"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "useFocusEffect"
+          ]
+        },
+        {
+          "source": "../../api/orders",
+          "specifiers": [
+            "listVouchers"
+          ]
+        },
+        {
+          "source": "../../api/shop",
+          "specifiers": [
+            "listMyClaims"
+          ]
+        },
+        {
+          "source": "../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        }
+      ],
+      "exports": [
+        "Vouchers"
+      ],
+      "totalLines": 89,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/+html.tsx": {
+      "filePath": "mobile/src/app/+html.tsx",
+      "contentHash": "4b8acf78ea93d9c3c385dc7b6f10eaad227fe01f2f4ae65c45c68c8e7d526fe2",
+      "functions": [
+        {
+          "name": "Root",
+          "params": [
+            "{ children }"
+          ],
+          "exported": true,
+          "lineCount": 35
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "expo-router/html",
+          "specifiers": [
+            "ScrollViewStyleReset"
+          ]
+        },
+        {
+          "source": "react",
+          "specifiers": [
+            "PropsWithChildren"
+          ]
+        },
+        {
+          "source": "../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        }
+      ],
+      "exports": [
+        "Root"
+      ],
+      "totalLines": 42,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/brand/index.tsx": {
+      "filePath": "mobile/src/app/brand/index.tsx",
+      "contentHash": "657607ecab708881b76576df15a30976dc42fbfe764e6472e71445b3fc93ec0f",
+      "functions": [
+        {
+          "name": "BrandHome",
+          "params": [],
+          "exported": true,
+          "lineCount": 30
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "Pressable",
+            "StyleSheet"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "Stack",
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../../api/shop",
+          "specifiers": [
+            "fetchActiveShops",
+            "fetchBrandMemberships",
+            "fetchMerchForShop",
+            "listMyClaims"
+          ]
+        },
+        {
+          "source": "../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        }
+      ],
+      "exports": [
+        "BrandHome"
+      ],
+      "totalLines": 46,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/brand/redeem.tsx": {
+      "filePath": "mobile/src/app/brand/redeem.tsx",
+      "contentHash": "b7dd3ac4e448ed41ca77ed41494bb83905e7568fcb2f850c1839803e68a72eec",
+      "functions": [
+        {
+          "name": "BrandRedeem",
+          "params": [],
+          "exported": true,
+          "lineCount": 35
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "TextInput",
+            "Pressable",
+            "StyleSheet",
+            "Alert"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "Stack"
+          ]
+        },
+        {
+          "source": "../../api/shop",
+          "specifiers": [
+            "redeemClaimCode",
+            "ShopError"
+          ]
+        },
+        {
+          "source": "../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        }
+      ],
+      "exports": [
+        "BrandRedeem"
+      ],
+      "totalLines": 50,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/dating/chat/[matchId].tsx": {
+      "filePath": "mobile/src/app/dating/chat/[matchId].tsx",
+      "contentHash": "f7d48e343f47366c0763cbfad0e1d1dd70ab81042cdcf82b5c35a75720022848",
+      "functions": [
+        {
+          "name": "DatingChat",
+          "params": [],
+          "exported": true,
+          "lineCount": 149
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "TextInput",
+            "Pressable",
+            "FlatList",
+            "StyleSheet",
+            "Alert",
+            "ActivityIndicator"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "Stack",
+            "useLocalSearchParams",
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../../../api/content",
+          "specifiers": [
+            "fetchAnchors"
+          ]
+        },
+        {
+          "source": "../../../api/personas",
+          "specifiers": [
+            "getMatch",
+            "updateMatch"
+          ]
+        },
+        {
+          "source": "../../../lib/supabase",
+          "specifiers": [
+            "supabase"
+          ]
+        },
+        {
+          "source": "../../../balance/balance",
+          "specifiers": [
+            "XP",
+            "tierForXp"
+          ]
+        },
+        {
+          "source": "../../../dating/chat",
+          "specifiers": [
+            "applyBeatChoice",
+            "nextBeat"
+          ]
+        },
+        {
+          "source": "../../../dating/affectionDrip",
+          "specifiers": [
+            "chatAffectionGain"
+          ]
+        },
+        {
+          "source": "../../../dating/chatSession",
+          "specifiers": [
+            "clearChatSession",
+            "loadChatSession",
+            "saveChatSession"
+          ]
+        },
+        {
+          "source": "../../../dating/chatStorage",
+          "specifiers": [
+            "loadChat",
+            "replyToUser",
+            "ChatMessage"
+          ]
+        },
+        {
+          "source": "../../../dating/bookDate",
+          "specifiers": [
+            "placeDateOrder"
+          ]
+        },
+        {
+          "source": "../../../ui/SpotPicker",
+          "specifiers": [
+            "SpotPicker"
+          ]
+        },
+        {
+          "source": "../../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        },
+        {
+          "source": "../../../state/auth",
+          "specifiers": [
+            "useAuth"
+          ]
+        },
+        {
+          "source": "../../../types/db",
+          "specifiers": [
+            "GagAnchor"
+          ]
+        }
+      ],
+      "exports": [
+        "DatingChat"
+      ],
+      "totalLines": 187,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/dating/index.tsx": {
+      "filePath": "mobile/src/app/dating/index.tsx",
+      "contentHash": "ee8df51fcc34666159b5402688f7a74328c8bab7f5cb8e7b392a8cde3348e3d0",
+      "functions": [
+        {
+          "name": "DatingDeck",
+          "params": [],
+          "exported": true,
+          "lineCount": 71
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "Pressable",
+            "StyleSheet",
+            "Alert"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "Stack",
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../../api/personas",
+          "specifiers": [
+            "createMatch",
+            "fetchPersonas"
+          ]
+        },
+        {
+          "source": "../../lib/supabase",
+          "specifiers": [
+            "supabase"
+          ]
+        },
+        {
+          "source": "../../balance/balance",
+          "specifiers": [
+            "XP",
+            "tierForXp"
+          ]
+        },
+        {
+          "source": "../../dating/deck",
+          "specifiers": [
+            "deckForToday"
+          ]
+        },
+        {
+          "source": "../../dating/distanceJoke",
+          "specifiers": [
+            "fakeDistanceKm"
+          ]
+        },
+        {
+          "source": "../../dating/swipe",
+          "specifiers": [
+            "resolveSwipe"
+          ]
+        },
+        {
+          "source": "../../state/auth",
+          "specifiers": [
+            "useAuth"
+          ]
+        },
+        {
+          "source": "../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        },
+        {
+          "source": "../../types/db",
+          "specifiers": [
+            "Persona",
+            "PersonaRarity"
+          ]
+        }
+      ],
+      "exports": [
+        "DatingDeck"
+      ],
+      "totalLines": 114,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/dating/matches.tsx": {
+      "filePath": "mobile/src/app/dating/matches.tsx",
+      "contentHash": "267413fea1c61dbb92472d26815362ef63152f573416d7d2408a8946ab9fa7dc",
+      "functions": [
+        {
+          "name": "DatingMatches",
+          "params": [],
+          "exported": true,
+          "lineCount": 25
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "FlatList",
+            "Pressable",
+            "StyleSheet"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "Stack",
+            "useFocusEffect",
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../../api/personas",
+          "specifiers": [
+            "listMatches"
+          ]
+        },
+        {
+          "source": "../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        }
+      ],
+      "exports": [
+        "DatingMatches"
+      ],
+      "totalLines": 42,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/fail/[orderId].tsx": {
+      "filePath": "mobile/src/app/fail/[orderId].tsx",
+      "contentHash": "924ad5426fc6be2c43fbc46fd49ec9cb6ddc5b8218eba7d81c5c19d69e0817c1",
+      "functions": [
+        {
+          "name": "Fail",
+          "params": [],
+          "exported": true,
+          "lineCount": 66
+        },
+        {
+          "name": "finaleHeadline",
+          "params": [
+            "kind"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 8
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "Pressable",
+            "StyleSheet",
+            "ActivityIndicator"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "Stack",
+            "useLocalSearchParams",
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../../api/orders",
+          "specifiers": [
+            "failOrder",
+            "getOrder",
+            "FailResult"
+          ]
+        },
+        {
+          "source": "../../dating/chatStorage",
+          "specifiers": [
+            "appendApology"
+          ]
+        },
+        {
+          "source": "../../state/auth",
+          "specifiers": [
+            "useAuth"
+          ]
+        },
+        {
+          "source": "../../lib/supabase",
+          "specifiers": [
+            "supabase"
+          ]
+        },
+        {
+          "source": "../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        }
+      ],
+      "exports": [
+        "Fail"
+      ],
+      "totalLines": 101,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/merch/claim/[claimId].tsx": {
+      "filePath": "mobile/src/app/merch/claim/[claimId].tsx",
+      "contentHash": "d45d534a60377a3ae00c288429b1bb46519b80377e3c1cb1c3f28f1b195e02eb",
+      "functions": [
+        {
+          "name": "ClaimDetail",
+          "params": [],
+          "exported": true,
+          "lineCount": 33
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "Pressable",
+            "StyleSheet",
+            "ActivityIndicator"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "Stack",
+            "useLocalSearchParams",
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../../../api/shop",
+          "specifiers": [
+            "getClaim"
+          ]
+        },
+        {
+          "source": "../../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        }
+      ],
+      "exports": [
+        "ClaimDetail"
+      ],
+      "totalLines": 50,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/merch/index.tsx": {
+      "filePath": "mobile/src/app/merch/index.tsx",
+      "contentHash": "86861692bc439c24fd42ddf1e5c8869af48b62830ed9352822df926c4cca7418",
+      "functions": [
+        {
+          "name": "MerchShop",
+          "params": [],
+          "exported": true,
+          "lineCount": 69
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "Pressable",
+            "ScrollView",
+            "StyleSheet",
+            "Alert",
+            "ActivityIndicator"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "Stack",
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../../api/shop",
+          "specifiers": [
+            "claimMerchItem",
+            "fetchActiveShops",
+            "fetchMerchForShop",
+            "ShopError"
+          ]
+        },
+        {
+          "source": "../../shop/schedule",
+          "specifiers": [
+            "formatCountdown",
+            "isShopOpen",
+            "msUntilNextOpen"
+          ]
+        },
+        {
+          "source": "../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        },
+        {
+          "source": "../../types/db",
+          "specifiers": [
+            "MerchItemRow",
+            "ShopRow"
+          ]
+        }
+      ],
+      "exports": [
+        "MerchShop"
+      ],
+      "totalLines": 94,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/order/[service]/confirm.tsx": {
+      "filePath": "mobile/src/app/order/[service]/confirm.tsx",
+      "contentHash": "be316c3b650b9a0a84514f29534d197d72380a7c5db343dd4546fa131bde93ea",
+      "functions": [
+        {
+          "name": "Confirm",
+          "params": [],
+          "exported": true,
+          "lineCount": 46
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "Pressable",
+            "StyleSheet",
+            "Alert"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "Stack",
+            "useLocalSearchParams",
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../../../api/orders",
+          "specifiers": [
+            "placeOrder"
+          ]
+        },
+        {
+          "source": "../../../services/config",
+          "specifiers": [
+            "SERVICE_CONFIGS"
+          ]
+        },
+        {
+          "source": "../../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        },
+        {
+          "source": "../../../types/db",
+          "specifiers": [
+            "CatalogItem",
+            "Service"
+          ]
+        }
+      ],
+      "exports": [
+        "Confirm"
+      ],
+      "totalLines": 68,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/order/[service]/index.tsx": {
+      "filePath": "mobile/src/app/order/[service]/index.tsx",
+      "contentHash": "a1caf8659a87fbdc0c7e7c820c641a77826a23a2060ff1cc0c8a75b5aebafd39",
+      "functions": [
+        {
+          "name": "Browse",
+          "params": [],
+          "exported": true,
+          "lineCount": 59
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "Pressable",
+            "FlatList",
+            "Image",
+            "StyleSheet"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "Stack",
+            "useLocalSearchParams",
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../../../api/content",
+          "specifiers": [
+            "fetchCatalog"
+          ]
+        },
+        {
+          "source": "../../../services/config",
+          "specifiers": [
+            "SERVICE_CONFIGS"
+          ]
+        },
+        {
+          "source": "../../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        },
+        {
+          "source": "../../../types/db",
+          "specifiers": [
+            "CatalogItem",
+            "Service"
+          ]
+        }
+      ],
+      "exports": [
+        "Browse"
+      ],
+      "totalLines": 84,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/partner.tsx": {
+      "filePath": "mobile/src/app/partner.tsx",
+      "contentHash": "71ea4813c2073318a3562c988df9403a0fba8880c7aa46e3415f298f64d76029",
+      "functions": [
+        {
+          "name": "Partner",
+          "params": [],
+          "exported": true,
+          "lineCount": 63
+        },
+        {
+          "name": "Field",
+          "params": [
+            "props"
+          ],
+          "exported": false,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "TextInput",
+            "Pressable",
+            "StyleSheet",
+            "ScrollView",
+            "Alert"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../lib/supabase",
+          "specifiers": [
+            "supabase"
+          ]
+        },
+        {
+          "source": "../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        }
+      ],
+      "exports": [
+        "Partner"
+      ],
+      "totalLines": 96,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/sign-in.tsx": {
+      "filePath": "mobile/src/app/sign-in.tsx",
+      "contentHash": "9d9d5c714b0f719f840ff875abea8dd79c364d1964d891848cbbc0337dd56a65",
+      "functions": [
+        {
+          "name": "SignIn",
+          "params": [],
+          "exported": true,
+          "lineCount": 56
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "TextInput",
+            "Pressable",
+            "StyleSheet",
+            "Alert"
+          ]
+        },
+        {
+          "source": "../state/auth",
+          "specifiers": [
+            "useAuth"
+          ]
+        },
+        {
+          "source": "../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        }
+      ],
+      "exports": [
+        "SignIn"
+      ],
+      "totalLines": 73,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/app/track/[orderId].tsx": {
+      "filePath": "mobile/src/app/track/[orderId].tsx",
+      "contentHash": "96f79dbfd3036a4a736ca7ed1a605ee1f815d8fb5ef4ee569420bfc22b78117b",
+      "functions": [
+        {
+          "name": "fakeEndpoints",
+          "params": [
+            "seed"
+          ],
+          "returnType": "{ from: LatLng; to: LatLng }",
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "Track",
+          "params": [],
+          "exported": true,
+          "lineCount": 99
+        },
+        {
+          "name": "incidentText",
+          "params": [
+            "kind"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useMemo",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "Pressable",
+            "StyleSheet",
+            "ActivityIndicator"
+          ]
+        },
+        {
+          "source": "expo-router",
+          "specifiers": [
+            "Stack",
+            "useLocalSearchParams",
+            "useRouter"
+          ]
+        },
+        {
+          "source": "../../ui/TrackingMap",
+          "specifiers": [
+            "TrackingMap"
+          ]
+        },
+        {
+          "source": "../../engine/engine",
+          "specifiers": [
+            "engineStateAt"
+          ]
+        },
+        {
+          "source": "../../engine/path",
+          "specifiers": [
+            "buildDoomedPath",
+            "positionAt",
+            "Keyframe",
+            "LatLng"
+          ]
+        },
+        {
+          "source": "../../engine/route",
+          "specifiers": [
+            "fetchRoute"
+          ]
+        },
+        {
+          "source": "../../api/content",
+          "specifiers": [
+            "fetchAnchors"
+          ]
+        },
+        {
+          "source": "../../api/orders",
+          "specifiers": [
+            "getOrder"
+          ]
+        },
+        {
+          "source": "../../lib/supabase",
+          "specifiers": [
+            "supabase"
+          ]
+        },
+        {
+          "source": "../../services/config",
+          "specifiers": [
+            "SERVICE_CONFIGS"
+          ]
+        },
+        {
+          "source": "../../ui/theme",
+          "specifiers": [
+            "theme"
+          ]
+        },
+        {
+          "source": "../../types/db",
+          "specifiers": [
+            "GagScriptRow",
+            "OrderRow",
+            "Service"
+          ]
+        },
+        {
+          "source": "../../engine/types",
+          "specifiers": [
+            "SabotageAction"
+          ]
+        }
+      ],
+      "exports": [
+        "Track"
+      ],
+      "totalLines": 145,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/balance/__tests__/balance.test.ts": {
+      "filePath": "mobile/src/balance/__tests__/balance.test.ts",
+      "contentHash": "713e2a3b53b0b10973467150a1b0dd8723c9e7c5a94273be051ae16b51ac7844",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../balance",
+          "specifiers": [
+            "TIERS",
+            "XP",
+            "MATCH_CAP",
+            "tierForXp",
+            "matchChance"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 43,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/balance/balance.ts": {
+      "filePath": "mobile/src/balance/balance.ts",
+      "contentHash": "457993767756df1cc9acf6522c4efd483b513e7b859b89c10968a10de0a4c1ce",
+      "functions": [
+        {
+          "name": "tierForXp",
+          "params": [
+            "xp"
+          ],
+          "returnType": "Tier",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "matchChance",
+          "params": [
+            "tier",
+            "rarity"
+          ],
+          "returnType": "number",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "Tier"
+          ]
+        }
+      ],
+      "exports": [
+        "XP",
+        "TIERS",
+        "MATCH_BASE",
+        "TIER_MATCH_MULT",
+        "MATCH_CAP",
+        "tierForXp",
+        "matchChance"
+      ],
+      "totalLines": 33,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/__tests__/affectionDrip.test.ts": {
+      "filePath": "mobile/src/dating/__tests__/affectionDrip.test.ts",
+      "contentHash": "d968d9d1df0cf293e727127ad6426f1a6365c4e746cfc35d8eba34744976ee32",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../affectionDrip",
+          "specifiers": [
+            "chatAffectionGain"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/__tests__/chat.test.ts": {
+      "filePath": "mobile/src/dating/__tests__/chat.test.ts",
+      "contentHash": "0365c2f88bd233477cb8c8b091ed0da2033a355d69539bd9634edffcd7d38b1d",
+      "functions": [
+        {
+          "name": "match",
+          "params": [
+            "affection",
+            "beats_done"
+          ],
+          "returnType": "MatchRow",
+          "exported": false,
+          "lineCount": 10
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../chat",
+          "specifiers": [
+            "applyBeatChoice",
+            "nextBeat"
+          ]
+        },
+        {
+          "source": "../../types/db",
+          "specifiers": [
+            "MatchRow",
+            "Persona"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 50,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/__tests__/deck.test.ts": {
+      "filePath": "mobile/src/dating/__tests__/deck.test.ts",
+      "contentHash": "479990726ad6f9a7ffbd1450274b18e757393718a6096a50da10daf792d90a60",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../deck",
+          "specifiers": [
+            "dailyDeckSeed",
+            "deckForToday",
+            "shufflePersonas"
+          ]
+        },
+        {
+          "source": "../../types/db",
+          "specifiers": [
+            "Persona"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 27,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/__tests__/distanceJoke.test.ts": {
+      "filePath": "mobile/src/dating/__tests__/distanceJoke.test.ts",
+      "contentHash": "0c4d9f3a76ff816a34056ce5ca993abafbe31bb2ea015f7d1691a67b83ef56ca",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../distanceJoke",
+          "specifiers": [
+            "anchorDistanceKm",
+            "fakeDistanceKm"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/__tests__/swipe.test.ts": {
+      "filePath": "mobile/src/dating/__tests__/swipe.test.ts",
+      "contentHash": "0157ea9fda1ba6a8a0b3af66df44c481a340a3f20b11a203eb869eda5f2faf3f",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../swipe",
+          "specifiers": [
+            "resolveSwipe"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/affectionDrip.ts": {
+      "filePath": "mobile/src/dating/affectionDrip.ts",
+      "contentHash": "9a5b0f3c91dd72a9a662fff9c6b3401148747a0961262c9d0dd707010e1d494f",
+      "functions": [
+        {
+          "name": "chatAffectionGain",
+          "params": [
+            "userMsgCount",
+            "sessionGained"
+          ],
+          "returnType": "number",
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "CHAT_DRIP_EVERY_N",
+        "CHAT_DRIP_MAX",
+        "chatAffectionGain"
+      ],
+      "totalLines": 10,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/bookDate.ts": {
+      "filePath": "mobile/src/dating/bookDate.ts",
+      "contentHash": "44cbfc85af1ecf85e1e328067416b092f72f967b729cf0ebdb0d245ff5ded2fb",
+      "functions": [
+        {
+          "name": "placeDateOrder",
+          "params": [
+            "opts"
+          ],
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../api/orders",
+          "specifiers": [
+            "placeOrder"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "GagAnchor"
+          ]
+        }
+      ],
+      "exports": [
+        "placeDateOrder"
+      ],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/chat.ts": {
+      "filePath": "mobile/src/dating/chat.ts",
+      "contentHash": "e8bd7c1bab1e3aefcb08a9e59fae98cbc7e64bb4a624d0fa4b95641eda92d014",
+      "functions": [
+        {
+          "name": "scriptedReply",
+          "params": [
+            "persona",
+            "userText"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "nextBeat",
+          "params": [
+            "match",
+            "persona"
+          ],
+          "returnType": "StoryBeat | null",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "applyBeatChoice",
+          "params": [
+            "beat",
+            "choiceIndex"
+          ],
+          "returnType": "number",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "MatchRow",
+            "Persona",
+            "StoryBeat"
+          ]
+        }
+      ],
+      "exports": [
+        "scriptedReply",
+        "nextBeat",
+        "applyBeatChoice"
+      ],
+      "totalLines": 22,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/chatSession.ts": {
+      "filePath": "mobile/src/dating/chatSession.ts",
+      "contentHash": "bc1540df394da659c2b78508ddace57886367a81f252442d45c2f3059dbe5f00",
+      "functions": [
+        {
+          "name": "key",
+          "params": [
+            "matchId"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "freshSession",
+          "params": [
+            "now"
+          ],
+          "returnType": "ChatSession",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "isSessionExpired",
+          "params": [
+            "session",
+            "nowMs"
+          ],
+          "returnType": "boolean",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "loadChatSession",
+          "params": [
+            "matchId"
+          ],
+          "returnType": "Promise<ChatSession>",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "saveChatSession",
+          "params": [
+            "matchId",
+            "session"
+          ],
+          "returnType": "Promise<void>",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "clearChatSession",
+          "params": [
+            "matchId"
+          ],
+          "returnType": "Promise<void>",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@react-native-async-storage/async-storage",
+          "specifiers": [
+            "AsyncStorage"
+          ]
+        }
+      ],
+      "exports": [
+        "SESSION_TTL_MS",
+        "freshSession",
+        "isSessionExpired",
+        "loadChatSession",
+        "saveChatSession",
+        "clearChatSession"
+      ],
+      "totalLines": 40,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/chatStorage.ts": {
+      "filePath": "mobile/src/dating/chatStorage.ts",
+      "contentHash": "4dd4677188b6d1f7627c0c9714e9b9bea96fe867c82b5b6aceecae1ae91537ee",
+      "functions": [
+        {
+          "name": "key",
+          "params": [
+            "matchId"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "loadChat",
+          "params": [
+            "matchId"
+          ],
+          "returnType": "Promise<ChatMessage[]>",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "appendChat",
+          "params": [
+            "matchId",
+            "msg"
+          ],
+          "returnType": "Promise<void>",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "replyToUser",
+          "params": [
+            "matchId",
+            "persona",
+            "userText"
+          ],
+          "returnType": "Promise<string>",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "appendApology",
+          "params": [
+            "matchId",
+            "personaName",
+            "line"
+          ],
+          "returnType": "Promise<void>",
+          "exported": true,
+          "lineCount": 8
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@react-native-async-storage/async-storage",
+          "specifiers": [
+            "AsyncStorage"
+          ]
+        },
+        {
+          "source": "./llm",
+          "specifiers": [
+            "generateReply"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "Persona"
+          ]
+        }
+      ],
+      "exports": [
+        "loadChat",
+        "appendChat",
+        "replyToUser",
+        "appendApology"
+      ],
+      "totalLines": 41,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/deck.ts": {
+      "filePath": "mobile/src/dating/deck.ts",
+      "contentHash": "4db3cba3bf5439bc8aa6831bae0b86dbc41955bce2f8271788d7078874df2bb1",
+      "functions": [
+        {
+          "name": "dailyDeckSeed",
+          "params": [
+            "userId",
+            "dateStr"
+          ],
+          "returnType": "number",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "shufflePersonas",
+          "params": [
+            "personas",
+            "seed"
+          ],
+          "returnType": "Persona[]",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "deckForToday",
+          "params": [
+            "personas",
+            "userId",
+            "now"
+          ],
+          "returnType": "Persona[]",
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../lib/rng",
+          "specifiers": [
+            "mulberry32"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "Persona"
+          ]
+        }
+      ],
+      "exports": [
+        "dailyDeckSeed",
+        "shufflePersonas",
+        "deckForToday"
+      ],
+      "totalLines": 28,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/distanceJoke.ts": {
+      "filePath": "mobile/src/dating/distanceJoke.ts",
+      "contentHash": "a3b361fb991230dfe40c11dbe1514db7f8f1a62c575a03193a83bbab8c2d3112",
+      "functions": [
+        {
+          "name": "hashSeed",
+          "params": [
+            "input"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "formatKm",
+          "params": [
+            "seed"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "fakeDistanceKm",
+          "params": [
+            "personaId",
+            "dateStr"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "anchorDistanceKm",
+          "params": [
+            "personaId",
+            "anchorId"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../lib/rng",
+          "specifiers": [
+            "mulberry32"
+          ]
+        }
+      ],
+      "exports": [
+        "fakeDistanceKm",
+        "anchorDistanceKm"
+      ],
+      "totalLines": 21,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/llm.ts": {
+      "filePath": "mobile/src/dating/llm.ts",
+      "contentHash": "a53de02ca0ba5c12878ed006f9a26cf910e67b1efd41a2dd1a1fae2ebbb96d82",
+      "functions": [
+        {
+          "name": "getLlmApiKey",
+          "params": [],
+          "returnType": "Promise<string | null>",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "setLlmApiKey",
+          "params": [
+            "key"
+          ],
+          "returnType": "Promise<void>",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "generateReply",
+          "params": [
+            "persona",
+            "userText"
+          ],
+          "returnType": "Promise<string>",
+          "exported": true,
+          "lineCount": 29
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@react-native-async-storage/async-storage",
+          "specifiers": [
+            "AsyncStorage"
+          ]
+        },
+        {
+          "source": "./chat",
+          "specifiers": [
+            "scriptedReply"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "Persona"
+          ]
+        }
+      ],
+      "exports": [
+        "getLlmApiKey",
+        "setLlmApiKey",
+        "generateReply"
+      ],
+      "totalLines": 44,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/dating/swipe.ts": {
+      "filePath": "mobile/src/dating/swipe.ts",
+      "contentHash": "b6b01525ac0af07c7a12e6004fe48dba3e652c5fb45ebe1ce5babc99c0b3c54c",
+      "functions": [
+        {
+          "name": "resolveSwipe",
+          "params": [
+            "opts"
+          ],
+          "returnType": "SwipeResult",
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../lib/rng",
+          "specifiers": [
+            "mulberry32"
+          ]
+        },
+        {
+          "source": "../balance/balance",
+          "specifiers": [
+            "matchChance",
+            "Rarity"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "Tier"
+          ]
+        }
+      ],
+      "exports": [
+        "resolveSwipe"
+      ],
+      "totalLines": 12,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/engine/__tests__/engine.test.ts": {
+      "filePath": "mobile/src/engine/__tests__/engine.test.ts",
+      "contentHash": "caf1aeef061a595f8606b1a3be561774ad2e6470ad1b1bfe82b918a0c43d04b2",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../engine",
+          "specifiers": [
+            "engineStateAt"
+          ]
+        },
+        {
+          "source": "../types",
+          "specifiers": [
+            "GagScript"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 70,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/engine/__tests__/path.test.ts": {
+      "filePath": "mobile/src/engine/__tests__/path.test.ts",
+      "contentHash": "75877cec7a995a35460fe7f78967537a59af6d31151e85ceac1e9e9598d883ea",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../path",
+          "specifiers": [
+            "buildDoomedPath",
+            "positionAt",
+            "nearestAnchor"
+          ]
+        },
+        {
+          "source": "../types",
+          "specifiers": [
+            "GagScript"
+          ]
+        },
+        {
+          "source": "../../types/db",
+          "specifiers": [
+            "GagAnchor"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 60,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/engine/__tests__/pickScript.test.ts": {
+      "filePath": "mobile/src/engine/__tests__/pickScript.test.ts",
+      "contentHash": "94c2f2ce64f88b560747d42da45679c71e1d0266b16a4e901955611491a7cc33",
+      "functions": [
+        {
+          "name": "mk",
+          "params": [
+            "id",
+            "service",
+            "weight",
+            "active"
+          ],
+          "returnType": "GagScriptRow",
+          "exported": false,
+          "lineCount": 2
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../pickScript",
+          "specifiers": [
+            "pickScript"
+          ]
+        },
+        {
+          "source": "../../types/db",
+          "specifiers": [
+            "GagScriptRow"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 30,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/engine/__tests__/route.test.ts": {
+      "filePath": "mobile/src/engine/__tests__/route.test.ts",
+      "contentHash": "f34882192fa94be9308c3845edbf4ee2f11c1a36db6a5980cb0b97c61f8cb3f8",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../route",
+          "specifiers": [
+            "fetchRoute",
+            "fallbackRoute"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 43,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/engine/engine.ts": {
+      "filePath": "mobile/src/engine/engine.ts",
+      "contentHash": "40c2f85c55139bfceb4df872e42d86ee7060456fa03b834d7e6cf664d4b49fe0",
+      "functions": [
+        {
+          "name": "engineStateAt",
+          "params": [
+            "{ script, elapsedS, sabotageLog }"
+          ],
+          "returnType": "EngineState",
+          "exported": true,
+          "lineCount": 66
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./types",
+          "specifiers": [
+            "EngineState",
+            "GagScript",
+            "SabotageAction",
+            "TimelineEvent"
+          ]
+        }
+      ],
+      "exports": [
+        "engineStateAt"
+      ],
+      "totalLines": 75,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/engine/path.ts": {
+      "filePath": "mobile/src/engine/path.ts",
+      "contentHash": "f967898ea249da4a6b6d1d240b87601326f12189536e4318d4363b7023c050d6",
+      "functions": [
+        {
+          "name": "dist2",
+          "params": [
+            "a",
+            "b"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "nearestAnchor",
+          "params": [
+            "anchors",
+            "type",
+            "ref"
+          ],
+          "returnType": "GagAnchor | null",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "alongRoute",
+          "params": [
+            "base",
+            "frac"
+          ],
+          "returnType": "LatLng",
+          "exported": false,
+          "lineCount": 11
+        },
+        {
+          "name": "buildDoomedPath",
+          "params": [
+            "opts"
+          ],
+          "returnType": "Keyframe[]",
+          "exported": true,
+          "lineCount": 42
+        },
+        {
+          "name": "positionAt",
+          "params": [
+            "path",
+            "f"
+          ],
+          "returnType": "LatLng",
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../lib/rng",
+          "specifiers": [
+            "mulberry32"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "GagAnchor",
+            "AnchorType"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "GagScript"
+          ]
+        }
+      ],
+      "exports": [
+        "nearestAnchor",
+        "buildDoomedPath",
+        "positionAt"
+      ],
+      "totalLines": 100,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/engine/pickScript.ts": {
+      "filePath": "mobile/src/engine/pickScript.ts",
+      "contentHash": "45dd26239cae013fb1e6ed8d83c849f202f4c8c4cbf6451a82260f60bd389750",
+      "functions": [
+        {
+          "name": "pickScript",
+          "params": [
+            "scripts",
+            "service",
+            "seed"
+          ],
+          "returnType": "GagScriptRow",
+          "exported": true,
+          "lineCount": 11
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../lib/rng",
+          "specifiers": [
+            "mulberry32"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "GagScriptRow",
+            "Service"
+          ]
+        }
+      ],
+      "exports": [
+        "pickScript"
+      ],
+      "totalLines": 15,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/engine/route.ts": {
+      "filePath": "mobile/src/engine/route.ts",
+      "contentHash": "45f6cd354eb02ca199f4160d5a264ef3c5804292104f4301207e04b362ac3442",
+      "functions": [
+        {
+          "name": "fetchRoute",
+          "params": [
+            "from",
+            "to",
+            "seed"
+          ],
+          "returnType": "Promise<LatLng[]>",
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "fallbackRoute",
+          "params": [
+            "from",
+            "to",
+            "seed"
+          ],
+          "returnType": "LatLng[]",
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../lib/rng",
+          "specifiers": [
+            "mulberry32"
+          ]
+        },
+        {
+          "source": "./path",
+          "specifiers": [
+            "LatLng"
+          ]
+        }
+      ],
+      "exports": [
+        "fetchRoute",
+        "fallbackRoute"
+      ],
+      "totalLines": 34,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/engine/types.ts": {
+      "filePath": "mobile/src/engine/types.ts",
+      "contentHash": "8f45a6bbc0774359f56e62f861ca0f1cfb8370994cc9df1a50cdaf2f328371a6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 42,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/lib/rng.ts": {
+      "filePath": "mobile/src/lib/rng.ts",
+      "contentHash": "8f6e9f5e3b524a70fbb39de14d32d336e889077972f7c2b831d8862fa550e532",
+      "functions": [
+        {
+          "name": "mulberry32",
+          "params": [
+            "seed"
+          ],
+          "returnType": "() => number",
+          "exported": true,
+          "lineCount": 10
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "mulberry32"
+      ],
+      "totalLines": 14,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/lib/supabase.ts": {
+      "filePath": "mobile/src/lib/supabase.ts",
+      "contentHash": "5a5228942dec201672ac57e73641b42d6daae3e7cbddd14aef96ca78d0eabe1a",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-native-url-polyfill/auto",
+          "specifiers": []
+        },
+        {
+          "source": "@react-native-async-storage/async-storage",
+          "specifiers": [
+            "AsyncStorage"
+          ]
+        },
+        {
+          "source": "@supabase/supabase-js",
+          "specifiers": [
+            "createClient",
+            "SupportedStorage"
+          ]
+        }
+      ],
+      "exports": [
+        "supabase"
+      ],
+      "totalLines": 34,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/services/config.ts": {
+      "filePath": "mobile/src/services/config.ts",
+      "contentHash": "669d91f7d1926b6917acdafa826a49b88a4970b96a5addc2db8ed5f6e8a55c33",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "Service"
+          ]
+        }
+      ],
+      "exports": [
+        "SERVICE_CONFIGS"
+      ],
+      "totalLines": 18,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/shop/__tests__/schedule.test.ts": {
+      "filePath": "mobile/src/shop/__tests__/schedule.test.ts",
+      "contentHash": "b8ca5c99fbf97ce43159489fb033f56f965b4e35472f8a7b3cd1ee1170c4611e",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../schedule",
+          "specifiers": [
+            "formatCountdown",
+            "isShopOpen",
+            "msUntilNextOpen",
+            "ShopSchedule"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 32,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/shop/schedule.ts": {
+      "filePath": "mobile/src/shop/schedule.ts",
+      "contentHash": "186e187c5f63f57261b9d8a2f4b61ee2a8b832e9bbaaca988cdd00b5b23ce4ee",
+      "functions": [
+        {
+          "name": "bangkokParts",
+          "params": [
+            "now"
+          ],
+          "returnType": "BangkokParts",
+          "exported": false,
+          "lineCount": 27
+        },
+        {
+          "name": "parseHm",
+          "params": [
+            "hm"
+          ],
+          "returnType": "{ h: number; m: number }",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "inDateRange",
+          "params": [
+            "dateStr",
+            "from",
+            "to"
+          ],
+          "returnType": "boolean",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "minutesSinceMidnight",
+          "params": [
+            "h",
+            "m"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "windowOpenAt",
+          "params": [
+            "parts",
+            "w"
+          ],
+          "returnType": "boolean",
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "isShopOpen",
+          "params": [
+            "schedule",
+            "now"
+          ],
+          "returnType": "boolean",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "nextOpenInstant",
+          "params": [
+            "schedule",
+            "now"
+          ],
+          "returnType": "Date | null",
+          "exported": false,
+          "lineCount": 19
+        },
+        {
+          "name": "msUntilNextOpen",
+          "params": [
+            "schedule",
+            "now"
+          ],
+          "returnType": "number",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "formatCountdown",
+          "params": [
+            "ms"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "isShopOpen",
+        "msUntilNextOpen",
+        "formatCountdown"
+      ],
+      "totalLines": 117,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/state/auth.ts": {
+      "filePath": "mobile/src/state/auth.ts",
+      "contentHash": "fcb9a6908a2b024949c6cf40d4f0d469ad02804c7a7f0358555d398c20a7fb88",
+      "functions": [
+        {
+          "name": "loadProfile",
+          "params": [
+            "userId"
+          ],
+          "returnType": "Promise<Profile | null>",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "signInAsGuest",
+          "params": [
+            "nickname"
+          ],
+          "exported": false,
+          "lineCount": 6
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "zustand",
+          "specifiers": [
+            "create"
+          ]
+        },
+        {
+          "source": "../lib/supabase",
+          "specifiers": [
+            "supabase"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "Profile"
+          ]
+        }
+      ],
+      "exports": [
+        "DEFAULT_GUEST_NICKNAME",
+        "useAuth"
+      ],
+      "totalLines": 84,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/types/db.ts": {
+      "filePath": "mobile/src/types/db.ts",
+      "contentHash": "19a4652cc579a69b2c215c10860b4c5e302116d975d5a4e8f94205305ef7422f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 152,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/types/declarations.d.ts": {
+      "filePath": "mobile/src/types/declarations.d.ts",
+      "contentHash": "68dce02589e1c9e510d647646bc09a5af4a24ba27fc09a69082e6c859cebd44d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/ui/SpotPicker.native.tsx": {
+      "filePath": "mobile/src/ui/SpotPicker.native.tsx",
+      "contentHash": "38eefa1e6ec7bfbf17da97fd623b246cd7bf5650d618100098c3149adfc842b1",
+      "functions": [
+        {
+          "name": "SpotPicker",
+          "params": [
+            "{\n  visible, anchors, personaId, loading, onConfirm, onDismiss,\n}"
+          ],
+          "exported": true,
+          "lineCount": 103
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "Modal",
+            "Pressable",
+            "StyleSheet",
+            "ScrollView",
+            "ActivityIndicator"
+          ]
+        },
+        {
+          "source": "react-native-maps",
+          "specifiers": [
+            "MapView",
+            "Marker"
+          ]
+        },
+        {
+          "source": "../dating/distanceJoke",
+          "specifiers": [
+            "anchorDistanceKm"
+          ]
+        },
+        {
+          "source": "./theme",
+          "specifiers": [
+            "theme"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "GagAnchor",
+            "AnchorType"
+          ]
+        },
+        {
+          "source": "./SpotPicker.types",
+          "specifiers": [
+            "SpotPickerProps"
+          ]
+        }
+      ],
+      "exports": [
+        "SpotPicker"
+      ],
+      "totalLines": 143,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/ui/SpotPicker.tsx": {
+      "filePath": "mobile/src/ui/SpotPicker.tsx",
+      "contentHash": "bfe7322680ad0fb4d483d76ad745ad12d5aef4020134239911097d0c62dcac08",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "default",
+        "SpotPickerProps"
+      ],
+      "totalLines": 3,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/ui/SpotPicker.types.ts": {
+      "filePath": "mobile/src/ui/SpotPicker.types.ts",
+      "contentHash": "f2d987e768b3f1de9e735a683b81ceec6cfe84c6b5028e492bc6b915bc1e46c9",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "GagAnchor"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/ui/SpotPicker.web.tsx": {
+      "filePath": "mobile/src/ui/SpotPicker.web.tsx",
+      "contentHash": "317c5fadd01e94f31841c050051d0a76fc5fb74b2be9f99c68a527a70d0afbe2",
+      "functions": [
+        {
+          "name": "SpotPicker",
+          "params": [
+            "{\n  visible, anchors, personaId, loading, onConfirm, onDismiss,\n}"
+          ],
+          "exported": true,
+          "lineCount": 83
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "Modal",
+            "Pressable",
+            "StyleSheet",
+            "ScrollView",
+            "ActivityIndicator"
+          ]
+        },
+        {
+          "source": "../dating/distanceJoke",
+          "specifiers": [
+            "anchorDistanceKm"
+          ]
+        },
+        {
+          "source": "./theme",
+          "specifiers": [
+            "theme"
+          ]
+        },
+        {
+          "source": "../types/db",
+          "specifiers": [
+            "GagAnchor",
+            "AnchorType"
+          ]
+        },
+        {
+          "source": "./SpotPicker.types",
+          "specifiers": [
+            "SpotPickerProps"
+          ]
+        }
+      ],
+      "exports": [
+        "SpotPicker"
+      ],
+      "totalLines": 123,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/ui/theme.ts": {
+      "filePath": "mobile/src/ui/theme.ts",
+      "contentHash": "b9801ebda1684a135503eed5792e96b8645c950189653cd1dafb19b64f8d8fba",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "theme"
+      ],
+      "totalLines": 15,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/ui/TrackingMap.native.tsx": {
+      "filePath": "mobile/src/ui/TrackingMap.native.tsx",
+      "contentHash": "5a19a472f4469b81e02ec2259cfb6e47aa9dc2308ac6e5976961301c2682d0a5",
+      "functions": [
+        {
+          "name": "TrackingMap",
+          "params": [
+            "{\n  style,\n  userPin,\n  rider,\n  path,\n  strokeColor,\n  trackingNoun,\n  incidentKind,\n}"
+          ],
+          "exported": true,
+          "lineCount": 34
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-native-maps",
+          "specifiers": [
+            "MapView",
+            "Marker",
+            "Polyline"
+          ]
+        },
+        {
+          "source": "react-native",
+          "specifiers": [
+            "Text"
+          ]
+        },
+        {
+          "source": "./TrackingMap.types",
+          "specifiers": [
+            "TrackingMapProps"
+          ]
+        }
+      ],
+      "exports": [
+        "TrackingMap"
+      ],
+      "totalLines": 39,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/ui/TrackingMap.tsx": {
+      "filePath": "mobile/src/ui/TrackingMap.tsx",
+      "contentHash": "997ad9e59fc710cd1bba513694677b2562696a6380ce83bda23205afa57a7806",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "default",
+        "TrackingMapProps"
+      ],
+      "totalLines": 3,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/ui/TrackingMap.types.ts": {
+      "filePath": "mobile/src/ui/TrackingMap.types.ts",
+      "contentHash": "066c266303782c4a7cc7830f878079bce87cc3d59d089534af0975bd8f97b9a5",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../engine/path",
+          "specifiers": [
+            "Keyframe",
+            "LatLng"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/src/ui/TrackingMap.web.tsx": {
+      "filePath": "mobile/src/ui/TrackingMap.web.tsx",
+      "contentHash": "9e04cbbb477723dcd9e3ca94f6ace9bbc235c7005e74f60b403e096ba8c14954",
+      "functions": [
+        {
+          "name": "TrackingMap",
+          "params": [
+            "{\n  style,\n  userPin,\n  rider,\n  path,\n  strokeColor,\n  trackingNoun,\n  incidentKind,\n}"
+          ],
+          "exported": true,
+          "lineCount": 24
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-native",
+          "specifiers": [
+            "View",
+            "Text",
+            "StyleSheet"
+          ]
+        },
+        {
+          "source": "./TrackingMap.types",
+          "specifiers": [
+            "TrackingMapProps"
+          ]
+        }
+      ],
+      "exports": [
+        "TrackingMap"
+      ],
+      "totalLines": 42,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/tsconfig.json": {
+      "filePath": "mobile/tsconfig.json",
+      "contentHash": "b3fcbc507af0df8008ffae41c5132e2bafceb650f6f55347d7492e0d8f98e3c0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 22,
+      "hasStructuralAnalysis": true
+    },
+    "mobile/vercel.json": {
+      "filePath": "mobile/vercel.json",
+      "contentHash": "8ce4d0a5289a7011f14d1bf4fdfd6a753741df8f883926e0f6da7026ec34f03a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": true
+    },
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "9492a05dba553c4887f7174a0932a049c2766845d3691f71377fd73fa4f41744",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 63,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/local-stack.sh": {
+      "filePath": "scripts/local-stack.sh",
+      "contentHash": "1297d3215688b89c44cb7cc2b696454247c690335cabbbcfa1501f392c0dae8a",
+      "functions": [
+        {
+          "name": "fix_restart_policy",
+          "params": [],
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "usage",
+          "params": [],
+          "exported": false,
+          "lineCount": 11
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 53,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/config.toml": {
+      "filePath": "supabase/config.toml",
+      "contentHash": "35874f2cf40d2e40f4fd91be9cc4c038ec5f693227f590c3cc96fc9e86b567a5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 419,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/functions/tiein-submit/index.ts": {
+      "filePath": "supabase/functions/tiein-submit/index.ts",
+      "contentHash": "7514c8e58e5464b63aad8a5fae6bd9ae24ba72faa43067ffe6304f021bfd7b63",
+      "functions": [
+        {
+          "name": "json",
+          "params": [
+            "body",
+            "status"
+          ],
+          "returnType": "Response",
+          "exported": false,
+          "lineCount": 6
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "npm:@supabase/supabase-js@2",
+          "specifiers": [
+            "createClient"
+          ]
+        },
+        {
+          "source": "./validate.ts",
+          "specifiers": [
+            "validateTiein"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 82,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/functions/tiein-submit/validate_test.ts": {
+      "filePath": "supabase/functions/tiein-submit/validate_test.ts",
+      "contentHash": "24563adc551177f9a1496ce6c3f2180cb61508cc5f14231fc9f2c5b25c274b9c",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "jsr:@std/assert@1",
+          "specifiers": [
+            "assertEquals"
+          ]
+        },
+        {
+          "source": "./validate.ts",
+          "specifiers": [
+            "validateTiein"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 37,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/functions/tiein-submit/validate.ts": {
+      "filePath": "supabase/functions/tiein-submit/validate.ts",
+      "contentHash": "973a7a1becb99a3fd52c978097c1bfa088c294fbfe891c423f8df8c9030776f0",
+      "functions": [
+        {
+          "name": "validateTiein",
+          "params": [
+            "body"
+          ],
+          "returnType": "Result",
+          "exported": true,
+          "lineCount": 18
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "validateTiein"
+      ],
+      "totalLines": 38,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/migrations/20260611000001_profiles.sql": {
+      "filePath": "supabase/migrations/20260611000001_profiles.sql",
+      "contentHash": "49ad56178a6b811bd695ec2cd8a7b3a01d26ff250adf18a3c07e1566db9b2a0a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 40,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/migrations/20260611000002_content_tables.sql": {
+      "filePath": "supabase/migrations/20260611000002_content_tables.sql",
+      "contentHash": "36ecfbe15e6c640fd85fe0b84b2ab940f7ae8db38715a4c50c8dd9b2d7e2a3c1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 131,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/migrations/20260611000003_user_tables.sql": {
+      "filePath": "supabase/migrations/20260611000003_user_tables.sql",
+      "contentHash": "beca16c0d9463b189f868d4de30a32e61c7f3a9e8a84d2c8d472110e2a9b05a7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 71,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/migrations/20260611000004_shop_tables.sql": {
+      "filePath": "supabase/migrations/20260611000004_shop_tables.sql",
+      "contentHash": "2e8214fbdac4754fcb4c933a438b0b08cb095212c22b10e5dd8778ae4f453e67",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 113,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/migrations/20260611000005_tiein_requests.sql": {
+      "filePath": "supabase/migrations/20260611000005_tiein_requests.sql",
+      "contentHash": "3b16feef264f9125e433797c3fadbab0ef55bfbe5f2391ebf81dece4d40fd1bc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 18,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/migrations/20260611000006_grant_voucher.sql": {
+      "filePath": "supabase/migrations/20260611000006_grant_voucher.sql",
+      "contentHash": "eb919105da0bb919009c743d1b8e2242f2ee24f26500c3fcf61a4a18e4814ba6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 131,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/migrations/20260611000007_claim_merch.sql": {
+      "filePath": "supabase/migrations/20260611000007_claim_merch.sql",
+      "contentHash": "6015a753eb8b0ee193f1d98709fe90d38fa374ba235b8c728fdfc0db5483e970",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 111,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/migrations/20260611000008_revoke_truncate.sql": {
+      "filePath": "supabase/migrations/20260611000008_revoke_truncate.sql",
+      "contentHash": "0cdcc23e42959d16e87555c42c64a1e2622cd737fa1e339c1da47cc2f1eaaf81",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/patches/2026-06-13-persona-beats.sql": {
+      "filePath": "supabase/patches/2026-06-13-persona-beats.sql",
+      "contentHash": "6d4813ed0f1514af11b4d6e4ff22479cfa2ca9458675b0b42ef44f290b9f678f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 28,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/seed.sql": {
+      "filePath": "supabase/seed.sql",
+      "contentHash": "d1f3c1c7fad1175755703f75386f63993e91460c0eeeb0a04a375ff05f279f1a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 114,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/tests/0001_profiles_test.sql": {
+      "filePath": "supabase/tests/0001_profiles_test.sql",
+      "contentHash": "133b00c585abec4be95feae20bcbdfd090903aefb36c0f9973fb18f8ead91aac",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 56,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/tests/0002_content_tables_test.sql": {
+      "filePath": "supabase/tests/0002_content_tables_test.sql",
+      "contentHash": "c3b982ceca8a4cc9ae820680705b5d03e8b6a638815c17a434b782356f044784",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 37,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/tests/0003_user_tables_test.sql": {
+      "filePath": "supabase/tests/0003_user_tables_test.sql",
+      "contentHash": "64a8d14896a0521334cea2fac33ca9c27d52e2f4ee6a7e03329743bc1532b692",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 80,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/tests/0004_shop_tables_test.sql": {
+      "filePath": "supabase/tests/0004_shop_tables_test.sql",
+      "contentHash": "b6cb3cd80142486eb54d16ead7b8108e1017992a9d22c93e858d43bdc8b64563",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 81,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/tests/0005_tiein_requests_test.sql": {
+      "filePath": "supabase/tests/0005_tiein_requests_test.sql",
+      "contentHash": "715e5465ce5d4fa567355a1a720eae2317cfe9a62e6d87e98e68d41f3ff89f37",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 33,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/tests/0006_grant_voucher_test.sql": {
+      "filePath": "supabase/tests/0006_grant_voucher_test.sql",
+      "contentHash": "49ba40a997bf70bd812e24e1cf0055dc21f84bd3de3fa485352dac31b24ce524",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 113,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/tests/0007_claim_merch_test.sql": {
+      "filePath": "supabase/tests/0007_claim_merch_test.sql",
+      "contentHash": "9e2642db0324daf5761335c773e521beb495e7f8d4a9880248d1abc2b2ef06fd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 115,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/tests/0008_hardening_test.sql": {
+      "filePath": "supabase/tests/0008_hardening_test.sql",
+      "contentHash": "66a19a519110a253fae6be1f09069abe231e06413f69780158c735e78a4add1d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    }
+  }
+}
