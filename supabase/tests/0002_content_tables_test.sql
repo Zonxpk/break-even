@@ -23,7 +23,7 @@ values ('canal', 'คลองทดสอบ', 13.75, 100.5);
 
 set local role anon;
 select set_config('request.jwt.claims', '{"role":"anon"}', true);
-select is((select count(*) from public.gag_anchors), 1::bigint,
+select is((select count(*) from public.gag_anchors where name = 'คลองทดสอบ'), 1::bigint,
   'anon can read content tables');
 
 -- ...but cannot write them

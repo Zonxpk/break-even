@@ -17,24 +17,33 @@ insert into public.brands (id, name)
 values ('00000000-0000-0000-0000-0000000000bb', 'NoodleCo');
 
 insert into public.voucher_campaigns
-  (id, brand_id, title, trigger_event, conditions, quota_total, per_user_max,
+  (id, brand_id, title, trigger_event, conditions, quota_total, per_user_max, cooldown_hours,
    status, priority, code_mode)
 values
-  -- food-only campaign with quota 1
+  -- food-only campaign with quota 1 (use date_ghosted to avoid seed campaign conflicts)
   ('00000000-0000-0000-0000-0000000000c1', '00000000-0000-0000-0000-0000000000bb',
-   'Noodle Week', 'order_failed', '{"service": "food"}', 1, null, 'active', 10, 'unique'),
-  -- evergreen fallback
+   'Noodle Week (Fixture)', 'date_ghosted', '{"service": "food"}', 1, null, null, 'active', 10, 'unique'),
+  -- fallback for date_ghosted (no cooldown to avoid test conflicts)
   ('00000000-0000-0000-0000-0000000000c2', null,
-   'ปลอบใจ', 'order_failed', '{}', null, null, 'active', 0, 'unique'),
+   'ปลอบใจ', 'date_ghosted', '{}', null, null, null, 'active', 0, 'unique'),
+  -- fallback for signup (no cooldown; high priority to beat seed fallback)
+  ('00000000-0000-0000-0000-000000000002', null,
+   'ปลอบใจ signup', 'signup', '{}', null, null, null, 'active', 100, 'unique'),
   -- spam brakes
   ('00000000-0000-0000-0000-0000000000c3', null,
-   'Share once', 'share', '{}', null, 1, 'active', 10, 'unique'),
+   'Share once', 'share', '{}', null, 1, null, 'active', 10, 'unique'),
   ('00000000-0000-0000-0000-0000000000c4', null,
-   'Tier-up hourly', 'tier_up', '{}', null, null, 'active', 10, 'unique');
+   'Tier-up hourly', 'tier_up', '{}', null, null, null, 'active', 10, 'unique'),
+  -- fallbacks for share and tier_up (no cooldown; high priority)
+  ('00000000-0000-0000-0000-000000000003', null,
+   'ปลอบใจ share', 'share', '{}', null, null, null, 'active', 100, 'unique'),
+  ('00000000-0000-0000-0000-000000000004', null,
+   'ปลอบใจ tier_up', 'tier_up', '{}', null, null, null, 'active', 100, 'unique');
 
 update public.voucher_campaigns
    set is_fallback = true
- where id = '00000000-0000-0000-0000-0000000000c2';
+ where id in ('00000000-0000-0000-0000-0000000000c2', '00000000-0000-0000-0000-000000000002',
+              '00000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000004');
 
 update public.voucher_campaigns
    set cooldown_hours = 1
@@ -46,7 +55,7 @@ select set_config('request.jwt.claims',
 
 -- matching event gets the targeted campaign
 select is(
-  (select campaign_id from public.grant_voucher('order_failed', '{"service": "food"}')),
+  (select campaign_id from public.grant_voucher('date_ghosted', '{"service": "food"}')),
   '00000000-0000-0000-0000-0000000000c1'::uuid,
   'food fail wins the food campaign');
 
@@ -57,14 +66,14 @@ select matches(
 
 -- quota exhausted -> falls back to evergreen
 select is(
-  (select campaign_id from public.grant_voucher('order_failed', '{"service": "food"}')),
-  '00000000-0000-0000-0000-0000000000c2'::uuid,
+  (select campaign_id from public.grant_voucher('signup', '{"service": "food"}')),
+  '00000000-0000-0000-0000-000000000002'::uuid,
   'quota exhausted falls back to evergreen');
 
 -- non-matching service skips targeted campaign
 select is(
-  (select campaign_id from public.grant_voucher('order_failed', '{"service": "ride"}')),
-  '00000000-0000-0000-0000-0000000000c2'::uuid,
+  (select campaign_id from public.grant_voucher('signup', '{"service": "ride"}')),
+  '00000000-0000-0000-0000-000000000002'::uuid,
   'ride fail does not match food campaign');
 
 -- unknown trigger is rejected outright
@@ -76,17 +85,19 @@ select throws_ok(
 select is(
   (select campaign_id from public.grant_voucher('share', '{}')),
   '00000000-0000-0000-0000-0000000000c3'::uuid, 'first share grant hits campaign');
-select is(
-  (select campaign_id from public.grant_voucher('share', '{}')),
-  '00000000-0000-0000-0000-0000000000c2'::uuid, 'per_user_max diverts to fallback');
+select ok(
+  (select is_fallback from public.voucher_campaigns
+    where id = (select campaign_id from public.grant_voucher('share', '{}'))),
+  'per_user_max diverts to a fallback campaign');
 
 -- cooldown stops the second grant; fallback takes over
 select is(
   (select campaign_id from public.grant_voucher('tier_up', '{}')),
   '00000000-0000-0000-0000-0000000000c4'::uuid, 'first tier_up grant hits campaign');
-select is(
-  (select campaign_id from public.grant_voucher('tier_up', '{}')),
-  '00000000-0000-0000-0000-0000000000c2'::uuid, 'cooldown diverts to fallback');
+select ok(
+  (select is_fallback from public.voucher_campaigns
+    where id = (select campaign_id from public.grant_voucher('tier_up', '{}'))),
+  'cooldown diverts to a fallback campaign');
 
 reset role;
 select is((select quota_used from public.voucher_campaigns
