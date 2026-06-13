@@ -1,7 +1,7 @@
 # Food Delivery Deep Browse — Design Spec
 
 **Date:** 2026-06-13  
-**Status:** Draft — awaiting review  
+**Status:** Approved — implementation plan at `docs/superpowers/plans/2026-06-13-food-delivery.md`  
 **Parent spec:** `docs/superpowers/specs/2026-06-11-when-geemong-design.md` §5 (Browse → Confirm pipeline)  
 **Prerequisite:** App core shipped (`docs/superpowers/RESUME-app-core.md`)
 
