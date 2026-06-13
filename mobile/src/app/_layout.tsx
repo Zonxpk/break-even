@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Platform, View, StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { useAuth } from '../state/auth';
 import { theme } from '../ui/theme';
@@ -33,12 +34,19 @@ export default function RootLayout() {
     </Stack>
   );
 
-  if (Platform.OS !== 'web') return stack;
+  if (Platform.OS !== 'web') {
+    return <GestureHandlerRootView style={s.flex}>{stack}</GestureHandlerRootView>;
+  }
 
-  return <View style={s.webShell}>{stack}</View>;
+  return (
+    <GestureHandlerRootView style={s.flex}>
+      <View style={s.webShell}>{stack}</View>
+    </GestureHandlerRootView>
+  );
 }
 
 const s = StyleSheet.create({
+  flex: { flex: 1 },
   webShell: {
     flex: 1,
     width: '100%',

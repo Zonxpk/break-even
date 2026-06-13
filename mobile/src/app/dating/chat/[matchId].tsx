@@ -12,6 +12,8 @@ import { chatAffectionGain } from '../../../dating/affectionDrip';
 import { clearChatSession, loadChatSession, saveChatSession } from '../../../dating/chatSession';
 import { loadChat, replyToUser, type ChatMessage } from '../../../dating/chatStorage';
 import { placeDateOrder } from '../../../dating/bookDate';
+import AffectionBar from '../../../dating/ui/AffectionBar';
+import ChatBubble from '../../../dating/ui/ChatBubble';
 import SpotPicker from '../../../ui/SpotPicker';
 import { theme } from '../../../ui/theme';
 import { useAuth } from '../../../state/auth';
@@ -50,6 +52,7 @@ export default function DatingChat() {
   }, [matchId]);
 
   const beat = match?.personas ? nextBeat(match, match.personas) : null;
+  const canSend = input.trim().length > 0 && !sending;
 
   async function grantBeatXp() {
     const { data: userData } = await supabase.auth.getUser();
@@ -63,7 +66,7 @@ export default function DatingChat() {
   }
 
   async function send() {
-    if (!input.trim() || !match?.personas || !matchId) return;
+    if (!canSend || !match?.personas || !matchId) return;
     setSending(true);
     try {
       await replyToUser(matchId, match.personas, input.trim());
@@ -123,36 +126,55 @@ export default function DatingChat() {
   return (
     <View style={s.root}>
       <Stack.Screen options={{ headerShown: true, title: match.personas?.name ?? 'แชท' }} />
-      <Text style={s.bar}>ความชอบ {match.affection}%</Text>
+      <AffectionBar affection={match.affection} name={match.personas?.name} />
       <FlatList
         data={messages}
         keyExtractor={(m) => m.id}
-        contentContainerStyle={{ padding: theme.pad, gap: 8 }}
-        renderItem={({ item }) => (
-          <View style={[s.bubble, item.role === 'user' ? s.user : s.persona]}>
-            <Text>{item.text}</Text>
-          </View>
-        )}
+        contentContainerStyle={s.list}
+        renderItem={({ item }) => <ChatBubble text={item.text} role={item.role} />}
       />
       {beat ? (
         <View style={s.beat}>
+          <Text style={s.beatLabel}>📖 จุดเปลี่ยนเรื่อง</Text>
           <Text style={s.beatScene}>{beat.scene}</Text>
           {beat.choices.map((c: { text: string }, i: number) => (
-            <Pressable key={c.text} style={s.beatBtn} onPress={() => onBeatChoice(i)}>
-              <Text>{c.text}</Text>
+            <Pressable
+              key={c.text}
+              accessibilityRole="button"
+              style={({ pressed }) => [s.beatBtn, pressed && s.beatBtnPressed]}
+              onPress={() => onBeatChoice(i)}
+            >
+              <Text style={s.beatBtnText}>{c.text}</Text>
             </Pressable>
           ))}
         </View>
       ) : null}
       {match.affection >= 30 ? (
-        <Pressable style={s.dateBtn} onPress={openDatePicker}>
+        <Pressable
+          accessibilityRole="button"
+          style={({ pressed }) => [s.dateBtn, pressed && s.dateBtnPressed]}
+          onPress={openDatePicker}
+        >
           <Text style={s.dateBtnText}>📍 นัดเดท</Text>
         </Pressable>
       ) : null}
       <View style={s.inputRow}>
-        <TextInput style={s.input} value={input} onChangeText={setInput} placeholder="พิมพ์ข้อความ..." />
-        <Pressable style={s.send} onPress={send} disabled={sending}>
-          <Text style={s.sendText}>ส่ง</Text>
+        <TextInput
+          style={s.input}
+          value={input}
+          onChangeText={setInput}
+          placeholder="พิมพ์ข้อความ..."
+          placeholderTextColor={theme.textMuted}
+          editable={!sending}
+        />
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="ส่งข้อความ"
+          style={({ pressed }) => [s.send, !canSend && s.sendDisabled, pressed && canSend && s.sendPressed]}
+          onPress={send}
+          disabled={!canSend}
+        >
+          <Text style={s.sendText}>{sending ? '…' : 'ส่ง'}</Text>
         </Pressable>
       </View>
       <SpotPicker
@@ -170,17 +192,62 @@ export default function DatingChat() {
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: theme.bg },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  bar: { padding: theme.pad, fontWeight: '700', backgroundColor: theme.surface },
-  bubble: { borderRadius: theme.radius, padding: 12, maxWidth: '85%' },
-  user: { alignSelf: 'flex-end', backgroundColor: '#DCFCE7' },
-  persona: { alignSelf: 'flex-start', backgroundColor: theme.surface },
-  beat: { padding: theme.pad, gap: 8, backgroundColor: '#FFF7ED' },
-  beatScene: { fontWeight: '700' },
-  beatBtn: { backgroundColor: '#fff', borderRadius: theme.radius, padding: 12 },
-  dateBtn: { margin: theme.pad, backgroundColor: theme.green, borderRadius: theme.radius, padding: 14, alignItems: 'center' },
-  dateBtnText: { color: '#fff', fontWeight: '700' },
-  inputRow: { flexDirection: 'row', padding: theme.pad, gap: 8, borderTopWidth: 1, borderTopColor: '#eee' },
-  input: { flex: 1, backgroundColor: theme.surface, borderRadius: theme.radius, paddingHorizontal: 12 },
-  send: { backgroundColor: theme.green, borderRadius: theme.radius, paddingHorizontal: 16, justifyContent: 'center' },
+  list: { padding: theme.pad, gap: 8, paddingBottom: 8 },
+  beat: {
+    padding: theme.pad,
+    gap: 8,
+    backgroundColor: theme.dating.beatBg,
+    borderTopWidth: 1,
+    borderTopColor: '#FDE68A',
+  },
+  beatLabel: { fontSize: 12, fontWeight: '800', color: theme.dating.rareText, textTransform: 'uppercase' },
+  beatScene: { fontWeight: '700', fontSize: 15, lineHeight: 22 },
+  beatBtn: {
+    backgroundColor: theme.bg,
+    borderRadius: theme.radius,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: '#EEE',
+  },
+  beatBtnPressed: { backgroundColor: theme.surface },
+  beatBtnText: { fontSize: 15 },
+  dateBtn: {
+    marginHorizontal: theme.pad,
+    marginTop: 8,
+    backgroundColor: theme.green,
+    borderRadius: theme.radius,
+    padding: 14,
+    alignItems: 'center',
+  },
+  dateBtnPressed: { backgroundColor: theme.greenDark },
+  dateBtnText: { color: '#fff', fontWeight: '700', fontSize: 16 },
+  inputRow: {
+    flexDirection: 'row',
+    padding: theme.pad,
+    gap: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#EEE',
+    backgroundColor: theme.bg,
+  },
+  input: {
+    flex: 1,
+    backgroundColor: theme.surface,
+    borderRadius: 22,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    fontSize: 15,
+    borderWidth: 1,
+    borderColor: '#EEE',
+  },
+  send: {
+    backgroundColor: theme.green,
+    borderRadius: 22,
+    paddingHorizontal: 18,
+    justifyContent: 'center',
+    minWidth: 56,
+    alignItems: 'center',
+  },
+  sendPressed: { backgroundColor: theme.greenDark },
+  sendDisabled: { opacity: 0.45 },
   sendText: { color: '#fff', fontWeight: '700' },
 });

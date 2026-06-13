@@ -1,32 +1,27 @@
 import { useEffect, useState } from 'react';
 import { View, Text, Pressable, StyleSheet, Alert } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createMatch, fetchPersonas } from '../../api/personas';
 import { supabase } from '../../lib/supabase';
 import { XP, tierForXp } from '../../balance/balance';
 import { deckForToday } from '../../dating/deck';
 import { fakeDistanceKm } from '../../dating/distanceJoke';
 import { resolveSwipe } from '../../dating/swipe';
+import TinderActionBar from '../../dating/ui/TinderActionBar';
+import TinderDeck, { type SwipeDirection } from '../../dating/ui/TinderDeck';
 import { useAuth } from '../../state/auth';
 import { theme } from '../../ui/theme';
-import type { Persona, PersonaRarity } from '../../types/db';
-
-const RARITY_STYLE: Record<PersonaRarity, { badge: object; badgeText: object; card?: object; namePrefix?: string }> = {
-  common: { badge: {}, badgeText: { color: theme.greenDark } },
-  rare: { badge: { backgroundColor: '#FEF3C7' }, badgeText: { color: '#92400E' } },
-  legendary: {
-    badge: { backgroundColor: '#FEF3C7' },
-    badgeText: { color: '#92400E' },
-    card: { borderWidth: 2, borderColor: theme.greenDark },
-    namePrefix: '✨ ',
-  },
-};
+import type { Persona } from '../../types/db';
 
 export default function DatingDeck() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { profile, userId, refreshProfile } = useAuth();
   const [deck, setDeck] = useState<Persona[]>([]);
-  const [index, setIndex] = useState(0);
+  const [swipedCount, setSwipedCount] = useState(0);
+  const [busy, setBusy] = useState(false);
+  const [swipeRequest, setSwipeRequest] = useState<SwipeDirection | null>(null);
   const today = new Date().toISOString().slice(0, 10);
 
   useEffect(() => {
@@ -34,80 +29,140 @@ export default function DatingDeck() {
     fetchPersonas().then((all) => setDeck(deckForToday(all, userId))).catch(() => {});
   }, [userId]);
 
-  const current = deck[index];
-  const rarity = current ? RARITY_STYLE[current.rarity] : null;
+  async function handleSwipe(direction: SwipeDirection, persona: Persona) {
+    if (!profile || !userId || busy) return;
+    setBusy(true);
+    const index = swipedCount;
+    const seed = persona.id.charCodeAt(0) + index;
+    const isSuper = direction === 'super';
 
-  async function swipe(direction: 'left' | 'right') {
-    if (!current || !profile || !userId) return;
-    const seed = current.id.charCodeAt(0) + index;
-
-    if (direction === 'left') {
-      const { data: prof } = await supabase.from('profiles').select('loyalty_xp').eq('id', userId).single();
-      if (prof) {
-        const xp = prof.loyalty_xp + XP.swipe_rejected;
-        await supabase.from('profiles').update({ loyalty_xp: xp, tier: tierForXp(xp) }).eq('id', userId);
-        refreshProfile();
+    try {
+      if (direction === 'left') {
+        const { data: prof } = await supabase.from('profiles').select('loyalty_xp').eq('id', userId).single();
+        if (prof) {
+          const xp = prof.loyalty_xp + XP.swipe_rejected;
+          await supabase.from('profiles').update({ loyalty_xp: xp, tier: tierForXp(xp) }).eq('id', userId);
+          refreshProfile();
+        }
+        Alert.alert('เขาปัดซ้ายคุณ 💔', '+2 แต้มความเจ็บปวด');
+      } else {
+        if (isSuper) {
+          Alert.alert('ซุปเปอร์ไลค์! ⭐', `${persona.name} ไม่เห็นหรอก แต่คุณรู้สึกดีใช่ไหม`);
+        }
+        const result = resolveSwipe({ tier: profile.tier, rarity: persona.rarity, seed });
+        if (result === 'match') {
+          await createMatch(persona.id);
+          Alert.alert('แมตช์แล้ว! 💘', `คุณกับ ${persona.name} ชอบกัน`);
+          router.push('/dating/matches');
+          return;
+        }
+        Alert.alert('ยังไม่แมตช์', 'วันนี้ยังไม่ใช่คู่แท้');
       }
-      Alert.alert('เขาปัดซ้ายคุณ 💔', '+2 แต้มความเจ็บปวด');
-    } else {
-      const result = resolveSwipe({ tier: profile.tier, rarity: current.rarity, seed });
-      if (result === 'match') {
-        await createMatch(current.id);
-        Alert.alert('แมตช์แล้ว! 💘', `คุณกับ ${current.name} ชอบกัน`);
-        router.push('/dating/matches');
-        return;
-      }
-      Alert.alert('ยังไม่แมตช์', 'วันนี้ยังไม่ใช่คู่แท้');
+      setSwipedCount((n) => n + 1);
+      setDeck((d) => d.slice(1));
+    } finally {
+      setBusy(false);
     }
-    setIndex((i) => i + 1);
   }
 
-  if (!current) {
-    return (
-      <View style={s.center}>
-        <Stack.Screen options={{ headerShown: true, title: '💘 หาคู่' }} />
-        <Text style={s.progress}>วันนี้ปัดไปแล้ว {index}/10</Text>
-        <Text style={s.empty}>มือหมดแล้ว — พรุ่งนี้มีคนใหม่มาให้ผิดหวัง</Text>
-        <Pressable onPress={() => router.push('/dating/matches')}>
-          <Text style={s.link}>ดูแมตช์ของฉัน</Text>
-        </Pressable>
-      </View>
-    );
+  function requestSwipe(dir: SwipeDirection) {
+    if (busy || deck.length === 0) return;
+    setSwipeRequest(dir);
   }
+
+  const empty = deck.length === 0;
 
   return (
-    <View style={s.root}>
-      <Stack.Screen options={{ headerShown: true, title: '💘 หาคู่' }} />
-      {index > 0 ? <Text style={s.progress}>วันนี้ปัดไปแล้ว {index}/10</Text> : null}
-      <View style={[s.card, rarity?.card]}>
-        <Text style={s.photo}>📸</Text>
-        <Text style={s.name}>{rarity?.namePrefix}{current.name}</Text>
-        <Text style={s.bio}>{current.bio}</Text>
-        <Text style={s.distance}>ห่างจากคุณ {fakeDistanceKm(current.id, today)}</Text>
-        <Text style={[s.rarity, rarity?.badge, rarity?.badgeText]}>{current.rarity}</Text>
+    <View style={[s.root, { paddingTop: insets.top }]}>
+      <Stack.Screen options={{ headerShown: false }} />
+
+      <View style={s.header}>
+        <Text style={s.logo}>💘</Text>
+        <Text style={s.title}>หาคู่</Text>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="ดูแมตช์ของฉัน"
+          onPress={() => router.push('/dating/matches')}
+          style={({ pressed }) => [s.matchesBtn, pressed && s.matchesBtnPressed]}
+        >
+          <Text style={s.matchesIcon}>💬</Text>
+        </Pressable>
       </View>
-      <View style={s.actions}>
-        <Pressable style={[s.btn, s.nope]} onPress={() => swipe('left')}><Text>✕</Text></Pressable>
-        <Pressable style={[s.btn, s.yes]} onPress={() => swipe('right')}><Text>♥</Text></Pressable>
+
+      {!empty ? (
+        <Text style={s.progress}>วันนี้ปัดไปแล้ว {swipedCount}/10</Text>
+      ) : null}
+
+      <View style={s.deckArea}>
+        {empty ? (
+          <View style={s.emptyWrap}>
+            <Text style={s.emptyEmoji}>🔥</Text>
+            <Text style={s.emptyTitle}>ไม่มีคนให้ปัดแล้ว</Text>
+            <Text style={s.emptySub}>พรุ่งนี้มีคนใหม่มาให้ผิดหวัง — หรือไปดูแมตช์เก่า</Text>
+            <Pressable onPress={() => router.push('/dating/matches')} style={s.emptyBtn}>
+              <Text style={s.emptyBtnText}>ดูแมตช์ของฉัน</Text>
+            </Pressable>
+          </View>
+        ) : (
+          <TinderDeck
+            cards={deck}
+            distanceFor={(p) => fakeDistanceKm(p.id, today)}
+            onSwipe={handleSwipe}
+            swipeRequest={swipeRequest}
+            onSwipeRequestHandled={() => setSwipeRequest(null)}
+          />
+        )}
       </View>
+
+      {!empty ? (
+        <View style={[s.actions, { paddingBottom: Math.max(insets.bottom, 12) }]}>
+          <TinderActionBar onSwipe={requestSwipe} disabled={busy} />
+        </View>
+      ) : null}
     </View>
   );
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: theme.bg, padding: theme.pad, justifyContent: 'center' },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: theme.pad, gap: 12 },
-  progress: { textAlign: 'center', color: theme.textMuted, marginBottom: 8, fontSize: 13 },
-  card: { backgroundColor: theme.surface, borderRadius: 20, padding: 24, alignItems: 'center', gap: 8, minHeight: 320 },
-  photo: { fontSize: 64 },
-  name: { fontSize: 24, fontWeight: '800' },
-  bio: { textAlign: 'center', color: theme.textMuted, lineHeight: 22 },
-  distance: { fontSize: 13, color: theme.textMuted },
-  rarity: { fontSize: 12, fontWeight: '700', textTransform: 'uppercase', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, overflow: 'hidden' },
-  actions: { flexDirection: 'row', justifyContent: 'center', gap: 40, marginTop: 24 },
-  btn: { width: 64, height: 64, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
-  nope: { backgroundColor: '#FEE2E2' },
-  yes: { backgroundColor: '#FECDD3' },
-  empty: { textAlign: 'center', color: theme.textMuted },
-  link: { color: theme.greenDark, fontWeight: '700' },
+  root: { flex: 1, backgroundColor: theme.bg },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: theme.pad,
+    paddingVertical: 10,
+    gap: 8,
+  },
+  logo: { fontSize: 26 },
+  title: { flex: 1, fontSize: 22, fontWeight: '800', color: theme.tinder.pink },
+  matchesBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  matchesBtnPressed: { opacity: 0.7 },
+  matchesIcon: { fontSize: 20 },
+  progress: {
+    textAlign: 'center',
+    fontSize: 13,
+    fontWeight: '600',
+    color: theme.textMuted,
+    marginBottom: 4,
+  },
+  deckArea: { flex: 1, paddingHorizontal: 12, paddingBottom: 8 },
+  actions: { paddingHorizontal: theme.pad, paddingTop: 4 },
+  emptyWrap: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10, padding: 24 },
+  emptyEmoji: { fontSize: 56 },
+  emptyTitle: { fontSize: 22, fontWeight: '800' },
+  emptySub: { textAlign: 'center', color: theme.textMuted, lineHeight: 22 },
+  emptyBtn: {
+    marginTop: 12,
+    backgroundColor: theme.tinder.pink,
+    paddingHorizontal: 24,
+    paddingVertical: 14,
+    borderRadius: 28,
+  },
+  emptyBtnText: { color: '#fff', fontWeight: '800', fontSize: 16 },
 });

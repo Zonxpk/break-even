@@ -1,7 +1,9 @@
 import { useCallback, useState } from 'react';
-import { View, Text, FlatList, Pressable, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { Stack, useFocusEffect, useRouter } from 'expo-router';
 import { listMatches } from '../../api/personas';
+import MatchRow from '../../dating/ui/MatchRow';
+import { RARITY_STYLE } from '../../dating/ui/rarity';
 import { theme } from '../../ui/theme';
 
 type Row = Awaited<ReturnType<typeof listMatches>>[number];
@@ -20,12 +22,21 @@ export default function DatingMatches() {
       <FlatList
         data={rows}
         keyExtractor={(r) => r.id}
-        ListEmptyComponent={<Text style={s.empty}>ยังไม่มีแมตช์ — ไปปัดการ์ดกัน</Text>}
+        contentContainerStyle={rows.length === 0 ? s.emptyList : undefined}
+        ListEmptyComponent={
+          <View style={s.emptyWrap}>
+            <Text style={s.emptyEmoji}>💔</Text>
+            <Text style={s.empty}>ยังไม่มีแมตช์</Text>
+            <Text style={s.emptySub}>ไปปัดการ์ดกัน — วันนี้มีคนใหม่มาให้ผิดหวัง</Text>
+          </View>
+        }
         renderItem={({ item }) => (
-          <Pressable style={s.card} onPress={() => router.push(`/dating/chat/${item.id}`)}>
-            <Text style={s.name}>{item.personas?.name ?? '???'}</Text>
-            <Text style={s.affection}>ความชอบ {item.affection}%</Text>
-          </Pressable>
+          <MatchRow
+            name={item.personas?.name ?? '???'}
+            affection={item.affection}
+            rarity={item.personas ? RARITY_STYLE[item.personas.rarity].label : undefined}
+            onPress={() => router.push(`/dating/chat/${item.id}`)}
+          />
         )}
       />
     </View>
@@ -34,8 +45,9 @@ export default function DatingMatches() {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: theme.bg, padding: theme.pad },
-  empty: { textAlign: 'center', color: theme.textMuted, marginTop: 60 },
-  card: { backgroundColor: theme.surface, borderRadius: theme.radius, padding: 16, marginBottom: 10 },
-  name: { fontSize: 17, fontWeight: '800' },
-  affection: { color: theme.textMuted, marginTop: 4 },
+  emptyList: { flexGrow: 1, justifyContent: 'center' },
+  emptyWrap: { alignItems: 'center', gap: 8, paddingHorizontal: 24 },
+  emptyEmoji: { fontSize: 48 },
+  empty: { textAlign: 'center', fontSize: 18, fontWeight: '800', color: theme.text },
+  emptySub: { textAlign: 'center', color: theme.textMuted, lineHeight: 20 },
 });
