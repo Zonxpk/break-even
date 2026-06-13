@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(6);
+select plan(7);
 
 select has_table('public', 'profiles', 'profiles table exists');
 select col_default_is('public', 'profiles', 'loyalty_xp', '0', 'xp defaults to 0');
@@ -41,6 +41,15 @@ select is(
   (select loyalty_xp from public.profiles
     where id = '00000000-0000-0000-0000-0000000000a1'),
   50, 'owner can update own xp (v1 client-trust per spec §15)');
+
+-- cross-user write attempt is silently filtered by RLS (0 rows touched)
+update public.profiles set loyalty_xp = 999
+ where id = '00000000-0000-0000-0000-0000000000a2';
+reset role;
+select is(
+  (select loyalty_xp from public.profiles
+    where id = '00000000-0000-0000-0000-0000000000a2'),
+  0, 'cross-user update touches nothing');
 
 select * from finish();
 rollback;

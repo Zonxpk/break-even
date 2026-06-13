@@ -11,8 +11,10 @@ create table public.profiles (
 
 alter table public.profiles enable row level security;
 
--- Grant permissions for testing/admin
-grant select, update on public.profiles to authenticated;
+-- auto_expose_new_tables = false: explicit grants required per table.
+-- Column-level update keeps id/created_at immutable for clients.
+grant select on public.profiles to authenticated;
+grant update (nickname, loyalty_xp, tier) on public.profiles to authenticated;
 
 create policy "profiles owner select" on public.profiles
   for select to authenticated using (id = auth.uid());
@@ -24,7 +26,7 @@ create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
 security definer
-set search_path = public
+set search_path = ''
 as $$
 begin
   insert into public.profiles (id, nickname)
