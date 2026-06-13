@@ -23,27 +23,18 @@ values
   -- food-only campaign with quota 1 (use date_ghosted to avoid seed campaign conflicts)
   ('00000000-0000-0000-0000-0000000000c1', '00000000-0000-0000-0000-0000000000bb',
    'Noodle Week (Fixture)', 'date_ghosted', '{"service": "food"}', 1, null, null, 'active', 10, 'unique'),
-  -- fallback for date_ghosted (no cooldown to avoid test conflicts)
-  ('00000000-0000-0000-0000-0000000000c2', null,
-   'ปลอบใจ', 'date_ghosted', '{}', null, null, null, 'active', 0, 'unique'),
-  -- fallback for signup (no cooldown; high priority to beat seed fallback)
+  -- single global fallback (is_fallback=true, priority 100 beats any seed fallback)
   ('00000000-0000-0000-0000-000000000002', null,
-   'ปลอบใจ signup', 'signup', '{}', null, null, null, 'active', 100, 'unique'),
+   'fixture fallback', 'date_ghosted', '{}', null, null, null, 'active', 100, 'unique'),
   -- spam brakes
   ('00000000-0000-0000-0000-0000000000c3', null,
    'Share once', 'share', '{}', null, 1, null, 'active', 10, 'unique'),
   ('00000000-0000-0000-0000-0000000000c4', null,
-   'Tier-up hourly', 'tier_up', '{}', null, null, null, 'active', 10, 'unique'),
-  -- fallbacks for share and tier_up (no cooldown; high priority)
-  ('00000000-0000-0000-0000-000000000003', null,
-   'ปลอบใจ share', 'share', '{}', null, null, null, 'active', 100, 'unique'),
-  ('00000000-0000-0000-0000-000000000004', null,
-   'ปลอบใจ tier_up', 'tier_up', '{}', null, null, null, 'active', 100, 'unique');
+   'Tier-up hourly', 'tier_up', '{}', null, null, null, 'active', 10, 'unique');
 
 update public.voucher_campaigns
    set is_fallback = true
- where id in ('00000000-0000-0000-0000-0000000000c2', '00000000-0000-0000-0000-000000000002',
-              '00000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000004');
+ where id = '00000000-0000-0000-0000-000000000002';
 
 update public.voucher_campaigns
    set cooldown_hours = 1
@@ -53,28 +44,38 @@ set local role authenticated;
 select set_config('request.jwt.claims',
   '{"sub":"00000000-0000-0000-0000-0000000000aa","role":"authenticated"}', true);
 
--- matching event gets the targeted campaign
+-- conditions mismatch: ride context does not match the food-only campaign
+select is(
+  (select campaign_id from public.grant_voucher('date_ghosted', '{"service": "ride"}')),
+  '00000000-0000-0000-0000-000000000002'::uuid,
+  'ride context does not match food campaign');
+
+-- matching event wins the targeted campaign
 select is(
   (select campaign_id from public.grant_voucher('date_ghosted', '{"service": "food"}')),
   '00000000-0000-0000-0000-0000000000c1'::uuid,
-  'food fail wins the food campaign');
+  'food context wins the food campaign');
 
--- unique code minted with WHEN- prefix
+-- unique code minted with WHEN- prefix (scoped to c1's voucher)
 select matches(
-  (select code from public.vouchers limit 1),
+  (select code from public.vouchers
+    where campaign_id = '00000000-0000-0000-0000-0000000000c1' limit 1),
   '^WHEN-[0-9A-F]{12}$', 'unique code minted');
 
--- quota exhausted -> falls back to evergreen
+-- quota 1 now exhausted -> diverts to fallback
 select is(
-  (select campaign_id from public.grant_voucher('signup', '{"service": "food"}')),
+  (select campaign_id from public.grant_voucher('date_ghosted', '{"service": "food"}')),
   '00000000-0000-0000-0000-000000000002'::uuid,
   'quota exhausted falls back to evergreen');
 
--- non-matching service skips targeted campaign
-select is(
-  (select campaign_id from public.grant_voucher('signup', '{"service": "ride"}')),
-  '00000000-0000-0000-0000-000000000002'::uuid,
-  'ride fail does not match food campaign');
+reset role;
+select is((select quota_used from public.voucher_campaigns
+            where id = '00000000-0000-0000-0000-0000000000c1'),
+  1, 'quota_used incremented exactly once across three calls');
+
+set local role authenticated;
+select set_config('request.jwt.claims',
+  '{"sub":"00000000-0000-0000-0000-0000000000aa","role":"authenticated"}', true);
 
 -- unknown trigger is rejected outright
 select throws_ok(
@@ -85,26 +86,22 @@ select throws_ok(
 select is(
   (select campaign_id from public.grant_voucher('share', '{}')),
   '00000000-0000-0000-0000-0000000000c3'::uuid, 'first share grant hits campaign');
-select ok(
-  (select is_fallback from public.voucher_campaigns
-    where id = (select campaign_id from public.grant_voucher('share', '{}'))),
-  'per_user_max diverts to a fallback campaign');
+select is(
+  (select campaign_id from public.grant_voucher('share', '{}')),
+  '00000000-0000-0000-0000-000000000002'::uuid,
+  'per_user_max diverts to fallback campaign');
 
 -- cooldown stops the second grant; fallback takes over
 select is(
   (select campaign_id from public.grant_voucher('tier_up', '{}')),
   '00000000-0000-0000-0000-0000000000c4'::uuid, 'first tier_up grant hits campaign');
-select ok(
-  (select is_fallback from public.voucher_campaigns
-    where id = (select campaign_id from public.grant_voucher('tier_up', '{}'))),
-  'cooldown diverts to a fallback campaign');
-
-reset role;
-select is((select quota_used from public.voucher_campaigns
-            where id = '00000000-0000-0000-0000-0000000000c1'),
-  1, 'quota_used incremented exactly once');
+select is(
+  (select campaign_id from public.grant_voucher('tier_up', '{}')),
+  '00000000-0000-0000-0000-000000000002'::uuid,
+  'cooldown diverts to fallback campaign');
 
 -- anon cannot call
+reset role;
 set local role anon;
 select set_config('request.jwt.claims', '{"role":"anon"}', true);
 select throws_ok(
