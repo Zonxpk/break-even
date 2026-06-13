@@ -12,8 +12,7 @@ create table public.profiles (
 alter table public.profiles enable row level security;
 
 -- Grant permissions for testing/admin
-grant select, insert, update on public.profiles to authenticated;
-grant select, insert, update on public.profiles to anon;
+grant select, update on public.profiles to authenticated;
 
 create policy "profiles owner select" on public.profiles
   for select to authenticated using (id = auth.uid());
