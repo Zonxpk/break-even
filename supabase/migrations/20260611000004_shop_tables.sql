@@ -61,6 +61,9 @@ as $$
                   where user_id = auth.uid() and brand_id = p_brand)
 $$;
 
+revoke execute on function public.is_brand_member(uuid) from public;
+grant execute on function public.is_brand_member(uuid) to authenticated;
+
 create policy "members see own memberships" on public.brand_members
   for select to authenticated using (user_id = auth.uid());
 
@@ -105,3 +108,5 @@ grant update (name, images, description, voucher_price, required_campaign_id,
 grant delete on public.merch_items to authenticated;
 
 grant select on public.claims to authenticated;
+
+create index merch_items_shop_idx on public.merch_items (shop_id);

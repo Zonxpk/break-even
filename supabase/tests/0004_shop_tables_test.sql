@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(7);
+select plan(10);
 
 select has_table('public', 'shops',         'shops exists');
 select has_table('public', 'merch_items',   'merch_items exists');
@@ -44,6 +44,27 @@ reset role;
 select is(
   (select name from public.shops where id = '00000000-0000-0000-0000-0000000000f2'),
   'Shop B', 'other brand''s shop untouched by foreign member');
+
+-- WITH CHECK paths: inserts are brand-scoped too
+set local role authenticated;
+select set_config('request.jwt.claims',
+  '{"sub":"00000000-0000-0000-0000-0000000000d1","role":"authenticated"}', true);
+
+select throws_ok(
+  $$ insert into public.shops (brand_id, name)
+     values ('00000000-0000-0000-0000-0000000000e2', 'sneaky shop') $$,
+  '42501', null, 'cannot create a shop under another brand');
+
+select throws_ok(
+  $$ insert into public.merch_items (shop_id, name, voucher_price, stock)
+     values ('00000000-0000-0000-0000-0000000000f2', 'sneaky merch', 1, 1) $$,
+  '42501', null, 'cannot attach merch to another brand''s shop');
+
+insert into public.merch_items (shop_id, name, voucher_price, stock)
+values ('00000000-0000-0000-0000-0000000000f1', 'หมวกทดสอบ', 3, 10);
+select is(
+  (select count(*) from public.merch_items where name = 'หมวกทดสอบ'),
+  1::bigint, 'brand member adds merch to own shop');
 
 -- claims are RPC-minted only
 set local role authenticated;
