@@ -20,6 +20,92 @@ export interface CatalogItem {
   sort: number;
 }
 
+export interface FoodRestaurant {
+  id: string;
+  name: string;
+  photo_url: string | null;
+  banner_url: string | null;
+  cuisine_tags: string[];
+  rating: number | null;
+  review_count: number;
+  delivery_fee: number;
+  eta_minutes: number;
+  promo_badge: string | null;
+  tie_in_brand_id: string | null;
+  active: boolean;
+  sort: number;
+}
+
+export interface FoodMenuCategory {
+  id: string;
+  restaurant_id: string;
+  name: string;
+  sort: number;
+}
+
+export interface FoodMenuItem {
+  id: string;
+  restaurant_id: string;
+  category_id: string;
+  name: string;
+  description: string | null;
+  photo_url: string | null;
+  price: number;
+  rating: number | null;
+  active: boolean;
+  sort: number;
+}
+
+export interface FoodModifierGroup {
+  id: string;
+  name: string;
+  min_select: number;
+  max_select: number;
+  active: boolean;
+  sort: number;
+  options: FoodModifierOption[];
+}
+
+export interface FoodModifierOption {
+  id: string;
+  group_id: string;
+  name: string;
+  price_delta: number;
+  active: boolean;
+  sort: number;
+}
+
+export interface FoodPromo {
+  id: string;
+  title: string;
+  subtitle: string | null;
+  image_url: string | null;
+  restaurant_id: string | null;
+  badge_text: string | null;
+  active: boolean;
+  sort: number;
+  starts_at: string | null;
+  ends_at: string | null;
+}
+
+export interface FoodMenuBundle {
+  restaurant: FoodRestaurant;
+  categories: FoodMenuCategory[];
+  items: FoodMenuItem[];
+  modifierGroupsByItemId: Record<string, FoodModifierGroup[]>;
+}
+
+export interface FoodOrderLinePayload {
+  restaurant_id: string;
+  restaurant_name: string;
+  menu_item_id: string;
+  name: string;
+  quantity: number;
+  modifiers: Array<{ group: string; option: string }>;
+  notes: string | null;
+  line_total: number;
+}
+
 export interface GagScriptRow {
   id: string;
   service: Service | 'date' | null;

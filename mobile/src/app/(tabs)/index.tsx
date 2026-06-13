@@ -9,7 +9,7 @@ import { theme } from '../../ui/theme';
 import type { ShopRow, VoucherCampaign } from '../../types/db';
 
 const SERVICES = [
-  { key: 'food', label: 'อาหาร', glyph: '🍜' },
+  { key: 'food', label: 'อาหาร', glyph: '🍜', route: '/order/food' as const },
   { key: 'ride', label: 'เรียกรถ', glyph: '🏍️' },
   { key: 'parcel', label: 'ส่งพัสดุ', glyph: '📦' },
   { key: 'mart', label: 'มาร์ท', glyph: '🛒' },

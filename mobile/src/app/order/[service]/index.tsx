@@ -14,8 +14,12 @@ export default function Browse() {
   const [picked, setPicked] = useState<CatalogItem[]>([]);
 
   useEffect(() => {
-    if (cfg) fetchCatalog(cfg.key).then(setItems).catch(() => {});
-  }, [service]);
+    if (service === 'food') router.replace('/order/food');
+  }, [service, router]);
+
+  useEffect(() => {
+    if (cfg && service !== 'food') fetchCatalog(cfg.key).then(setItems).catch(() => {});
+  }, [service, cfg]);
 
   if (!cfg) return null;
 
