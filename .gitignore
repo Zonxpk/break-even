@@ -1,3 +1,4 @@
 .superpowers/
 .env
 supabase/.temp/
+supabase/functions/.env
