@@ -25,7 +25,10 @@ Deno.serve(async (req) => {
   const token = req.headers.get("authorization")?.replace(/^Bearer /i, "") ?? "";
   let role = "";
   try {
-    role = JSON.parse(atob(token.split(".")[1])).role ?? "";
+    const p = token.split(".")[1] ?? "";
+    const b64 = p.replaceAll("-", "+").replaceAll("_", "/")
+      .padEnd(p.length + ((4 - (p.length % 4)) % 4), "=");
+    role = JSON.parse(atob(b64)).role ?? "";
   } catch {
     return json({ error: "unauthorized" }, 401);
   }

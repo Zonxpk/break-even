@@ -18,6 +18,8 @@ supabase test db        # run pgTAP tests in supabase/tests/
 
 ## Edge Function
 
+Create the env file first: `echo 'DISCORD_WEBHOOK_URL=' > supabase/functions/.env` (set a real webhook URL to test Discord pings).
+
 ```bash
 supabase functions serve tiein-submit --env-file supabase/functions/.env
 cd supabase/functions/tiein-submit && deno test  # unit tests

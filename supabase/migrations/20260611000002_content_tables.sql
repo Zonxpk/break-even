@@ -67,7 +67,7 @@ create table public.personas (
 -- conditions jsonb schema (all present keys must pass — see spec §9):
 -- { "service": "food", "finale_type": "canal", "persona_rarity": "legendary",
 --   "min_tier": "gold", "nth_fail": 5, "day_of_week": [5,6,7],   -- isodow 1=Mon
---   "hour_range": [0, 5],                                        -- [start, end) local server time
+--   "hour_range": [0, 5],                                        -- [start, end) Asia/Bangkok time
 --   "first_time_event": true }
 create table public.voucher_campaigns (
   id            uuid primary key default gen_random_uuid(),
@@ -92,7 +92,7 @@ create table public.voucher_campaigns (
                 check (status in ('draft', 'active', 'paused')),
   priority      integer not null default 0,
   weight        integer not null default 1,
-  is_fallback   boolean not null default false,  -- evergreen consolation (spec §13); trigger/conditions/quota are ignored for fallbacks
+  is_fallback   boolean not null default false,  -- evergreen consolation (spec §13); trigger/conditions/quota/code_mode are ignored for fallbacks (fallback codes are always unique-style)
   created_at    timestamptz not null default now(),
   constraint static_code_required
     check (code_mode <> 'static' or static_code is not null),
@@ -127,4 +127,4 @@ grant select on public.voucher_campaigns to anon, authenticated;
 comment on column public.gag_scripts.timeline is
   'Event timeline JSON: {"duration_s": int, "events": [{"t": sec, "type": "eta|move|chat|incident|sabotage|finale", ...}]}. See migration file for full example.';
 comment on column public.voucher_campaigns.conditions is
-  'All present keys must pass. Valid keys/values: service (food|ride|parcel|mart|date), finale_type (e.g. canal), persona_rarity (common|rare|legendary), min_tier (silver|gold|platinum|vip — exact lowercase), nth_fail (int), day_of_week (array, isodow 1=Mon..7=Sun), hour_range ([start,end) hours), first_time_event (bool).';
+  'All present keys must pass. Valid keys/values: service (food|ride|parcel|mart|date), finale_type (e.g. canal), persona_rarity (common|rare|legendary), min_tier (silver|gold|platinum|vip — exact lowercase), nth_fail (int), day_of_week (array, Asia/Bangkok isodow 1=Mon..7=Sun), hour_range ([start,end) hours, Asia/Bangkok), first_time_event (bool).';

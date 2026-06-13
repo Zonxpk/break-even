@@ -52,10 +52,10 @@ begin
             or (coalesce(p_context ->> 'nth_fail', '0') ~ '^[0-9]+$'
                 and (p_context ->> 'nth_fail')::integer >= (c.conditions ->> 'nth_fail')::integer))
        and (c.conditions -> 'day_of_week' is null
-            or c.conditions -> 'day_of_week' @> to_jsonb(extract(isodow from now())::integer))
+            or c.conditions -> 'day_of_week' @> to_jsonb(extract(isodow from now() at time zone 'Asia/Bangkok')::integer))
        and (c.conditions -> 'hour_range' is null
-            or (extract(hour from now())::integer >= (c.conditions -> 'hour_range' ->> 0)::integer
-                and extract(hour from now())::integer <  (c.conditions -> 'hour_range' ->> 1)::integer))
+            or (extract(hour from now() at time zone 'Asia/Bangkok')::integer >= (c.conditions -> 'hour_range' ->> 0)::integer
+                and extract(hour from now() at time zone 'Asia/Bangkok')::integer <  (c.conditions -> 'hour_range' ->> 1)::integer))
        and (coalesce((c.conditions ->> 'first_time_event')::boolean, false) = false
             or not exists (
                  select 1 from public.vouchers v
