@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(7);
+select plan(10);
 
 select has_table('public', 'orders',   'orders exists');
 select has_table('public', 'vouchers', 'vouchers exists');
@@ -49,6 +49,31 @@ select throws_ok(
      values ('00000000-0000-0000-0000-0000000000b2',
              '00000000-0000-0000-0000-0000000000c2') $$,
   '42501', null, 'clients cannot mint vouchers directly');
+
+-- matches: owner-scoped CRUD
+select throws_ok(
+  $$ insert into public.matches (user_id, persona_id)
+     values ('00000000-0000-0000-0000-0000000000b1',
+             '00000000-0000-0000-0000-0000000000c3') $$,
+  '42501', null, 'cannot create a match for another user');
+
+reset role;
+insert into public.personas (id, name, system_prompt)
+values ('00000000-0000-0000-0000-0000000000c3', 'test persona', 'p');
+insert into public.matches (user_id, persona_id)
+values ('00000000-0000-0000-0000-0000000000b1', '00000000-0000-0000-0000-0000000000c3');
+
+set local role authenticated;
+select set_config('request.jwt.claims',
+  '{"sub":"00000000-0000-0000-0000-0000000000b2","role":"authenticated"}', true);
+select is((select count(*) from public.matches), 0::bigint,
+  'other user cannot see the match');
+
+select set_config('request.jwt.claims',
+  '{"sub":"00000000-0000-0000-0000-0000000000b1","role":"authenticated"}', true);
+delete from public.matches where persona_id = '00000000-0000-0000-0000-0000000000c3';
+select is((select count(*) from public.matches), 0::bigint,
+  'owner can delete own match');
 
 select * from finish();
 rollback;
