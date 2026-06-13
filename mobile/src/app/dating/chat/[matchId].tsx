@@ -5,19 +5,29 @@ import {
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { fetchAnchors } from '../../../api/content';
 import { getMatch, updateMatch } from '../../../api/personas';
+import { supabase } from '../../../lib/supabase';
+import { XP, tierForXp } from '../../../balance/balance';
 import { applyBeatChoice, nextBeat } from '../../../dating/chat';
+import { chatAffectionGain } from '../../../dating/affectionDrip';
+import { clearChatSession, loadChatSession, saveChatSession } from '../../../dating/chatSession';
 import { loadChat, replyToUser, type ChatMessage } from '../../../dating/chatStorage';
 import { placeDateOrder } from '../../../dating/bookDate';
+import SpotPicker from '../../../ui/SpotPicker';
 import { theme } from '../../../ui/theme';
+import { useAuth } from '../../../state/auth';
 import type { GagAnchor } from '../../../types/db';
 
 export default function DatingChat() {
   const { matchId } = useLocalSearchParams<{ matchId: string }>();
   const router = useRouter();
+  const { refreshProfile } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [match, setMatch] = useState<Awaited<ReturnType<typeof getMatch>> | null>(null);
   const [spots, setSpots] = useState<GagAnchor[]>([]);
+  const [spotsLoading, setSpotsLoading] = useState(true);
+  const [spotsError, setSpotsError] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [sending, setSending] = useState(false);
 
   const reload = useCallback(async () => {
@@ -28,18 +38,43 @@ export default function DatingChat() {
 
   useEffect(() => {
     reload().catch(() => {});
-    fetchAnchors().then(setSpots).catch(() => {});
+    setSpotsLoading(true);
+    fetchAnchors()
+      .then((a) => { setSpots(a); setSpotsError(false); })
+      .catch(() => setSpotsError(true))
+      .finally(() => setSpotsLoading(false));
   }, [reload]);
+
+  useEffect(() => () => {
+    if (matchId) clearChatSession(matchId).catch(() => {});
+  }, [matchId]);
 
   const beat = match?.personas ? nextBeat(match, match.personas) : null;
 
+  async function grantBeatXp() {
+    const { data: userData } = await supabase.auth.getUser();
+    const userId = userData.user?.id;
+    if (!userId) return;
+    const { data: prof } = await supabase.from('profiles').select('loyalty_xp').eq('id', userId).single();
+    if (!prof) return;
+    const xp = prof.loyalty_xp + XP.story_beat;
+    await supabase.from('profiles').update({ loyalty_xp: xp, tier: tierForXp(xp) }).eq('id', userId);
+    refreshProfile();
+  }
+
   async function send() {
-    if (!input.trim() || !match?.personas) return;
+    if (!input.trim() || !match?.personas || !matchId) return;
     setSending(true);
     try {
-      await replyToUser(matchId!, match.personas, input.trim());
-      const affection = match.affection + 1;
-      await updateMatch(matchId!, { affection });
+      await replyToUser(matchId, match.personas, input.trim());
+      const session = await loadChatSession(matchId);
+      session.userMsgCount += 1;
+      const drip = chatAffectionGain(session.userMsgCount, session.gained);
+      if (drip > 0) session.gained += drip;
+      await saveChatSession(matchId, session);
+      if (drip > 0) {
+        await updateMatch(matchId, { affection: match.affection + drip });
+      }
       setInput('');
       await reload();
     } finally {
@@ -48,23 +83,32 @@ export default function DatingChat() {
   }
 
   async function onBeatChoice(idx: number) {
-    if (!beat || !match?.personas) return;
+    if (!beat || !match?.personas || !matchId) return;
     const delta = applyBeatChoice(beat, idx);
     const affection = Math.max(0, match.affection + delta);
     const beats_done = [...match.beats_done, beat.id];
-    await updateMatch(matchId!, { affection, beats_done });
+    await updateMatch(matchId, { affection, beats_done });
+    await grantBeatXp();
     await reload();
   }
 
-  async function bookDate() {
-    if (!match?.personas || match.affection < 30) {
+  function openDatePicker() {
+    if (!match || match.affection < 30) {
       Alert.alert('ยังไม่พร้อม', 'คุยกันให้ชอบกันก่อนนะ (30%)');
       return;
     }
-    const spot = spots[0];
-    if (!spot) return;
+    if (spotsError) {
+      Alert.alert('โหลดจุดนัดไม่ได้', 'ลองใหม่อีกครั้ง');
+      return;
+    }
+    setPickerOpen(true);
+  }
+
+  async function confirmDate(spot: GagAnchor) {
+    if (!match?.personas || !matchId) return;
+    setPickerOpen(false);
     const order = await placeDateOrder({
-      matchId: matchId!,
+      matchId,
       personaId: match.persona_id,
       personaName: match.personas.name,
       spot,
@@ -101,7 +145,7 @@ export default function DatingChat() {
         </View>
       ) : null}
       {match.affection >= 30 ? (
-        <Pressable style={s.dateBtn} onPress={bookDate}>
+        <Pressable style={s.dateBtn} onPress={openDatePicker}>
           <Text style={s.dateBtnText}>📍 นัดเดท</Text>
         </Pressable>
       ) : null}
@@ -111,6 +155,14 @@ export default function DatingChat() {
           <Text style={s.sendText}>ส่ง</Text>
         </Pressable>
       </View>
+      <SpotPicker
+        visible={pickerOpen}
+        anchors={spots}
+        personaId={match.persona_id}
+        loading={spotsLoading}
+        onConfirm={confirmDate}
+        onDismiss={() => setPickerOpen(false)}
+      />
     </View>
   );
 }

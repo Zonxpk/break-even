@@ -25,6 +25,18 @@ jest.mock('../lib/supabase', () => ({
 
 import { useAuth } from '../state/auth';
 
+beforeEach(() => {
+  useAuth.setState({ userId: null, profile: null, loading: true });
+});
+
+test('init signs in as guest when no session exists', async () => {
+  await act(async () => {
+    await useAuth.getState().init();
+  });
+  expect(useAuth.getState().userId).toBe('u1');
+  expect(useAuth.getState().loading).toBe(false);
+});
+
 test('guest sign-in loads the profile', async () => {
   await act(async () => {
     await useAuth.getState().signInGuest('ทดสอบ');
@@ -33,10 +45,11 @@ test('guest sign-in loads the profile', async () => {
   expect(useAuth.getState().userId).toBe('u1');
 });
 
-test('signOut clears state', async () => {
+test('signOut starts a fresh guest session', async () => {
   await act(async () => {
+    await useAuth.getState().signInGuest('ทดสอบ');
     await useAuth.getState().signOut();
   });
-  expect(useAuth.getState().userId).toBeNull();
-  expect(useAuth.getState().profile).toBeNull();
+  expect(useAuth.getState().userId).toBe('u1');
+  expect(useAuth.getState().profile).not.toBeNull();
 });

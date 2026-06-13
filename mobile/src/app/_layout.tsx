@@ -16,7 +16,6 @@ export default function RootLayout() {
   useEffect(() => {
     if (loading) return;
     const onAuthScreen = segments[0] === 'sign-in';
-    if (!userId && !onAuthScreen) router.replace('/sign-in');
     if (userId && onAuthScreen) router.replace('/');
   }, [userId, loading, segments]);
 

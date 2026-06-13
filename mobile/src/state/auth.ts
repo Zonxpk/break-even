@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
 import type { Profile } from '../types/db';
 
+export const DEFAULT_GUEST_NICKNAME = 'ลูกค้านิรนาม';
+
 interface AuthState {
   userId: string | null;
   profile: Profile | null;
@@ -19,6 +21,13 @@ async function loadProfile(userId: string): Promise<Profile | null> {
   return (data as Profile) ?? null;
 }
 
+async function signInAsGuest(nickname: string) {
+  const { data, error } = await supabase.auth.signInAnonymously({ options: { data: { nickname } } });
+  if (error) throw error;
+  const userId = data.user!.id;
+  return { userId, profile: await loadProfile(userId) };
+}
+
 export const useAuth = create<AuthState>((set, get) => ({
   userId: null,
   profile: null,
@@ -26,21 +35,25 @@ export const useAuth = create<AuthState>((set, get) => ({
 
   init: async () => {
     const { data } = await supabase.auth.getSession();
-    const userId = data.session?.user.id ?? null;
-    set({ userId, profile: userId ? await loadProfile(userId) : null, loading: false });
+    let userId = data.session?.user.id ?? null;
+    let profile = userId ? await loadProfile(userId) : null;
+    if (!userId) {
+      const guest = await signInAsGuest(DEFAULT_GUEST_NICKNAME);
+      userId = guest.userId;
+      profile = guest.profile;
+    }
+    set({ userId, profile, loading: false });
     supabase.auth.onAuthStateChange((_event, session) => {
       const id = session?.user.id ?? null;
       set({ userId: id });
-      if (id) loadProfile(id).then((profile) => set({ profile }));
+      if (id) loadProfile(id).then((p) => set({ profile: p }));
       else set({ profile: null });
     });
   },
 
   signInGuest: async (nickname) => {
-    const { data, error } = await supabase.auth.signInAnonymously({ options: { data: { nickname } } });
-    if (error) throw error;
-    const userId = data.user!.id;
-    set({ userId, profile: await loadProfile(userId), loading: false });
+    const { userId, profile } = await signInAsGuest(nickname);
+    set({ userId, profile, loading: false });
   },
 
   signInEmail: async (email, password) => {
@@ -64,6 +77,7 @@ export const useAuth = create<AuthState>((set, get) => ({
 
   signOut: async () => {
     await supabase.auth.signOut();
-    set({ userId: null, profile: null });
+    const { userId, profile } = await signInAsGuest(DEFAULT_GUEST_NICKNAME);
+    set({ userId, profile });
   },
 }));
