@@ -1,7 +1,6 @@
 # Resume — dating UI polish (2026-06-13)
 
-**Branch:** `feat/dating-ui-polish`  
-**Worktree:** `.worktrees/dating-ui-polish`
+**Branch:** `develop` (merged from `feat/dating-ui-polish`)
 
 ## Done
 
@@ -15,9 +14,7 @@
 ## Try it
 
 ```bash
-cd .worktrees/dating-ui-polish/mobile
-cp ../../mobile/.env .env   # if needed
-npx expo start -c
+cd mobile && npx expo start -c
 ```
 
 - Home → 💘 — drag cards or use bottom buttons

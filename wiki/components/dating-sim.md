@@ -5,16 +5,19 @@ title: "Dating Sim"
 tags: ["component", "dating-sim"]
 created: "2026-06-13"
 updated: "2026-06-13"
+commit: "706fb84"
 ---
 
 # Dating Sim
 
 Swipe deck, chat, affection, LLM replies, date orders.
 
+**UI polish (Tinder-style):** see [[components/dating-ui-polish|Dating UI Polish]] — pan gestures, card stack, polished matches/chat (commit `706fb84`).
+
 ## Key files
 
 - `mobile/src/app/dating/chat/[matchId].tsx` — Dating chat screen combining message history, scripted story beats, affection drip on send, XP grants on beat choices, and date-order placement via SpotPicker.
-- `mobile/src/app/dating/index.tsx` — Expo Router dating deck screen where users swipe through a daily persona stack, earn loyalty XP on rejection, and create matches via tier-weighted RNG.
+- `mobile/src/app/dating/index.tsx` — Tinder-style swipe deck: pan gestures, card stack, action bar; daily persona stack with tier-weighted match RNG and loyalty XP on rejection.
 - `mobile/src/app/dating/matches.tsx` — Dating matches list screen showing matched personas with affection percentage and navigation into per-match chat.
 - `mobile/src/dating/__tests__/affectionDrip.test.ts` — Parameterized unit tests verifying chatAffectionGain drip cadence and session cap behavior.
 - `mobile/src/dating/__tests__/chat.test.ts` — Tests story-beat selection order and affection deltas for nextBeat and applyBeatChoice against fixture persona beats.
@@ -30,3 +33,11 @@ Swipe deck, chat, affection, LLM replies, date orders.
 - `mobile/src/dating/distanceJoke.ts` — Generates humorous fake kilometer distances for dating personas and meetup anchors using seeded mulberry32 output, always suffixing results with a Thai '(lying)' label.
 - `mobile/src/dating/llm.ts` — Optional BYO Anthropic API integration for dating replies with AsyncStorage key persistence and scriptedReply fallback when the key or network fails.
 - `mobile/src/dating/swipe.ts` — Resolves a right swipe as match or reject by rolling mulberry32 against the tier- and rarity-adjusted match probability from the balance module.
+
+## UI components (`mobile/src/dating/ui/`)
+
+- `TinderDeck.tsx` — Pan gesture + Reanimated fly-off; renders card stack
+- `TinderCard.tsx` — Full-bleed persona card layout
+- `TinderActionBar.tsx` — Rewind / ✕ / ★ / ♥ / ⚡ buttons
+- `personaVisual.ts` — Deterministic fake age, color, emoji
+- `MatchRow.tsx`, `AffectionBar.tsx`, `ChatBubble.tsx`, `rarity.ts` — matches & chat polish

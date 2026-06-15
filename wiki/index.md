@@ -33,6 +33,7 @@ Mode B — Repository architecture wiki. Seeded from `/understand` knowledge gra
 ### Components (features)
 - [[components/gag-engine|Gag Tracking Engine]]
 - [[components/dating-sim|Dating Sim]]
+- [[components/dating-ui-polish|Dating UI Polish]]
 - [[components/merch-shop|Merch Shop]]
 - [[components/mobile-api|Mobile API Layer]]
 - [[components/supabase-backend|Supabase Backend]]
