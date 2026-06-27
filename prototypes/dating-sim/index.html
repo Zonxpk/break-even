@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>หาคู่ — Experience Variants (Doodle)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --font: "Mali", cursive;
+        --paper: #fbf8f0;
+        --ink: #3a3530;
+        --ink-soft: #7c746a;
+        --coral: #f2664b;
+        --blue: #4d8fc0;
+        --yellow: #f4c24a;
+        --mint: #6fbe9b;
+        --grape: #9b6fc0;
+        --coral-wash: #fce0da;
+        --blue-wash: #dceaf4;
+        --mint-wash: #dcefe6;
+        --yellow-wash: #fbefc9;
+        --grape-wash: #ece0f4;
+      }
+      body {
+        font-family: var(--font);
+        background: #26241f;
+        color: var(--paper);
+        min-height: 100vh;
+        padding: 28px 18px 48px;
+      }
+      .wrap {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+      .sub {
+        color: #a8a29e;
+        font-size: 0.82rem;
+        margin: 6px 0 4px;
+        line-height: 1.5;
+      }
+      .note {
+        color: #8a857d;
+        font-size: 0.68rem;
+        margin-bottom: 22px;
+      }
+      .note code {
+        background: #3a3732;
+        padding: 1px 6px;
+        border-radius: 6px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 14px;
+      }
+      a.card {
+        display: block;
+        text-decoration: none;
+        color: var(--ink);
+        background: var(--paper);
+        border: 3px solid var(--ink);
+        border-radius: 18px 24px 16px 22px;
+        padding: 16px;
+        box-shadow: 5px 7px 0 rgba(0, 0, 0, 0.35);
+        transform: rotate(var(--r, 0deg));
+        transition: transform 0.15s ease;
+      }
+      a.card:hover {
+        transform: rotate(0deg) translateY(-3px);
+      }
+      a.card:nth-child(1) {
+        --r: -1.2deg;
+      }
+      a.card:nth-child(2) {
+        --r: 0.9deg;
+      }
+      a.card:nth-child(3) {
+        --r: -0.6deg;
+      }
+      .badge {
+        display: inline-block;
+        font-size: 0.62rem;
+        font-weight: 700;
+        padding: 3px 9px;
+        border: 2.5px solid var(--ink);
+        border-radius: 12px 16px 10px 14px;
+        transform: rotate(-2deg);
+      }
+      .b1 {
+        background: var(--grape-wash);
+        color: #4a2f6b;
+      }
+      .b2 {
+        background: var(--coral-wash);
+        color: #8a3322;
+      }
+      .b3 {
+        background: var(--mint-wash);
+        color: #1f5740;
+      }
+      .face {
+        font-size: 2.4rem;
+        margin: 8px 0 2px;
+      }
+      .card h2 {
+        font-size: 1.05rem;
+        font-weight: 700;
+      }
+      .card p {
+        font-size: 0.74rem;
+        font-weight: 500;
+        color: var(--ink-soft);
+        margin-top: 5px;
+        line-height: 1.4;
+      }
+      .flow {
+        font-size: 0.62rem;
+        font-weight: 600;
+        color: var(--grape);
+        margin-top: 9px;
+      }
+      .shared {
+        margin: 26px 0 0;
+        padding: 14px 16px;
+        background: #3a3732;
+        border: 2px dashed #6b6560;
+        border-radius: 14px;
+        font-size: 0.76rem;
+        color: #c4bdb4;
+        line-height: 1.5;
+      }
+      .shared b {
+        color: var(--yellow);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>หาคู่ — Experience Variants ✏️</h1>
+      <p class="sub">
+        Doodle design language (<em>เบรค, อีเวน</em>) · three takes on the
+        geemong dating sim. All share the same swipe-deck entry, then diverge
+        into a different experience.
+      </p>
+      <p class="note">
+        Prototype set · 2026-06-28 · open each in a browser; use the screen tabs
+        at the top to walk the flow. Grounded in real
+        <code>mobile/src/dating</code> values.
+      </p>
+
+      <div class="grid">
+        <a class="card" href="./v1-ghost-dex-2026-06-28.html" target="_blank">
+          <span class="badge b1">V1 · Ghost-dex</span>
+          <div class="face">👻</div>
+          <h2>Tinder × Pokédex</h2>
+          <p>
+            Every ghosting catalogs a dex entry. "เห็นแล้ว 47 / เดทสำเร็จ 0."
+            Getting left IS the collection loop.
+          </p>
+          <div class="flow">ปัด → แมตช์ → Ghost-dex → เอนทรี → payoff</div>
+        </a>
+        <a
+          class="card"
+          href="./v2-vn-dating-sim-2026-06-28.html"
+          target="_blank"
+        >
+          <span class="badge b2">V2 · Visual Novel</span>
+          <div class="face">📖</div>
+          <h2>Dating-sim game</h2>
+          <p>
+            Match opens a VN route: scene, portrait, branching choices (real
+            beats/affection), every ending doomed.
+          </p>
+          <div class="flow">
+            ปัด → แมตช์ → ฉาก+ตัวเลือก → เส้นเรื่อง → ตอนจบ
+          </div>
+        </a>
+        <a
+          class="card"
+          href="./v3-delulu-radar-2026-06-28.html"
+          target="_blank"
+        >
+          <span class="badge b3">V3 · Delulu Radar</span>
+          <div class="face">📡</div>
+          <h2>Sonar that lies</h2>
+          <p>
+            Matches are blips on a radar sweep; they vanish as you approach and
+            the "(โกหก)" distance resets.
+          </p>
+          <div class="flow">ปัด → แมตช์ → เรดาร์ → แชตกำลังจาง → หายไป</div>
+        </a>
+      </div>
+
+      <div class="shared">
+        <b>Shared entry — the swipe deck.</b> Each variant opens on the same
+        Doodle Tinder-style card (emoji band, name + fake age, "X.X กม. (โกหก)",
+        rarity badge ทั่วไป/หายาก/✨ตำนาน, LIKE/NOPE/SUPER stamps, ↺ ✕ ★ ♥ ⚡
+        bar). Match odds use the real rarity table (70/25/3 × tier). After the
+        swipe, the experiences split.
+      </div>
+    </div>
+  </body>
+</html>

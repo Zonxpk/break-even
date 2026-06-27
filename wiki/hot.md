@@ -1,26 +1,27 @@
 ---
 type: "meta"
 title: "Hot Cache"
-updated: "2026-06-13"
+updated: "2026-06-28"
 ---
 
 # Recent Context
 
 ## Last Updated
-2026-06-13. Dating UI polish shipped to `develop`.
+2026-06-28. Built 3 dating-sim experience prototypes in the **Doodle** language (now the current visual direction).
 
 ## Key Recent Facts
 - **geemong** is a parody super app (When? / กี่โมง?) — rider never arrives
 - Monorepo: Supabase backend + Expo React Native + dating sim + merch shop
-- **Dating deck** now Tinder-style (pan swipe, card stack) — commit `706fb84`
-- Food delivery has deep browse (`food_*` CMS tables)
-- 9 architectural layers, 12-step guided tour in [[flows/_index]]
+- **Current design direction**: [[concepts/doodle-design-language|Doodle (เบรค, อีเวน)]] — full hand-drawn sketchbook look: crayon palette, `Mali` font, SVG `feTurbulence`/`feDisplacementMap` wobble borders, dotted paper. Framed as "a rest stop for people who forgot to rest."
+- **Not yet built** — design prototype only; shipped UI still uses `theme.ts` (Tinder/pink for [[components/dating-ui-polish]])
+- Dating deck is Tinder-style (commit `706fb84`); food has deep browse (`food_*` tables)
 
 ## Recent Changes
-- [[components/dating-ui-polish]] — Tinder UI for swipe/matches/chat
-- Food deep browse on `develop` (restaurant → menu → cart → confirm)
-- Wiki scaffolded from [[sources/understand-knowledge-graph]]
+- [[concepts/dating-experience-variants]] — 3 Doodle HTML prototypes in `prototypes/dating-sim/` (Ghost-dex / VN / Delulu Radar); shared swipe entry, then diverge. **Latest:** all % removed (qualitative wording, no meters); ◀/▶ arrows + swipe-on-frame step nav added to all 3
+- [[concepts/doodle-design-language]] — current visual language (from `.raw/designs/breakeven-doodle-2026-06-28.html`)
+- [[sources/breakeven-doodle-prototype]] — provenance for the prototype HTML
+- [[components/dating-ui-polish]] — flagged: pink Tinder theme predates the Doodle direction
 
 ## Active Threads
-- Wiki is the persistent layer on top of Understand Anything graph
-- Re-run `/understand` after major refactors, then refresh wiki
+- Reconcile shipped `theme.ts` / `theme.tinder.*` tokens with the Doodle palette + `Mali` font if Doodle is built
+- Wiki is the persistent layer on top of the Understand Anything graph; re-run `/understand` after major refactors

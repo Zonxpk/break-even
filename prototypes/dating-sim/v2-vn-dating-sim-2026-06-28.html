@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>หาคู่ — Visual Novel (Doodle)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ───────────────────────────────────────────────
+ * V2 · DATING-SIM VN — match opens a visual-novel route.
+ * Real beats[]/choices[] engine; every road → a doomed ending.
+ * Doodle design language. Swipe is the shared entry.
+ * ─────────────────────────────────────────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+:root {
+  --font: "Mali", cursive;
+  --phone-w: min(390px, calc(100vw - 28px));
+  --paper: #FBF8F0; --paper-2: #F4EFE2; --grid: #E4DCC8;
+  --ink: #3A3530; --ink-soft: #7C746A; --pencil: #5A5450;
+  --coral: #F2664B; --blue: #4D8FC0; --yellow: #F4C24A; --mint: #6FBE9B; --grape: #9B6FC0;
+  --coral-wash: #FCE0DA; --blue-wash: #DCEAF4; --mint-wash: #DCEFE6; --yellow-wash: #FBEFC9; --grape-wash: #ECE0F4;
+}
+body { font-family: var(--font); background: #26241f; color: var(--ink);
+  min-height: 100dvh; padding: env(safe-area-inset-top) 0 calc(12px + env(safe-area-inset-bottom)); }
+.header { position: sticky; top: 0; z-index: 50; background: rgba(38,36,31,.94);
+  backdrop-filter: blur(10px); padding: 10px 14px 0; border-bottom: 2px dashed #56524a; }
+.header h1 { font-size: .92rem; font-weight: 700; color: var(--paper); }
+.header p { font-size: .66rem; color: #a8a29e; margin: 3px 0 8px; }
+.screen-tabs { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; padding-bottom: 8px; }
+.screen-tabs::-webkit-scrollbar { display: none; }
+.stab { flex: 0 0 auto; padding: 7px 12px; border: 2px solid #6b6560; border-radius: 999px;
+  background: #3a3732; color: #c4bdb4; font-family: var(--font); font-size: .7rem; font-weight: 600; cursor: pointer; }
+.stab.on { background: var(--coral-wash); color: #8a3322; border-color: var(--coral); }
+.view { display: none; padding: 12px 0 16px; animation: pop .22s ease; }
+.view.on { display: block; }
+@keyframes pop { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+.phones { display: flex; justify-content: center; padding: 0 14px; }
+.phone-wrap { width: 100%; text-align: center; }
+.phone-wrap h2 { font-size: .65rem; font-weight: 600; color: #a8a29e; margin-bottom: 6px; letter-spacing: .05em; text-transform: uppercase; }
+.phone-wrap h2 em { font-style: normal; color: var(--coral); }
+.phone { width: var(--phone-w); margin: 0 auto; background: #17150f; border-radius: 38px; padding: 9px;
+  border: 2px solid #56524a; box-shadow: 6px 8px 0 rgba(0,0,0,.35); }
+.screen { border-radius: 30px; overflow: hidden; min-height: 620px; display: flex; flex-direction: column; text-align: left; position: relative; }
+.doodle { background: var(--paper); color: var(--ink); }
+.doodle::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(var(--grid) 1.1px, transparent 1.1px); background-size: 18px 18px; opacity: .55; }
+.doodle::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .3;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E"); }
+.doodle > * { position: relative; z-index: 1; }
+.sketch { filter: url(#wobble); } .sketch-2 { filter: url(#wobble2); }
+.body { flex: 1; padding-bottom: 4px; }
+.top { padding: 14px 16px 6px; }
+.tag { display: inline-block; background: var(--mint); color: #234234; border: 2.5px solid var(--ink);
+  border-radius: 14px 18px 12px 16px; padding: 3px 11px; font-size: .68rem; font-weight: 700; transform: rotate(-2.5deg); margin-right: 4px; }
+.tag.coral { background: var(--coral); color: #fff; transform: rotate(1.5deg); }
+.tag.yellow { background: var(--yellow); color: #5a4410; transform: rotate(-1deg); }
+.title { font-size: 1.16rem; font-weight: 700; margin-top: 10px; line-height: 1.22; }
+.sub { font-size: .76rem; font-weight: 500; color: var(--ink-soft); margin-top: 5px; }
+.circled { position: relative; white-space: nowrap; font-weight: 700; }
+.circled::after { content: ""; position: absolute; left: -5px; right: -5px; top: -3px; bottom: -3px;
+  border: 2.5px solid var(--coral); border-radius: 48% 52% 50% 50% / 60% 55% 45% 40%; transform: rotate(-2deg); pointer-events: none; }
+.ul { background: linear-gradient(transparent 62%, var(--yellow) 62%, var(--yellow) 92%, transparent 92%); padding: 0 2px; }
+.cta { display: block; width: calc(100% - 32px); margin: 14px 16px 0; padding: 14px; background: var(--coral); color: #fff;
+  border: 3px solid var(--ink); border-radius: 16px 22px 16px 22px; font-family: var(--font); font-size: .92rem; font-weight: 700;
+  text-align: center; box-shadow: 4px 5px 0 rgba(58,53,48,.25); transform: rotate(-.6deg); }
+.cta.ghost { background: #FFFEFA; color: var(--pencil); box-shadow: 3px 4px 0 rgba(58,53,48,.15); transform: rotate(.5deg); }
+.tabbar { display: flex; border-top: 2.5px solid var(--ink); padding: 7px 0 10px; margin-top: auto; background: var(--paper); }
+.tabbar div { flex: 1; text-align: center; font-size: .56rem; font-weight: 700; color: var(--ink-soft); }
+.tabbar div.on { color: var(--coral); }
+.tabbar div span { display: block; font-size: 1.08rem; margin-bottom: 1px; }
+
+/* swipe deck (shared) */
+.deck { position: relative; height: 430px; margin: 10px 16px 0; }
+.card { position: absolute; inset: 0; background: #FFFEFA; border: 3px solid var(--ink);
+  border-radius: 20px 26px 18px 24px; overflow: hidden; box-shadow: 5px 7px 0 rgba(58,53,48,.22); }
+.card.behind { transform: rotate(2.4deg) scale(.95); top: 10px; opacity: .55; z-index: 0; }
+.card.front { transform: rotate(-1.2deg); z-index: 2; }
+.card .band { height: 250px; display: grid; place-items: center; font-size: 6rem; border-bottom: 3px solid var(--ink); }
+.card .meta { padding: 12px 14px; }
+.card .nm { font-size: 1.25rem; font-weight: 700; }
+.card .nm small { font-size: .9rem; font-weight: 500; color: var(--ink-soft); }
+.card .dist { font-size: .72rem; color: var(--ink-soft); margin: 3px 0 7px; }
+.card .bio { font-size: .78rem; font-weight: 500; line-height: 1.35; }
+.rarity { position: absolute; top: 12px; right: 12px; font-size: .64rem; font-weight: 700; padding: 4px 9px;
+  border: 2.5px solid var(--ink); border-radius: 999px; transform: rotate(4deg); background: var(--blue-wash); color: #2f516b; }
+.stamp-super { position: absolute; top: 26px; left: 50%; transform: translateX(-50%) rotate(-8deg); font-size: 1.2rem; font-weight: 800;
+  padding: 5px 12px; border: 4px solid var(--blue); color: var(--blue); border-radius: 8px; }
+.actbar { display: flex; justify-content: center; gap: 14px; margin: 16px 0 4px; }
+.actbar button { width: 50px; height: 50px; border-radius: 999px; border: 3px solid var(--ink); background: #FFFEFA;
+  font-size: 1.3rem; box-shadow: 3px 4px 0 rgba(58,53,48,.2); cursor: pointer; }
+.actbar .big { width: 60px; height: 60px; font-size: 1.6rem; }
+.actbar .nope { color: var(--coral); } .actbar .like { color: var(--mint); } .actbar .super { color: var(--blue); }
+
+/* ── VN specific ── */
+.vn-stage { position: relative; height: 300px; margin: 10px 16px 0; border: 3px solid var(--ink);
+  border-radius: 16px 20px 14px 18px; overflow: hidden; background: linear-gradient(180deg, var(--blue-wash), var(--mint-wash)); }
+.vn-stage .scene-label { position: absolute; top: 8px; left: 10px; font-size: .58rem; font-weight: 700; color: var(--ink-soft);
+  background: rgba(255,255,255,.7); padding: 2px 7px; border-radius: 8px; }
+.vn-portrait { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); font-size: 8rem; line-height: 1; }
+.vn-affect { position: absolute; top: 8px; right: 10px; font-size: .6rem; font-weight: 700; color: var(--grape);
+  background: rgba(255,255,255,.8); padding: 3px 8px; border: 2px solid var(--grape); border-radius: 999px; }
+.vn-namebox { margin: 0 16px; transform: translateY(-12px); }
+.vn-name { display: inline-block; background: var(--coral); color: #fff; border: 2.5px solid var(--ink);
+  border-radius: 12px 16px 10px 14px; padding: 4px 14px; font-size: .82rem; font-weight: 700; }
+.vn-text { margin: 0 16px; padding: 13px 14px; background: #FFFEFA; border: 2.5px solid var(--ink);
+  border-radius: 6px 18px 18px 18px; font-size: .82rem; font-weight: 500; line-height: 1.45; }
+.vn-choices { margin: 10px 16px 0; display: flex; flex-direction: column; gap: 8px; }
+.vn-choice { display: flex; justify-content: space-between; align-items: center; padding: 11px 13px; background: var(--yellow-wash);
+  border: 2.5px solid var(--ink); border-radius: 14px 10px 16px 12px; font-size: .78rem; font-weight: 600; cursor: pointer; transform: rotate(var(--r,0deg)); }
+.vn-choice:nth-child(2) { background: var(--mint-wash); }
+.vn-choice:nth-child(3) { background: var(--coral-wash); }
+.vn-choice .delta { font-size: .68rem; font-weight: 700; color: var(--grape); white-space: nowrap; }
+
+/* affection / route bar */
+.affbar-wrap { margin: 12px 16px 0; padding: 12px 13px; background: #FFFEFA; border: 2.5px solid var(--ink);
+  border-radius: 16px 12px 18px 14px; transform: rotate(-.4deg); }
+.affbar-top { display: flex; justify-content: space-between; font-size: .78rem; font-weight: 700; }
+.affbar { height: 16px; margin-top: 8px; background: var(--paper-2); border: 2.5px solid var(--ink); border-radius: 999px; overflow: hidden; }
+.affbar > i { display: block; height: 100%; width: 27%; background: var(--mint); }
+.affbar-hint { font-size: .66rem; font-weight: 600; color: var(--ink-soft); margin-top: 7px; }
+.route-list { margin: 10px 16px 0; }
+.route-row { display: flex; gap: 10px; align-items: center; padding: 9px 0; font-size: .76rem; font-weight: 600; }
+.route-row + .route-row { border-top: 2px dotted var(--grid); }
+.route-row .dot { width: 22px; height: 22px; display: grid; place-items: center; border: 2.5px solid var(--ink);
+  border-radius: 999px; font-size: .7rem; background: var(--yellow-wash); }
+.route-row.done .dot { background: var(--mint); } .route-row.locked { opacity: .5; }
+
+.payoff { justify-content: center; }
+.splash { text-align: center; font-size: 3.3rem; padding: 18px 0 6px; transform: rotate(-5deg); }
+.payoff-head { text-align: center; font-size: 1.22rem; font-weight: 700; color: var(--coral); padding: 0 18px; line-height: 1.24; }
+.payoff-sub { text-align: center; font-size: .78rem; font-weight: 600; color: var(--ink-soft); margin-top: 7px; padding: 0 20px; }
+.ending-card { margin: 14px 16px 0; padding: 14px; background: var(--paper-2); border: 3px dashed var(--ink);
+  border-radius: 12px; text-align: center; transform: rotate(-1deg); }
+.meta-note { padding: 8px 14px; font-size: .64rem; color: #a8a29e; text-align: center; line-height: 1.45; }
+.nav-arrow { position: fixed; top: 50%; transform: translateY(-50%); z-index: 60;
+  width: 48px; height: 48px; border-radius: 999px; border: 3px solid var(--ink);
+  background: var(--yellow); color: var(--ink); font-family: var(--font); font-size: 1.4rem; font-weight: 800;
+  cursor: pointer; box-shadow: 3px 4px 0 rgba(0,0,0,.4); display: grid; place-items: center; }
+.nav-arrow:active { transform: translateY(-50%) scale(.92); }
+.nav-arrow.prev { left: 14px; } .nav-arrow.next { right: 14px; }
+.nav-arrow small { position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%);
+  font-size: .5rem; font-weight: 700; color: #c4bdb4; white-space: nowrap; }
+@media (max-width: 460px) { .nav-arrow { width: 38px; height: 38px; font-size: 1.1rem; } .nav-arrow.prev { left: 4px; } .nav-arrow.next { right: 4px; } }
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.2"/></filter>
+  <filter id="wobble2"><feTurbulence type="fractalNoise" baseFrequency="0.024" numOctaves="2" seed="22" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4"/></filter>
+</defs></svg>
+
+<header class="header">
+  <h1>หาคู่ — <span style="color:var(--coral)">Visual Novel</span></h1>
+  <p>V2 · เกมจีบแบบ VN · แมตช์เปิดเป็นเนื้อเรื่อง เลือกบทสนทนา · ทุกทางจบลงด้วยการถูกทิ้ง</p>
+  <div class="screen-tabs">
+    <button class="stab on" data-view="swipe">① ปัด</button>
+    <button class="stab" data-view="match">② แมตช์</button>
+    <button class="stab" data-view="scene">③ ฉาก + ตัวเลือก</button>
+    <button class="stab" data-view="route">④ เส้นเรื่อง</button>
+    <button class="stab" data-view="ending">⑤ ตอนจบ</button>
+  </div>
+</header>
+
+<!-- ① SWIPE (shared entry) -->
+<div class="view on" id="view-swipe"><div class="phones"><div class="phone-wrap">
+  <h2>Entry · <em>ปัดเพื่อเลือกตัวละคร</em></h2>
+  <div class="phone"><div class="screen doodle">
+    <div class="body">
+      <div class="top"><span class="tag">วันนี้ปัดไปแล้ว 5/10</span><div class="title">เลือก <span class="circled">นางเอก</span> ของเรื่องวันนี้</div></div>
+      <div class="deck">
+        <div class="card behind sketch-2"><div class="band" style="background:var(--coral-wash)">😎</div></div>
+        <div class="card front sketch">
+          <div class="band" style="background:var(--blue-wash)">⚡</div>
+          <span class="rarity sketch-2">หายาก</span>
+          <span class="stamp-super sketch-2">SUPER</span>
+          <div class="meta">
+            <div class="nm">ภูผา <small>27</small></div>
+            <div class="dist">1.1 กม. (โกหก)</div>
+            <div class="bio">นักปีนเขาที่หายตัวเก่งกว่าปีนเขา · มีเส้นเรื่อง 3 บท</div>
+          </div>
+        </div>
+      </div>
+      <div class="actbar">
+        <button class="nope sketch-2">✕</button>
+        <button class="big super sketch">★</button>
+        <button class="big like sketch-2">♥</button>
+      </div>
+    </div>
+    <div class="tabbar"><div class="on"><span>🃏</span>ปัด</div><div><span>📖</span>เรื่อง</div><div><span>🎟️</span>คูปอง</div><div><span>👤</span>โปรไฟล์</div></div>
+  </div></div>
+</div></div>
+<p class="meta-note">ปัด = แคสติ้งตัวละคร · super-like เปิดบทพิเศษ (มุก)</p></div>
+
+<!-- ② MATCH -->
+<div class="view" id="view-match"><div class="phones"><div class="phone-wrap">
+  <h2>Match · <em>เริ่มเส้นเรื่อง</em></h2>
+  <div class="phone"><div class="screen doodle payoff">
+    <div class="body" style="display:flex;flex-direction:column;justify-content:center">
+      <div class="splash">💘📖</div>
+      <div class="payoff-head">แมตช์แล้ว!<br>เส้นเรื่อง "ภูผา" ปลดล็อก</div>
+      <div class="payoff-sub">เพิ่งเริ่มรู้จักกัน · คุยให้สนิทอีกหน่อยถึงจะปลดล็อก "นัดเดท"</div>
+      <a class="cta sketch">เริ่มบทที่ 1 →</a>
+      <a class="cta ghost sketch-2">ดูเส้นเรื่องทั้งหมด</a>
+    </div>
+    <div class="tabbar"><div><span>🃏</span>ปัด</div><div class="on"><span>📖</span>เรื่อง</div><div><span>🎟️</span>คูปอง</div><div><span>👤</span>โปรไฟล์</div></div>
+  </div></div>
+</div></div>
+<p class="meta-note">แมตช์ = ปลดล็อกรูท · ใช้ระบบ beats[] จริง</p></div>
+
+<!-- ③ VN SCENE + CHOICES -->
+<div class="view" id="view-scene"><div class="phones"><div class="phone-wrap">
+  <h2>Scene · <em>บทที่ 2 — ร้านชานม</em></h2>
+  <div class="phone"><div class="screen doodle">
+    <div class="body">
+      <div class="vn-stage sketch">
+        <span class="scene-label">📖 จุดเปลี่ยนเรื่อง · บทที่ 2</span>
+        <span class="vn-affect">❤ เริ่มชอบ</span>
+        <span class="vn-portrait">⚡</span>
+      </div>
+      <div class="vn-namebox"><span class="vn-name sketch-2">ภูผา</span></div>
+      <div class="vn-text sketch">“เดี๋ยวเจอกันที่ร้านชานมนะ… เราจะไปแน่ๆ คราวนี้.” เขาพิมพ์ แล้วสถานะก็เปลี่ยนเป็น <b>ออนไลน์ 3 ชั่วโมงที่แล้ว</b> ทันที.</div>
+      <div class="vn-choices">
+        <div class="vn-choice sketch" style="--r:-.6deg"><span>“ไม่เป็นไร เดี๋ยวรอ ☺️”</span><span class="delta">ความชอบ +3</span></div>
+        <div class="vn-choice sketch-2" style="--r:.5deg"><span>“มาสายอีกแล้วนะเรา 🙄”</span><span class="delta">ความชอบ −2</span></div>
+        <div class="vn-choice sketch" style="--r:-.3deg"><span>“…ไปคนเดียวก็ได้ค่ะ”</span><span class="delta">ความชอบ +5 · เปิดบท 3</span></div>
+      </div>
+    </div>
+    <div class="tabbar"><div><span>🃏</span>ปัด</div><div class="on"><span>📖</span>เรื่อง</div><div><span>🎟️</span>คูปอง</div><div><span>👤</span>โปรไฟล์</div></div>
+  </div></div>
+</div></div>
+<p class="meta-note">ฉาก VN: พื้นหลัง + ตัวละคร + กล่องชื่อ + กล่องข้อความ · ตัวเลือกมี affection delta จริง (จาก choices[])</p></div>
+
+<!-- ④ ROUTE / AFFECTION -->
+<div class="view" id="view-route"><div class="phones"><div class="phone-wrap">
+  <h2>Route · <em>ความคืบหน้าเส้นเรื่อง</em></h2>
+  <div class="phone"><div class="screen doodle">
+    <div class="body">
+      <div class="top"><span class="tag yellow">เส้นเรื่อง: ภูผา</span><div class="title">ใกล้นัดเดทแล้ว…มั้ง</div></div>
+      <div class="affbar-wrap sketch">
+        <div class="affbar-top"><span>ความสนิท</span><span class="ul">เริ่มสนิท · ใกล้นัดได้</span></div>
+        <div class="affbar-hint">คุยต่ออีกนิด แล้วค่อยนัด · สนิทขึ้นเรื่อยๆ ทุกครั้งที่คุยกัน</div>
+      </div>
+      <div class="route-list">
+        <div class="route-row done"><span class="dot sketch-2">✓</span><span class="grow" style="flex:1">บทที่ 1 · “ทักครั้งแรก” (บทเปิด)</span></div>
+        <div class="route-row done"><span class="dot sketch-2">✓</span><span style="flex:1">บทที่ 2 · “ร้านชานม” (บทกลาง)</span></div>
+        <div class="route-row"><span class="dot sketch">3</span><span style="flex:1">บทที่ 3 · “สารภาพ” (บทลึก)</span></div>
+        <div class="route-row locked"><span class="dot sketch-2">🔒</span><span style="flex:1">นัดเดท · เลือกจุดนัด (ต้องสนิทพอ)</span></div>
+      </div>
+      <a class="cta sketch">เล่นบทที่ 3 ต่อ →</a>
+      <a class="cta ghost sketch-2">📍 นัดเดท (ยังไม่สนิทพอ)</a>
+    </div>
+    <div class="tabbar"><div><span>🃏</span>ปัด</div><div class="on"><span>📖</span>เรื่อง</div><div><span>🎟️</span>คูปอง</div><div><span>👤</span>โปรไฟล์</div></div>
+  </div></div>
+</div></div>
+<p class="meta-note">beats ปลดล็อกตามลำดับความสนิท · นัดเดทเมื่อสนิทพอ — อิงค่าจริงจาก code (ซ่อนตัวเลข)</p></div>
+
+<!-- ⑤ DOOMED ENDING -->
+<div class="view" id="view-ending"><div class="phones"><div class="phone-wrap">
+  <h2>Ending · <em>END 4 / 4 — ถูกทิ้งกลางคลอง</em></h2>
+  <div class="phone"><div class="screen doodle payoff">
+    <div class="body" style="display:flex;flex-direction:column;justify-content:center">
+      <div class="splash">🛶💔</div>
+      <div class="payoff-head">BAD END · “เขาไม่มา”</div>
+      <div class="payoff-sub">คุณไปถึงร้านชานม นั่งรอ 87 นาที สั่งชานม 2 แก้ว ดื่มคนเดียวทั้งสองแก้ว</div>
+      <div class="ending-card sketch">
+        <span class="tag coral">ตอนจบที่ปลดล็อก</span>
+        <div style="font-size:.8rem;font-weight:700;margin-top:9px">END 4/4 · +40 XP (โดนเท)</div>
+        <div style="font-size:.7rem;color:var(--ink-soft);margin-top:4px">ปลดล็อกแล้ว: เท, เงียบหาย, อ่านแล้วไม่ตอบ, ตกคลอง</div>
+      </div>
+      <a class="cta sketch">เล่นรูทอื่น (จบแย่เหมือนกัน)</a>
+      <a class="cta ghost sketch-2">กลับไปปัดตัวละครใหม่</a>
+    </div>
+    <div class="tabbar"><div><span>🃏</span>ปัด</div><div class="on"><span>📖</span>เรื่อง</div><div><span>🎟️</span>คูปอง</div><div><span>👤</span>โปรไฟล์</div></div>
+  </div></div>
+</div></div>
+<p class="meta-note">ทุกรูทจบแบบ doomed · เก็บ ending แบบ collectible · +40 XP date_ghosted (ค่าจริง)</p></div>
+
+<button class="nav-arrow prev" id="navPrev" aria-label="ขั้นก่อนหน้า">◀<small>ย้อน</small></button>
+<button class="nav-arrow next" id="navNext" aria-label="ขั้นถัดไป">▶<small>ขั้นถัดไป</small></button>
+<script>
+  const stabs = document.querySelectorAll('.stab');
+  const views = document.querySelectorAll('.view');
+  const order = ['swipe','match','scene','route','ending'];
+  let idx = 0;
+  function show(i) {
+    idx = (i + order.length) % order.length;
+    const v = order[idx];
+    stabs.forEach(x => x.classList.toggle('on', x.dataset.view === v));
+    views.forEach(y => y.classList.toggle('on', y.id === `view-${v}`));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  stabs.forEach(s => s.addEventListener('click', () => show(order.indexOf(s.dataset.view))));
+  document.getElementById('navPrev').addEventListener('click', () => show(idx - 1));
+  document.getElementById('navNext').addEventListener('click', () => show(idx + 1));
+  let sx = null;
+  function down(e) { sx = (e.touches ? e.touches[0].clientX : e.clientX); }
+  function up(e) {
+    if (sx === null) return;
+    const ex = (e.changedTouches ? e.changedTouches[0].clientX : e.clientX);
+    const dx = ex - sx; sx = null;
+    if (Math.abs(dx) > 50) show(idx + (dx < 0 ? 1 : -1));
+  }
+  document.querySelectorAll('.phone').forEach(p => {
+    p.addEventListener('touchstart', down, { passive: true });
+    p.addEventListener('touchend', up);
+    p.addEventListener('mousedown', down);
+    p.addEventListener('mouseup', up);
+  });
+</script>
+</body></html>

@@ -77,8 +77,12 @@ Home → 💘. Drag cards or use bottom buttons. Swipe up (or ★) for super-lik
 - 68/68 Jest tests pass
 - `npm run typecheck` clean
 
+> [!note] Different from the current design direction
+> This screen's Tinder-style pink theme (`theme.tinder.*`) predates the [[concepts/doodle-design-language|Doodle design language]] now set as the current visual direction. Adopting Doodle would re-skin this deck in the crayon/sketchbook palette and `Mali` font.
+
 ## Related
 
+- [[concepts/doodle-design-language|Doodle Design Language]] — current visual direction (to reconcile)
 - [[components/dating-sim|Dating Sim]] — domain logic and API
 - [[flows/08-dating-sim-daily-swipe-deck|Flow 8: Daily swipe deck]]
 - [[flows/09-dating-sim-chat-beats-date-orders|Flow 9: Chat & date orders]]

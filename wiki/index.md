@@ -4,7 +4,7 @@ title: "Wiki Index"
 status: "active"
 tags: ["index"]
 created: "2026-06-13"
-updated: "2026-06-13"
+updated: "2026-06-28"
 ---
 
 # geemong Wiki
@@ -52,7 +52,13 @@ Mode B — Repository architecture wiki. Seeded from `/understand` knowledge gra
 - [[flows/11-brand-booth-partner-tie-ins|11. Brand & partners]]
 - [[flows/12-supabase-backend-local-stack-schema|12. Backend]]
 
+## Design
+
+- [[concepts/doodle-design-language|Doodle Design Language (เบรค, อีเวน)]] — **current visual direction**
+- [[concepts/dating-experience-variants|Dating Experience Variants]] — 3 Doodle prototypes (`prototypes/dating-sim/`)
+
 ## Reference
 
 - [[dependencies/tech-stack|Tech Stack]]
 - [[sources/understand-knowledge-graph|Understand source graph]]
+- [[sources/breakeven-doodle-prototype|Doodle prototype (source)]]
