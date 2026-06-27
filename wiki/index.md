@@ -14,6 +14,7 @@ Mode B — Repository architecture wiki. Seeded from `/understand` knowledge gra
 ## Navigation
 
 - [[overview]]
+- [[roadmap]] — เล่นสนุก → ไวรัล → สปอนเซอร์ (HTML: `prototypes/roadmap.html`)
 - [[hot]] — recent context (~500 words)
 - [[log]] — operation history
 
@@ -56,6 +57,11 @@ Mode B — Repository architecture wiki. Seeded from `/understand` knowledge gra
 
 - [[concepts/doodle-design-language|Doodle Design Language (เบรค, อีเวน)]] — **current visual direction**
 - [[concepts/dating-experience-variants|Dating Experience Variants]] — 3 Doodle prototypes (`prototypes/dating-sim/`)
+
+## Marketing
+
+- [[marketing/marketing-plan|Marketing Plan — 12 เดือนที่ของไม่เคยถึง]] — in-world AARRR plan (satire)
+- [[marketing/landing-page|Break E'Wen Landing Page]] — Doodle parody one-pager (`prototypes/landing/`)
 
 ## Reference
 

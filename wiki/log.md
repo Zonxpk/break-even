@@ -7,6 +7,30 @@ updated: "2026-06-28"
 
 # Wiki Log
 
+## 2026-06-28 — Roadmap (เล่นสนุก → ไวรัล → สปอนเซอร์)
+
+- New page: [[roadmap]] — phased product+growth roadmap (Phase 0 baseline → 1 fun → 2 viral → 3 sponsor)
+- Built Doodle-styled HTML version `prototypes/roadmap.html` (reuses เบรค,อีเวน palette/Mali/wobble engine)
+- Sponsor strategy grounded in existing [[components/merch-shop]] brand booth + `redeem_claim`; guardrail = never sell out the never-arrives gag
+- Updated [[index]] (Navigation), [[hot]]
+- Key insight: sponsors are downstream of virality; sponsor surface is half-built already (brand booth)
+
+## 2026-06-28 — Landing page (Break E'Wen, Doodle parody)
+
+- Built `prototypes/landing/breakeven-landing.html` — single self-contained Doodle one-pager
+- **Brand decision:** removed the กี่โมง? hook headline; main title is now **เบรค E'Wen** for outward marketing
+- 5 sections: hero / 6-tile services / how-it-works (never-arrives loop) / สมาคมคนตกคลอง testimonials / consolation voucher `BM-7X2K`
+- Grounded in [[concepts/doodle-design-language]] tokens + voice; spec at `docs/superpowers/specs/2026-06-28-breakeven-landing-design.md`
+- New page: [[marketing/landing-page]]; updated [[index]], [[hot]]
+
+## 2026-06-28 — Marketing plan (in-world satire, AARRR)
+
+- Combined `marketing-skills:marketing-plan` (13-section AARRR spine) with the wiki's 6 features + Doodle bible
+- New page: [[marketing/marketing-plan]] — written in-character as geemong's marketing dept; never-arrives mechanic as the central marketing asset; fictional metrics, real features
+- Grounded in [[concepts/doodle-design-language]] voice ("ที่พักของคนที่ลืมพัก", "ค่าส่ง ฟรี เพราะไม่ส่ง", "สมาคมคนตกคลอง", ฿0/∞) and all 6 components
+- Updated [[index]] (new Marketing section), [[hot]]
+- Key insight: parody product → real plan structure as the joke's deadpan frame; only real eng deliverable surfaced is Doodle theme reconciliation
+
 ## 2026-06-28 — Variant prototypes: drop percentages + add step nav
 
 - Stripped every user-facing affection/odds **%** from all 3 prototypes → qualitative wording; removed V2's affection fill-bar (a meter is still a meter)

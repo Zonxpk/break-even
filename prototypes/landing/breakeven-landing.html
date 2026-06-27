@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เบรค E'Wen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F0; --paper-2:#F4EFE2; --grid:#E4DCC8;
+    --ink:#3A3530; --ink-soft:#7C746A; --pencil:#5A5450;
+    --coral:#F2664B; --blue:#4D8FC0; --yellow:#F4C24A; --mint:#6FBE9B; --grape:#9B6FC0;
+    --coral-wash:#FCE0DA; --blue-wash:#DCEAF4; --mint-wash:#DCEFE6; --yellow-wash:#FBEFC9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Mali', cursive;
+    color:var(--ink);
+    background:var(--paper);
+    background-image:
+      radial-gradient(var(--grid) 1.4px, transparent 1.4px);
+    background-size:18px 18px;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 20px;}
+
+  /* wobble border helper */
+  .sketch{filter:url(#wobble);}
+  .sketch-2{filter:url(#wobble-2);}
+
+  /* annotations */
+  .circled{position:relative;display:inline-block;}
+  .circled::after{
+    content:"";position:absolute;inset:-8px -14px;
+    border:2.5px solid var(--coral);
+    border-radius:48% 52% 50% 50%/60% 55% 45% 40%;
+    transform:rotate(-3deg);
+    filter:url(#wobble-2);
+  }
+  .hl{background:linear-gradient(transparent 55%, var(--yellow) 55%);padding:0 2px;}
+  .tag{
+    display:inline-block;background:var(--ink);color:var(--paper);
+    font-weight:600;font-size:.78rem;padding:3px 12px;
+    border-radius:14px 18px 12px 16px;transform:rotate(-2deg);
+    filter:url(#wobble-2);
+  }
+
+  /* hero */
+  header{text-align:center;padding:54px 0 30px;}
+  .brand{font-size:1.1rem;font-weight:600;color:var(--ink-soft);letter-spacing:.04em;}
+  .brand b{color:var(--coral);}
+  h1{font-size:clamp(2.8rem,12vw,4.6rem);font-weight:700;line-height:1;margin:14px 0 6px;}
+  h1 .en{color:var(--coral);}
+  .tagline{font-size:1.25rem;color:var(--pencil);font-weight:500;}
+  .rider{font-size:3.4rem;margin:22px 0 8px;display:inline-block;transform:rotate(-4deg);}
+  .cta{
+    display:inline-block;margin-top:14px;
+    background:var(--coral);color:#fff;font-weight:700;font-size:1.15rem;
+    text-decoration:none;padding:14px 30px;
+    border-radius:18px 24px 16px 22px;
+    box-shadow:4px 5px 0 var(--ink);
+    transform:rotate(-1.5deg);
+    filter:url(#wobble);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .cta:hover{transform:rotate(-1.5deg) translate(-1px,-2px);box-shadow:6px 8px 0 var(--ink);}
+  .cta:active{transform:rotate(-1.5deg) translate(2px,3px);box-shadow:1px 2px 0 var(--ink);}
+
+  /* section heading */
+  section{padding:34px 0;}
+  .sec-h{font-size:1.9rem;font-weight:700;text-align:center;margin-bottom:6px;}
+  .sec-sub{text-align:center;color:var(--ink-soft);margin-bottom:24px;}
+
+  /* services grid */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  .tile{
+    background:var(--paper-2);padding:18px 16px;text-align:center;
+    border:2.5px solid var(--ink);
+    border-radius:18px 24px 16px 22px;
+    box-shadow:4px 5px 0 rgba(58,53,48,.18);
+    filter:url(#wobble);
+  }
+  .tile:nth-child(1){background:var(--coral-wash);transform:rotate(-1.2deg);}
+  .tile:nth-child(2){background:var(--blue-wash);transform:rotate(1deg);}
+  .tile:nth-child(3){background:var(--yellow-wash);transform:rotate(.8deg);}
+  .tile:nth-child(4){background:var(--mint-wash);transform:rotate(-.9deg);}
+  .tile:nth-child(5){background:var(--coral-wash);transform:rotate(1.1deg);}
+  .tile:nth-child(6){background:var(--blue-wash);transform:rotate(-1deg);}
+  .tile .emoji{font-size:2.1rem;display:block;}
+  .tile .name{font-weight:700;font-size:1.15rem;margin:4px 0 2px;}
+  .tile .price{color:var(--pencil);font-size:.9rem;}
+
+  /* how it works */
+  .steps{display:flex;flex-direction:column;gap:14px;}
+  .step{
+    display:flex;align-items:center;gap:16px;
+    background:var(--paper-2);padding:16px 18px;
+    border:2.5px solid var(--ink);
+    border-radius:16px 22px 14px 20px;
+    box-shadow:3px 4px 0 rgba(58,53,48,.15);
+    filter:url(#wobble-2);
+  }
+  .step:nth-child(odd){transform:rotate(-.7deg);}
+  .step:nth-child(even){transform:rotate(.7deg);}
+  .step .n{
+    flex:0 0 auto;width:42px;height:42px;display:grid;place-items:center;
+    background:var(--ink);color:var(--paper);font-weight:700;font-size:1.2rem;
+    border-radius:50% 48% 52% 50%;
+  }
+  .step .big{font-size:1.7rem;}
+  .step .t{font-weight:700;font-size:1.1rem;}
+  .step .d{color:var(--ink-soft);font-size:.92rem;}
+  .arrow{text-align:center;font-size:1.6rem;color:var(--coral);line-height:.4;}
+
+  /* testimonials */
+  .quotes{display:flex;flex-direction:column;gap:18px;}
+  .quote{
+    background:#fff;padding:18px 20px;
+    border:2.5px solid var(--ink);
+    border-radius:18px 14px 22px 16px;
+    box-shadow:4px 5px 0 rgba(58,53,48,.16);
+    filter:url(#wobble);
+  }
+  .quote:nth-child(1){transform:rotate(-1.4deg);background:var(--yellow-wash);}
+  .quote:nth-child(2){transform:rotate(1.2deg);background:var(--mint-wash);}
+  .quote:nth-child(3){transform:rotate(-.8deg);background:var(--blue-wash);}
+  .quote p{font-size:1.05rem;}
+  .quote .who{margin-top:8px;font-weight:600;color:var(--pencil);font-size:.9rem;}
+  .stars{color:var(--yellow);font-size:1.1rem;-webkit-text-stroke:1px var(--ink);}
+
+  /* footer voucher */
+  footer{padding:40px 0 60px;text-align:center;}
+  .voucher{
+    display:inline-block;background:var(--paper-2);
+    border:2.5px dashed var(--ink);
+    padding:22px 30px;
+    border-radius:14px 20px 12px 18px;
+    transform:rotate(-1.2deg);
+    box-shadow:5px 6px 0 rgba(58,53,48,.18);
+    filter:url(#wobble);
+  }
+  .voucher .label{font-size:.85rem;color:var(--ink-soft);}
+  .voucher .code{font-size:1.8rem;font-weight:700;letter-spacing:.08em;color:var(--coral);}
+  .voucher .gift{margin-top:6px;color:var(--pencil);}
+  .foot-note{margin-top:24px;color:var(--ink-soft);font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<!-- hidden wobble filter engine -->
+<svg width="0" height="0" style="position:absolute">
+  <filter id="wobble">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2"/>
+  </filter>
+  <filter id="wobble-2">
+    <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="2" seed="13" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4"/>
+  </filter>
+</svg>
+
+<div class="wrap">
+
+  <!-- 1. HERO -->
+  <header>
+    <h1>เบรค <span class="en">E'Wen</span></h1>
+    <p class="tagline">ที่พักของ<span class="hl">คนที่ลืมพัก</span></p>
+    <div class="rider">🛵💤</div>
+    <div>
+      <a href="#how" class="cta">สั่งของที่ไม่มีวันถึง →</a>
+    </div>
+    <p style="margin-top:16px;color:var(--ink-soft);">
+      ซูเปอร์แอปที่<span class="circled">ไรเดอร์ไม่เคยมาถึง</span> เพราะคุณควรได้พักบ้าง
+    </p>
+  </header>
+
+  <!-- 2. SERVICES -->
+  <section id="services">
+    <h2 class="sec-h">บริการครบ (ที่ไม่ส่ง)</h2>
+    <p class="sec-sub">เลือกอะไรก็ได้ ผลลัพธ์เหมือนกัน: คุณได้พัก</p>
+    <div class="grid">
+      <div class="tile"><span class="emoji">🍜</span><div class="name">อาหาร</div><div class="price">฿0 · ส่งใน 87 นาที+</div></div>
+      <div class="tile"><span class="emoji">🚗</span><div class="name">เรียกรถ</div><div class="price">รถกำลังจะมา (โกหก)</div></div>
+      <div class="tile"><span class="emoji">📦</span><div class="name">ส่งพัสดุ</div><div class="price">ค่าส่ง ฟรี เพราะไม่ส่ง</div></div>
+      <div class="tile"><span class="emoji">🛒</span><div class="name">มาร์ท</div><div class="price">฿∞ · ของหมดทุกอย่าง</div></div>
+      <div class="tile"><span class="emoji">❤️</span><div class="name">หาคู่</div><div class="price">แมตช์แล้วก็หาย</div></div>
+      <div class="tile"><span class="emoji">😴</span><div class="name">นอนเฉยๆ</div><div class="price">บริการเดียวที่สำเร็จ</div></div>
+    </div>
+  </section>
+
+  <!-- 3. HOW IT WORKS -->
+  <section id="how">
+    <h2 class="sec-h">มันทำงานยังไง</h2>
+    <p class="sec-sub">วงจรที่ไม่เคยถึงปลายทาง (และนั่นคือฟีเจอร์)</p>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><span class="big">📲</span><div><div class="t">สั่ง</div><div class="d">กดสั่งของที่อยากได้ ด้วยความหวังเต็มเปี่ยม</div></div></div>
+      <div class="arrow">↓</div>
+      <div class="step"><span class="n">2</span><span class="big">🛵💤</span><div><div class="t">ไรเดอร์หลับ</div><div class="d">"ใกล้ถึงแล้วว! (โกหก)" — แล้วก็ตกคลองแสนแสบ</div></div></div>
+      <div class="arrow">↓</div>
+      <div class="step"><span class="n">3</span><span class="big">🌿</span><div><div class="t">คุณได้พัก</div><div class="d">ระหว่างรอ คุณหายใจเฮือกใหญ่ และได้พักจริงๆ</div></div></div>
+      <div class="arrow">↓</div>
+      <div class="step"><span class="n">4</span><span class="big">🎟️</span><div><div class="t">คูปองปลอบใจ</div><div class="d">รับคูปองจาก <span class="tag">สมาคมคนตกคลอง</span></div></div></div>
+    </div>
+  </section>
+
+  <!-- 4. TESTIMONIALS -->
+  <section id="reviews">
+    <h2 class="sec-h">เสียงจากสมาชิก</h2>
+    <p class="sec-sub">สมาคมคนตกคลอง · พักครบแล้ว เริ่ด</p>
+    <div class="quotes">
+      <div class="quote">
+        <div class="stars">★★★★★</div>
+        <p>"สั่งกาแฟไป 3 วันแล้วยังไม่มา แต่ฉันได้นอนกลางวันครั้งแรกในรอบปี ขอบคุณค่ะ"</p>
+        <div class="who">— แนน, ตกคลองเมื่อวันอังคาร</div>
+      </div>
+      <div class="quote">
+        <div class="stars">★★★★★</div>
+        <p>"ไรเดอร์ไม่มา ฉันเลยได้คุยกับแมวที่บ้าน เป็นบทสนทนาที่ลึกที่สุดในชีวิต"</p>
+        <div class="who">— เอก, สมาชิกระดับทอง (ตกคลอง 12 ครั้ง)</div>
+      </div>
+      <div class="quote">
+        <div class="stars">★★★★☆</div>
+        <p>"หักดาวเพราะของมาถึงครั้งนึง ทำให้ฉันเครียด อยากได้ความว่างเปล่ากลับคืนมา"</p>
+        <div class="who">— ปุ๊ก, ผู้ลืมพักมานาน</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. FOOTER -->
+  <footer>
+    <div class="voucher">
+      <div class="label">คูปองปลอบใจ · สมาคมคนตกคลอง</div>
+      <div class="code">BM-7X2K</div>
+      <div class="gift">ของแถม: ลมหายใจเฮือกใหญ่</div>
+    </div>
+    <p class="foot-note">เบรค, อีเวน — ที่พักของคนที่ลืมพัก · ของไม่ถึง แต่ใจถึง</p>
+  </footer>
+
+</div>
+</body>
+</html>

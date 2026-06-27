@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>geemong Roadmap — เบรค, อีเวน</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Doodle roadmap — reuses the "เบรค, อีเวน" sketchbook language
+     * (palette, Mali font, wobble border engine, dotted paper). */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --font: "Mali", cursive;
+      --paper: #FBF8F0; --paper-2: #F4EFE2; --grid: #E4DCC8;
+      --ink: #3A3530; --ink-soft: #7C746A; --pencil: #5A5450;
+      --crayon-coral: #F2664B; --crayon-blue: #4D8FC0; --crayon-yellow: #F4C24A;
+      --crayon-mint: #6FBE9B; --crayon-grape: #9B6FC0;
+      --coral-wash: #FCE0DA; --blue-wash: #DCEAF4; --mint-wash: #DCEFE6; --yellow-wash: #FBEFC9;
+    }
+    body {
+      font-family: var(--font); background: #26241f; color: var(--ink);
+      min-height: 100dvh; padding: env(safe-area-inset-top) 0 40px;
+    }
+    .sketch { filter: url(#wobble); }
+    .sketch-2 { filter: url(#wobble2); }
+
+    /* ── header ── */
+    .header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(38,36,31,.94); backdrop-filter: blur(10px);
+      padding: 14px 18px 12px; border-bottom: 2px dashed #56524a; text-align: center;
+    }
+    .header h1 { font-size: 1.05rem; font-weight: 700; color: var(--paper); }
+    .header p { font-size: .68rem; color: #a8a29e; margin-top: 4px; }
+    .legend { display: flex; gap: 7px; justify-content: center; flex-wrap: wrap; margin-top: 9px; font-size: .6rem; font-weight: 700; }
+    .legend span { padding: 3px 9px; border-radius: 7px; }
+    .legend .done { background: var(--mint-wash); color: #234234; }
+    .legend .now  { background: var(--coral-wash); color: #8a3320; }
+    .legend .next { background: var(--yellow-wash); color: #6a531a; }
+    .legend .later{ background: var(--blue-wash); color: #2f516b; }
+
+    /* ── paper sheet ── */
+    .sheet {
+      max-width: 560px; margin: 16px auto 0; padding: 8px 0 24px;
+      background: var(--paper); position: relative;
+      border-radius: 18px; border: 2px solid #56524a;
+      box-shadow: 6px 8px 0 rgba(0,0,0,.35);
+    }
+    .sheet::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: 18px;
+      background-image: radial-gradient(var(--grid) 1.1px, transparent 1.1px);
+      background-size: 18px 18px; opacity: .5;
+    }
+    .sheet > * { position: relative; z-index: 1; }
+
+    /* hand-drawn spine connecting the phases */
+    .spine { position: absolute; left: 38px; top: 70px; bottom: 60px; width: 0;
+      border-left: 3px dashed var(--crayon-grape); z-index: 0; opacity: .55; }
+
+    /* ── phase card ── */
+    .phase { margin: 18px 18px 0 16px; position: relative; }
+    .dot {
+      position: absolute; left: 6px; top: 6px;
+      width: 30px; height: 30px; display: grid; place-items: center;
+      border: 3px solid var(--ink); border-radius: 50%;
+      background: var(--crayon-yellow); font-size: .82rem; font-weight: 700;
+      transform: rotate(-6deg); z-index: 3;
+    }
+    .phase.done .dot { background: var(--crayon-mint); }
+    .phase.now  .dot { background: var(--crayon-coral); color: #fff; }
+    .card {
+      margin-left: 50px; padding: 14px 15px 13px;
+      background: #FFFEFA; border: 2.5px solid var(--ink);
+      border-radius: 16px 22px 14px 20px;
+      box-shadow: 4px 5px 0 rgba(58,53,48,.18);
+      transform: rotate(var(--r, -.5deg));
+    }
+    .phase:nth-child(odd) .card { --r: .5deg; }
+    .tag {
+      display: inline-block; border: 2.5px solid var(--ink);
+      border-radius: 14px 18px 12px 16px; padding: 2px 10px;
+      font-size: .62rem; font-weight: 700; transform: rotate(-2deg); margin-bottom: 7px;
+    }
+    .tag.done { background: var(--crayon-mint); color: #234234; }
+    .tag.now  { background: var(--crayon-coral); color: #fff; transform: rotate(1.5deg); }
+    .tag.next { background: var(--crayon-yellow); color: #5a4410; }
+    .tag.later{ background: var(--crayon-blue); color: #fff; transform: rotate(1deg); }
+    .card h2 { font-size: 1.02rem; font-weight: 700; line-height: 1.25; }
+    .card .goal { font-size: .74rem; font-weight: 600; color: var(--ink-soft); margin: 5px 0 10px; }
+    .card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .card li {
+      font-size: .76rem; font-weight: 500; line-height: 1.35;
+      padding-left: 22px; position: relative;
+    }
+    .card li::before {
+      content: "✎"; position: absolute; left: 0; top: -1px;
+      color: var(--crayon-grape); font-size: .8rem;
+    }
+    .card li.warn::before { content: "⚠︎"; color: var(--crayon-coral); }
+    .card li b { font-weight: 700; }
+    .circled { position: relative; white-space: nowrap; font-weight: 700; }
+    .circled::after {
+      content: ""; position: absolute; left: -5px; right: -5px; top: -3px; bottom: -3px;
+      border: 2.5px solid var(--crayon-coral);
+      border-radius: 48% 52% 50% 50% / 60% 55% 45% 40%;
+      transform: rotate(-2deg); pointer-events: none;
+    }
+    .scrib-ul { background: linear-gradient(transparent 62%, var(--crayon-yellow) 62%, var(--crayon-yellow) 92%, transparent 92%); padding: 0 2px; }
+    .gate {
+      margin: 9px 0 0; padding: 8px 11px;
+      background: var(--paper-2); border: 2.5px dashed var(--crayon-grape);
+      border-radius: 14px 18px 16px 20px; font-size: .7rem; font-weight: 700;
+      line-height: 1.35; transform: rotate(-.4deg);
+    }
+    .gate b { color: var(--crayon-grape); }
+
+    .foot { text-align: center; font-size: .64rem; color: #a8a29e; margin: 22px 18px 0; line-height: 1.5; }
+    .foot .scribble-tag { display: inline-block; background: var(--crayon-yellow); color: #5a4410;
+      border: 2px solid var(--ink); border-radius: 12px; padding: 1px 8px; transform: rotate(-2deg); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <!-- wobble border engine (reused from เบรค, อีเวน prototype) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="wobble">
+        <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="7" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2"/>
+      </filter>
+      <filter id="wobble2">
+        <feTurbulence type="fractalNoise" baseFrequency="0.024" numOctaves="2" seed="22" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <div class="header">
+    <h1>geemong Roadmap 🛵💤</h1>
+    <p>เล่นสนุก → ไวรัล → รับสปอนเซอร์ · "ที่พักของคนที่ลืมพัก"</p>
+    <div class="legend">
+      <span class="done">✓ ทำแล้ว</span>
+      <span class="now">● ตอนนี้</span>
+      <span class="next">→ ถัดไป</span>
+      <span class="later">… ทีหลัง</span>
+    </div>
+  </div>
+
+  <div class="sheet sketch-2">
+    <div class="spine"></div>
+
+    <!-- Phase 0 -->
+    <div class="phase done">
+      <div class="dot sketch">✓</div>
+      <div class="card sketch">
+        <span class="tag done">PHASE 0 · ทำแล้ว</span>
+        <h2>มันเล่นได้แล้ว</h2>
+        <p class="goal">ฐานของจริงที่ทุก phase ต่อยอด</p>
+        <ul>
+          <li>Gag Engine — reducer · route · path · pickScript <b>(มี test ครบ)</b></li>
+          <li>Dating Sim — swipe deck · chat beats · affection · LLM (BYO key)</li>
+          <li>Merch Pop-Up — ตารางเวลา กทม. · voucher · brand booth <code>redeem_claim</code></li>
+          <li>Mobile API + Supabase (Postgres · Deno · pgTAP)</li>
+          <li class="warn">หนี้ดีไซน์: UI ที่ ship ยังเป็นธีม Tinder/ชมพู — ยังไม่ใช่ Doodle</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Phase 1 -->
+    <div class="phase now">
+      <div class="dot sketch">1</div>
+      <div class="card sketch">
+        <span class="tag now">PHASE 1 · ตอนนี้</span>
+        <h2>ทำให้ <span class="circled">สนุก</span></h2>
+        <p class="goal">core loop สนุกพอที่คนเล่นจบแล้วอยากเล่าต่อ — ยังไม่คิดเรื่องเงิน</p>
+        <ul>
+          <li>Reconcile ธีม Tinder → Doodle (<code>theme.ts</code> · ฟอนต์ Mali)</li>
+          <li>Polish finale <span class="scrib-ul">"ตกคลองแสนแสบ! พักครบแล้ว เริ่ด!"</span></li>
+          <li>ทำหน้า finale ให้ <b>แชร์ได้</b> (export การ์ด/ภาพ)</li>
+          <li>ปรับ daily deck ให้มีเหตุผลเปิดทุกวัน</li>
+        </ul>
+        <div class="gate"><b>ผ่านเมื่อ →</b> เพื่อนที่ลองเล่นหัวเราะแล้วส่งต่อเอง โดยไม่ต้องขอ</div>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase">
+      <div class="dot sketch">2</div>
+      <div class="card sketch">
+        <span class="tag next">PHASE 2 · ถัดไป</span>
+        <h2>ทำให้ <span class="circled">ไวรัล</span></h2>
+        <p class="goal">สะสม reach + ตัวเลขที่เอาไปคุยกับแบรนด์ได้ — ยังไม่ขายสปอนเซอร์</p>
+        <ul>
+          <li>Shareable finale loop — <b>#เบรคอีเวน</b></li>
+          <li>มีม — คลิป notebook-map ไรเดอร์ตกคลอง ตัดสั้น 15 วิ</li>
+          <li>App Store / ASO — มุก "สั่งของที่ไม่มีวันถึง →"</li>
+          <li>"สมาคมคนตกคลอง" — community รอบมุกไม่ส่ง</li>
+        </ul>
+        <div class="gate"><b>ผ่านเมื่อ →</b> มีตัวเลข reach/redemption ที่เล่าเป็น story ให้สปอนเซอร์ได้ (≥1 มีมออกนอกวงเพื่อน)</div>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase">
+      <div class="dot sketch">3</div>
+      <div class="card sketch">
+        <span class="tag later">PHASE 3 · ทีหลัง</span>
+        <h2>รับ <span class="circled">สปอนเซอร์</span></h2>
+        <p class="goal">monetize โดยไม่ทำลายมุกไม่ส่ง — เรียงตาม brand-fit</p>
+        <ul>
+          <li><b>1. Brand booth sponsor</b> (มี infra แล้ว) — claim โค้ด <code>WHEN-</code> → เดินไปรับเองที่บูธ</li>
+          <li><b>2. Sponsored gag</b> — persona/incident ที่แบรนด์เป็น punchline ไม่ใช่ banner</li>
+          <li><b>3. Consolation voucher sponsor</b> — แบรนด์ออกทุนคูปองปลอบใจหลัง finale</li>
+          <li>build: dashboard นับ redemption ต่อแบรนด์ · tag sponsored persona/incident</li>
+          <li class="warn">เส้นห้ามข้าม: สปอนเซอร์ที่ต้องการให้ "ส่งสำเร็จ" = <b>Skip</b></li>
+        </ul>
+        <div class="gate"><b>กฎเดียว →</b> มุกไม่ส่งคือ asset ทั้งหมด อย่าขายมันทิ้ง</div>
+      </div>
+    </div>
+
+    <p class="foot">
+      เงินอยู่ปลายน้ำของมีม <span class="scribble-tag">สปอนเซอร์ = ผลพลอยได้ของไวรัล</span><br>
+      ดูแผนเต็ม: wiki/roadmap.md · wiki/marketing/marketing-plan.md
+    </p>
+  </div>
+</body>
+</html>
