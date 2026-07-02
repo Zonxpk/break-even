@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import { View, Text, Pressable, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { placeOrder } from '../../../api/orders';
 import { SERVICE_CONFIGS } from '../../../services/config';
 import { theme } from '../../../ui/theme';
+import { PaperBackground } from '../../../ui/doodle/PaperBackground';
+import { Sketch } from '../../../ui/doodle/Sketch';
+import { CrayonCta } from '../../../ui/doodle/CrayonCta';
+import { doodleHeader } from '../../../ui/doodle/nav';
 import type { CatalogItem, Service } from '../../../types/db';
 
 export default function Confirm() {
@@ -29,39 +33,55 @@ export default function Confirm() {
 
   return (
     <View style={s.root}>
-      <Stack.Screen options={{ headerShown: true, title: 'สรุปคำสั่งซื้อ' }} />
-      {items.map((i) => (
-        <View key={i.id} style={s.row}>
-          <Text style={s.name}>{i.name}</Text>
-          <Text style={s.price}>฿{Number(i.price).toFixed(0)}</Text>
+      <PaperBackground />
+      <Stack.Screen options={{ ...doodleHeader, title: 'สรุปคำสั่งซื้อ' }} />
+
+      <Sketch style={s.card} fill={theme.doodle.card} seed={5} radius={18}>
+        <View style={s.cardInner}>
+          {items.map((i, idx) => (
+            <View key={i.id} style={[s.row, idx > 0 && s.rowDivider]}>
+              <Text style={s.name}>{i.name}</Text>
+              <Text style={s.price}>฿{Number(i.price).toFixed(0)}</Text>
+            </View>
+          ))}
+          <View style={[s.row, s.rowDivider]}>
+            <Text style={s.name}>รวม</Text>
+            <Text style={s.strike}>฿{subtotal.toFixed(0)}</Text>
+          </View>
+          <View style={s.row}>
+            <Text style={s.nameBold}>ยอดชำระ (โปรเปิดตัว)</Text>
+            <Text style={s.free}>฿0</Text>
+          </View>
         </View>
-      ))}
-      <View style={s.divider} />
-      <View style={s.row}>
-        <Text style={s.name}>รวม</Text>
-        <Text style={s.strike}>฿{subtotal.toFixed(0)}</Text>
-      </View>
-      <View style={s.row}>
-        <Text style={[s.name, { fontWeight: '800' }]}>ยอดชำระ (โปรเปิดตัว)</Text>
-        <Text style={s.free}>฿0</Text>
-      </View>
-      <Text style={s.fine}>* ทุกออเดอร์ฟรีตลอดไป เพราะเราไม่เคยส่งถึงใครเลย</Text>
-      <Pressable style={[s.cta, { backgroundColor: cfg.accent }, busy && { opacity: 0.5 }]} disabled={busy} onPress={submit}>
-        <Text style={s.ctaText}>{busy ? 'กำลังหา' + cfg.trackingNoun + '...' : cfg.confirmCta}</Text>
-      </Pressable>
+      </Sketch>
+
+      <Sketch style={s.note} fill={theme.doodle.paper2} stroke={theme.doodle.grape} dashed seed={42} radius={16}>
+        <Text style={s.noteText}>* ทุกออเดอร์ฟรีตลอดไป เพราะเราไม่เคยส่งถึงใครเลย</Text>
+      </Sketch>
+
+      <CrayonCta
+        label={busy ? 'กำลังหา' + cfg.trackingNoun + '...' : cfg.confirmCta}
+        disabled={busy}
+        seed={99}
+        style={s.cta}
+        onPress={submit}
+      />
     </View>
   );
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: theme.bg, padding: theme.pad },
-  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8 },
-  name: { fontSize: 15 },
-  price: { fontSize: 15, color: theme.textMuted },
-  strike: { fontSize: 15, color: theme.textMuted, textDecorationLine: 'line-through' },
-  free: { fontSize: 18, fontWeight: '800', color: theme.green },
-  divider: { height: 1, backgroundColor: '#eee', marginVertical: 8 },
-  fine: { fontSize: 11, color: '#bbb', marginTop: 4 },
-  cta: { borderRadius: theme.radius, padding: 16, alignItems: 'center', marginTop: 24 },
-  ctaText: { color: '#fff', fontWeight: '700', fontSize: 16 },
+  root: { flex: 1, backgroundColor: theme.doodle.paper, padding: theme.pad },
+  card: { transform: [{ rotate: '-0.4deg' }] },
+  cardInner: { padding: 13 },
+  row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8, gap: 12 },
+  rowDivider: { borderTopWidth: 2, borderTopColor: theme.doodle.grid, borderStyle: 'dotted' },
+  name: { fontFamily: theme.fontBold, fontSize: 15, color: theme.doodle.ink, flex: 1 },
+  nameBold: { fontFamily: theme.fontBold, fontSize: 15, color: theme.doodle.ink, flex: 1 },
+  price: { fontFamily: theme.fontBold, fontSize: 15, color: theme.doodle.coral },
+  strike: { fontFamily: theme.font, fontSize: 15, color: theme.doodle.inkSoft, textDecorationLine: 'line-through' },
+  free: { fontFamily: theme.fontBold, fontSize: 18, color: theme.doodle.coral },
+  note: { marginTop: 14, transform: [{ rotate: '-0.5deg' }] },
+  noteText: { fontFamily: theme.fontBold, fontSize: 13, color: theme.doodle.ink, lineHeight: 19, padding: 12 },
+  cta: { marginTop: 20 },
 });

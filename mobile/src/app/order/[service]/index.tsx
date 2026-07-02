@@ -4,6 +4,10 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { fetchCatalog } from '../../../api/content';
 import { SERVICE_CONFIGS } from '../../../services/config';
 import { theme } from '../../../ui/theme';
+import { PaperBackground } from '../../../ui/doodle/PaperBackground';
+import { Sketch } from '../../../ui/doodle/Sketch';
+import { CrayonCta } from '../../../ui/doodle/CrayonCta';
+import { doodleHeader } from '../../../ui/doodle/nav';
 import type { CatalogItem, Service } from '../../../types/db';
 
 export default function Browse() {
@@ -28,60 +32,71 @@ export default function Browse() {
 
   return (
     <View style={s.root}>
-      <Stack.Screen options={{ headerShown: true, title: cfg.title }} />
+      <PaperBackground />
+      <Stack.Screen options={{ ...doodleHeader, title: cfg.title }} />
       <Text style={s.section}>{cfg.catalogTitle}</Text>
       <FlatList
         data={items}
         keyExtractor={(i) => i.id}
-        renderItem={({ item }) => {
+        contentContainerStyle={s.list}
+        renderItem={({ item, index }) => {
           const selected = picked.some((i) => i.id === item.id);
           return (
-            <Pressable style={[s.card, selected && { borderColor: cfg.accent, borderWidth: 2 }]} onPress={() => toggle(item)}>
-              {item.photo_url ? (
-                <Image source={{ uri: item.photo_url }} style={s.photo} />
-              ) : (
-                <View style={[s.photo, s.photoFallback]}>
-                  <Text style={{ fontSize: 28 }}>🍱</Text>
+            <Pressable onPress={() => toggle(item)}>
+              <Sketch
+                style={s.card}
+                fill={selected ? theme.doodle.yellowWash : theme.doodle.card}
+                stroke={selected ? theme.doodle.coral : theme.doodle.ink}
+                seed={index + 1}
+                radius={18}
+              >
+                <View style={s.cardInner}>
+                  {item.photo_url ? (
+                    <Image source={{ uri: item.photo_url }} style={s.photo} />
+                  ) : (
+                    <View style={[s.photo, s.photoFallback]}>
+                      <Text style={{ fontSize: 28 }}>🍱</Text>
+                    </View>
+                  )}
+                  <View style={{ flex: 1 }}>
+                    <Text style={s.name}>{item.name}</Text>
+                    <Text style={s.meta}>
+                      {item.rating ? `⭐ ${item.rating} · ` : ''}ส่งฟรี (เพราะไม่ส่ง)
+                    </Text>
+                  </View>
+                  <Text style={s.price}>฿{item.price.toFixed(0)}</Text>
                 </View>
-              )}
-              <View style={{ flex: 1 }}>
-                <Text style={s.name}>{item.name}</Text>
-                <Text style={s.meta}>
-                  {item.rating ? `★ ${item.rating}  · ` : ''}฿{item.price.toFixed(0)} · ส่งฟรี
-                </Text>
-              </View>
+              </Sketch>
             </Pressable>
           );
         }}
       />
-      <Pressable
-        style={[s.cta, { backgroundColor: cfg.accent }, picked.length === 0 && { opacity: 0.4 }]}
+      <CrayonCta
+        label={`ไปหน้าสรุป (${picked.length})`}
         disabled={picked.length === 0}
-        onPress={() => {
+        seed={99}
+        style={s.cta}
+        onPress={() =>
           router.push({
             pathname: '/order/[service]/confirm',
             params: { service: cfg.key, items: JSON.stringify(picked) },
-          });
-        }}
-      >
-        <Text style={s.ctaText}>ไปหน้าสรุป ({picked.length})</Text>
-      </Pressable>
+          })
+        }
+      />
     </View>
   );
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: theme.bg, padding: theme.pad },
-  section: { fontSize: 16, fontWeight: '700', marginBottom: 10 },
-  card: {
-    flexDirection: 'row', gap: 12, padding: 12, borderRadius: theme.radius,
-    backgroundColor: theme.surface, marginBottom: 10, alignItems: 'center',
-    borderWidth: 2, borderColor: 'transparent',
-  },
-  photo: { width: 64, height: 64, borderRadius: 8 },
-  photoFallback: { backgroundColor: '#eee', alignItems: 'center', justifyContent: 'center' },
-  name: { fontWeight: '600', fontSize: 15 },
-  meta: { color: theme.textMuted, fontSize: 13, marginTop: 2 },
-  cta: { borderRadius: theme.radius, padding: 16, alignItems: 'center', marginTop: 8 },
-  ctaText: { color: '#fff', fontWeight: '700', fontSize: 16 },
+  root: { flex: 1, backgroundColor: theme.doodle.paper, padding: theme.pad },
+  section: { fontFamily: theme.fontBold, fontSize: 17, color: theme.doodle.ink, marginBottom: 10 },
+  list: { paddingBottom: 8 },
+  card: { marginBottom: 10 },
+  cardInner: { flexDirection: 'row', gap: 12, padding: 12, alignItems: 'center' },
+  photo: { width: 56, height: 56, borderRadius: 10, borderWidth: 2, borderColor: theme.doodle.ink },
+  photoFallback: { backgroundColor: theme.doodle.paper2, alignItems: 'center', justifyContent: 'center' },
+  name: { fontFamily: theme.fontBold, fontSize: 15, color: theme.doodle.ink },
+  meta: { fontFamily: theme.font, color: theme.doodle.inkSoft, fontSize: 12, marginTop: 2 },
+  price: { fontFamily: theme.fontBold, fontSize: 15, color: theme.doodle.coral },
+  cta: { marginTop: 8 },
 });

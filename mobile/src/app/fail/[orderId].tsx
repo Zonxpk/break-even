@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { failOrder, getOrder, type FailResult } from '../../api/orders';
 import { appendApology } from '../../dating/chatStorage';
 import { useAuth } from '../../state/auth';
 import { supabase } from '../../lib/supabase';
 import { theme } from '../../ui/theme';
+import { PaperBackground } from '../../ui/doodle/PaperBackground';
+import { Sketch } from '../../ui/doodle/Sketch';
+import { CrayonCta } from '../../ui/doodle/CrayonCta';
 
 export default function Fail() {
   const { orderId, kind } = useLocalSearchParams<{ orderId: string; kind: string }>();
@@ -40,43 +43,67 @@ export default function Fail() {
   if (!result) {
     return (
       <View style={s.center}>
-        <ActivityIndicator color={theme.green} size="large" />
+        <PaperBackground />
+        <ActivityIndicator color={theme.doodle.coral} size="large" />
       </View>
     );
   }
 
   return (
     <View style={s.root}>
+      <PaperBackground />
       <Stack.Screen options={{ headerShown: false }} />
       <Text style={s.splash}>🛶</Text>
-      <Text style={s.headline}>{finaleHeadline(kind ?? 'lost')}</Text>
-      <Text style={s.sub}>ขออภัยในความไม่สะดวก (อีกแล้ว)</Text>
+      <Text style={s.headline}>{finaleHeadline(kind ?? 'lost')}{'\n'}พักครบแล้ว เริ่ด!</Text>
+      <Text style={s.sub}>พอแล้วว เก่งมากก! กลับไปลุยต่อได้ อย่าติดใจล่ะ</Text>
 
       {result.voucher ? (
-        <View style={s.voucher}>
-          <Text style={s.voucherLabel}>🎟️ คูปองปลอบใจจากพาร์ทเนอร์</Text>
-          <Text style={s.voucherTitle}>{campaignTitle}</Text>
-          {result.voucher.code ? <Text style={s.voucherCode}>{result.voucher.code}</Text> : null}
-        </View>
+        <Sketch
+          style={s.voucher}
+          fill={theme.doodle.yellowWash}
+          stroke={theme.doodle.ink}
+          strokeWidth={3}
+          dashed
+          seed={8}
+          radius={12}
+          shadow
+        >
+          <View style={s.voucherInner}>
+            <Text style={s.voucherTag}>คูปองปลอบใจ</Text>
+            <Text style={s.voucherTitle}>{campaignTitle}</Text>
+            {result.voucher.code ? (
+              <View style={s.codeBox}>
+                <Text style={s.code}>{result.voucher.code}</Text>
+              </View>
+            ) : null}
+          </View>
+        </Sketch>
       ) : result.rateLimited ? (
-        <Text style={s.rateLimited}>ความเสียใจของคุณถี่เกินระบบจะปลอบไหว 🙏{'\n'}พักสักครู่แล้วค่อยผิดหวังใหม่</Text>
+        <Text style={s.noVoucher}>ความเสียใจของคุณถี่เกินระบบจะปลอบไหว 🙏{'\n'}พักสักครู่แล้วค่อยผิดหวังใหม่</Text>
       ) : (
-        <Text style={s.rateLimited}>ครั้งนี้ไม่มีคูปอง แต่มีความทรงจำ</Text>
+        <Text style={s.noVoucher}>ครั้งนี้ไม่มีคูปอง แต่มีความทรงจำ</Text>
       )}
 
-      <Pressable style={s.cta} onPress={() => router.replace('/(tabs)/vouchers')}>
-        <Text style={s.ctaText}>ดูคูปองของฉัน</Text>
-      </Pressable>
-      <Pressable onPress={() => router.replace('/')}>
-        <Text style={s.again}>สั่งใหม่ (เผื่อรอบนี้จะถึง)</Text>
-      </Pressable>
+      <CrayonCta
+        label="กลับไปใช้ชีวิต"
+        seed={99}
+        style={s.cta}
+        onPress={() => router.replace('/(tabs)/vouchers')}
+      />
+      <CrayonCta
+        ghost
+        label="สั่งใหม่ (รู้ว่าไม่ถึง)"
+        seed={55}
+        style={s.ctaGhost}
+        onPress={() => router.replace('/')}
+      />
     </View>
   );
 }
 
 function finaleHeadline(kind: string): string {
   switch (kind) {
-    case 'canal': return 'ไรเดอร์ตกคลอง';
+    case 'canal': return 'ตกคลองแสนแสบ!';
     case 'sleepy': return 'ไรเดอร์หลับลึกเกินปลุก';
     case 'lost': return 'ไรเดอร์หลงทางถาวร';
     default: return 'ออเดอร์ไปไม่ถึงฝั่งฝัน';
@@ -84,17 +111,37 @@ function finaleHeadline(kind: string): string {
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#0E2A47', alignItems: 'center', justifyContent: 'center', padding: 24, gap: 10 },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#0E2A47' },
-  splash: { fontSize: 72 },
-  headline: { fontSize: 26, fontWeight: '900', color: '#fff', textAlign: 'center' },
-  sub: { color: '#9FB8D0', marginBottom: 18 },
-  voucher: { backgroundColor: '#fff', borderRadius: 16, padding: 20, alignItems: 'center', gap: 6, width: '100%' },
-  voucherLabel: { fontSize: 12, color: theme.textMuted },
-  voucherTitle: { fontSize: 17, fontWeight: '800', textAlign: 'center' },
-  voucherCode: { fontSize: 20, fontWeight: '900', letterSpacing: 2, color: theme.greenDark, marginTop: 6 },
-  rateLimited: { color: '#9FB8D0', textAlign: 'center', lineHeight: 22 },
-  cta: { backgroundColor: theme.green, borderRadius: theme.radius, padding: 16, alignItems: 'center', width: '100%', marginTop: 20 },
-  ctaText: { color: '#fff', fontWeight: '700' },
-  again: { color: '#9FB8D0', padding: 10 },
+  root: { flex: 1, backgroundColor: theme.doodle.paper, alignItems: 'stretch', justifyContent: 'center', padding: 24 },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.doodle.paper },
+  splash: { fontSize: 56, textAlign: 'center', transform: [{ rotate: '-5deg' }], paddingBottom: 6 },
+  headline: {
+    fontFamily: theme.fontBold, fontSize: 24, color: theme.doodle.coral,
+    textAlign: 'center', lineHeight: 32, paddingHorizontal: 18,
+  },
+  sub: {
+    fontFamily: theme.fontBold, fontSize: 14, color: theme.doodle.inkSoft,
+    textAlign: 'center', marginTop: 7, paddingHorizontal: 20,
+  },
+  voucher: { marginTop: 18, transform: [{ rotate: '-1deg' }] },
+  voucherInner: { padding: 15, alignItems: 'center' },
+  voucherTag: {
+    fontFamily: theme.fontBold, fontSize: 13, color: '#fff',
+    backgroundColor: theme.doodle.coral,
+    borderWidth: 2.5, borderColor: theme.doodle.ink, borderRadius: 14,
+    paddingHorizontal: 11, paddingVertical: 3, overflow: 'hidden',
+    transform: [{ rotate: '1.5deg' }],
+  },
+  voucherTitle: { fontFamily: theme.fontBold, fontSize: 15, color: theme.doodle.ink, marginTop: 9, textAlign: 'center' },
+  codeBox: {
+    marginTop: 9, paddingHorizontal: 14, paddingVertical: 8,
+    borderWidth: 2.5, borderColor: theme.doodle.ink, borderRadius: 8,
+    backgroundColor: theme.doodle.card,
+  },
+  code: { fontFamily: theme.fontBold, fontSize: 18, letterSpacing: 2, color: theme.doodle.coral },
+  noVoucher: {
+    fontFamily: theme.font, color: theme.doodle.inkSoft, textAlign: 'center',
+    lineHeight: 22, marginTop: 16,
+  },
+  cta: { marginTop: 22 },
+  ctaGhost: { marginTop: 12 },
 });

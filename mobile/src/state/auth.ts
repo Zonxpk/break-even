@@ -34,21 +34,28 @@ export const useAuth = create<AuthState>((set, get) => ({
   loading: true,
 
   init: async () => {
-    const { data } = await supabase.auth.getSession();
-    let userId = data.session?.user.id ?? null;
-    let profile = userId ? await loadProfile(userId) : null;
-    if (!userId) {
-      const guest = await signInAsGuest(DEFAULT_GUEST_NICKNAME);
-      userId = guest.userId;
-      profile = guest.profile;
+    try {
+      const { data } = await supabase.auth.getSession();
+      let userId = data.session?.user.id ?? null;
+      let profile = userId ? await loadProfile(userId) : null;
+      if (!userId) {
+        const guest = await signInAsGuest(DEFAULT_GUEST_NICKNAME);
+        userId = guest.userId;
+        profile = guest.profile;
+      }
+      set({ userId, profile, loading: false });
+      supabase.auth.onAuthStateChange((_event, session) => {
+        const id = session?.user.id ?? null;
+        set({ userId: id });
+        if (id) loadProfile(id).then((p) => set({ profile: p }));
+        else set({ profile: null });
+      });
+    } catch (e) {
+      // Supabase unreachable (offline / cold backend): boot into a data-less
+      // guest state instead of crashing the app with an uncaught rejection.
+      console.warn('[auth] init failed, continuing offline:', e);
+      set({ userId: null, profile: null, loading: false });
     }
-    set({ userId, profile, loading: false });
-    supabase.auth.onAuthStateChange((_event, session) => {
-      const id = session?.user.id ?? null;
-      set({ userId: id });
-      if (id) loadProfile(id).then((p) => set({ profile: p }));
-      else set({ profile: null });
-    });
   },
 
   signInGuest: async (nickname) => {

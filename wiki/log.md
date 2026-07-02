@@ -7,6 +7,12 @@ updated: "2026-06-28"
 
 # Wiki Log
 
+## 2026-06-28 — Roadmap: expanded Phase 2 (viral) + Phase 3 (sponsors)
+
+- [[roadmap]] Phase 2 detailed: viral unit, Thai channels (TikTok/X/FB/LINE/Pantip), in-app share mechanic, seeding, metric gates
+- Phase 3 detailed: sponsor menu (3 tiers), ideal-sponsor profile, pitch one-pager, outreach motion, prototype pricing (barter→paid), two-way guardrails, build list
+- HTML kept as at-a-glance summary; depth lives in the wiki page
+
 ## 2026-06-28 — Roadmap (เล่นสนุก → ไวรัล → สปอนเซอร์)
 
 - New page: [[roadmap]] — phased product+growth roadmap (Phase 0 baseline → 1 fun → 2 viral → 3 sponsor)

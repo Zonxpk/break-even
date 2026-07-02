@@ -8,7 +8,15 @@ function Icon({ glyph }: { glyph: string }) {
 
 export default function TabsLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: theme.green, headerShown: false }}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: theme.doodle.coral,
+        tabBarInactiveTintColor: theme.doodle.inkSoft,
+        tabBarLabelStyle: { fontFamily: theme.fontBold, fontSize: 11 },
+        tabBarStyle: { backgroundColor: theme.doodle.paper, borderTopWidth: 2.5, borderTopColor: theme.doodle.ink },
+      }}
+    >
       <Tabs.Screen name="index" options={{ title: 'หน้าแรก', tabBarIcon: () => <Icon glyph="🏠" /> }} />
       <Tabs.Screen name="activity" options={{ title: 'กิจกรรม', tabBarIcon: () => <Icon glyph="📋" /> }} />
       <Tabs.Screen name="vouchers" options={{ title: 'คูปอง', tabBarIcon: () => <Icon glyph="🎟️" /> }} />

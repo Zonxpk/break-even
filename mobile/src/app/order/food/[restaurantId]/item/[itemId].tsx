@@ -15,9 +15,11 @@ import { fetchRestaurantMenu } from '../../../../../api/food';
 import { cartLineTotal, validateModifierSelection } from '../../../../../food/cartMath';
 import { canAddToCart, useFoodCart } from '../../../../../state/foodCart';
 import { theme } from '../../../../../ui/theme';
+import { PaperBackground } from '../../../../../ui/doodle/PaperBackground';
+import { Sketch } from '../../../../../ui/doodle/Sketch';
+import { CrayonCta } from '../../../../../ui/doodle/CrayonCta';
+import { doodleHeader } from '../../../../../ui/doodle/nav';
 import type { FoodModifierGroup } from '../../../../../types/db';
-
-const ACCENT = '#00B14F';
 
 export default function FoodItemSheet() {
   const { restaurantId, itemId } = useLocalSearchParams<{ restaurantId: string; itemId: string }>();
@@ -140,15 +142,17 @@ export default function FoodItemSheet() {
   if (loading || !item) {
     return (
       <View style={s.center}>
-        <ActivityIndicator color={ACCENT} />
+        <PaperBackground />
+        <ActivityIndicator color={theme.doodle.coral} />
       </View>
     );
   }
 
   return (
     <View style={s.root}>
-      <Stack.Screen options={{ presentation: 'modal', headerShown: true, title: 'รายละเอียด' }} />
-      <ScrollView contentContainerStyle={{ padding: theme.pad, paddingBottom: 100 }}>
+      <PaperBackground />
+      <Stack.Screen options={{ ...doodleHeader, presentation: 'modal', title: 'รายละเอียด' }} />
+      <ScrollView contentContainerStyle={{ padding: theme.pad, paddingBottom: 110 }}>
         {item.photo_url ? (
           <Image source={{ uri: item.photo_url }} style={s.photo} />
         ) : (
@@ -160,7 +164,7 @@ export default function FoodItemSheet() {
         {item.description ? <Text style={s.desc}>{item.description}</Text> : null}
         <Text style={s.price}>฿{item.price.toFixed(0)}</Text>
 
-        {item.groups.map((g) => (
+        {item.groups.map((g, gi) => (
           <View key={g.id} style={s.group}>
             <Text style={s.groupTitle}>
               {g.name}
@@ -169,91 +173,104 @@ export default function FoodItemSheet() {
             {g.min_select > 0 && !(selected[g.id]?.length >= g.min_select) ? (
               <Text style={s.hint}>กรุณาเลือกอย่างน้อย {g.min_select} ตัวเลือก</Text>
             ) : null}
-            {g.options.map((opt) => {
-              const on = (selected[g.id] ?? []).includes(opt.id);
-              return (
-                <Pressable key={opt.id} style={s.optRow} onPress={() => toggleOption(g, opt.id)}>
-                  <Text style={s.optRadio}>{g.max_select === 1 ? (on ? '◉' : '○') : on ? '☑' : '☐'}</Text>
-                  <Text style={s.optName}>{opt.name}</Text>
-                  {Number(opt.price_delta) > 0 ? (
-                    <Text style={s.optDelta}>+฿{Number(opt.price_delta).toFixed(0)}</Text>
-                  ) : null}
-                </Pressable>
-              );
-            })}
+            <Sketch style={s.groupCard} fill={theme.doodle.card} seed={gi + 8} radius={16}>
+              <View style={s.groupCardInner}>
+                {g.options.map((opt, oi) => {
+                  const on = (selected[g.id] ?? []).includes(opt.id);
+                  return (
+                    <Pressable
+                      key={opt.id}
+                      style={[s.optRow, oi > 0 && s.optDivider]}
+                      onPress={() => toggleOption(g, opt.id)}
+                    >
+                      <Text style={[s.optRadio, on && s.optRadioOn]}>
+                        {g.max_select === 1 ? (on ? '◉' : '○') : on ? '☑' : '☐'}
+                      </Text>
+                      <Text style={s.optName}>{opt.name}</Text>
+                      {Number(opt.price_delta) > 0 ? (
+                        <Text style={s.optDelta}>+฿{Number(opt.price_delta).toFixed(0)}</Text>
+                      ) : null}
+                    </Pressable>
+                  );
+                })}
+              </View>
+            </Sketch>
           </View>
         ))}
 
         <Text style={s.groupTitle}>หมายเหตุ</Text>
-        <TextInput
-          style={s.notes}
-          placeholder="หมายเหตุถึงร้าน เช่น ไม่ใส่ผักชี"
-          value={notes}
-          onChangeText={setNotes}
-          multiline
-        />
+        <Sketch style={s.notesWrap} fill={theme.doodle.card} seed={17} radius={14}>
+          <TextInput
+            style={s.notes}
+            placeholder="หมายเหตุถึงร้าน เช่น ไม่ใส่ผักชี"
+            placeholderTextColor={theme.doodle.inkSoft}
+            value={notes}
+            onChangeText={setNotes}
+            multiline
+          />
+        </Sketch>
 
         <View style={s.qtyRow}>
           <Text style={s.groupTitle}>จำนวน</Text>
           <View style={s.stepper}>
-            <Pressable onPress={() => setQuantity((q) => Math.max(1, q - 1))}>
-              <Text style={s.stepBtn}>−</Text>
+            <Pressable style={s.stepBtn} onPress={() => setQuantity((q) => Math.max(1, q - 1))}>
+              <Text style={s.stepBtnText}>−</Text>
             </Pressable>
             <Text style={s.qty}>{quantity}</Text>
-            <Pressable onPress={() => setQuantity((q) => q + 1)}>
-              <Text style={s.stepBtn}>+</Text>
+            <Pressable style={s.stepBtn} onPress={() => setQuantity((q) => q + 1)}>
+              <Text style={s.stepBtnText}>+</Text>
             </Pressable>
           </View>
         </View>
       </ScrollView>
 
-      <Pressable
-        style={[s.cta, !validation.ok && { opacity: 0.4 }]}
+      <CrayonCta
+        label={`เพิ่มลงตะกร้า · ฿${lineTotal.toFixed(0)}`}
         disabled={!validation.ok}
+        seed={99}
+        style={s.cta}
         onPress={addToCart}
-      >
-        <Text style={s.ctaText}>เพิ่มลงตะกร้า · ฿{lineTotal.toFixed(0)}</Text>
-      </Pressable>
+      />
     </View>
   );
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: theme.bg },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  photo: { width: '100%', height: 160, borderRadius: theme.radius, marginBottom: 12 },
-  photoFallback: { backgroundColor: '#eee', alignItems: 'center', justifyContent: 'center' },
-  name: { fontSize: 20, fontWeight: '800' },
-  desc: { fontSize: 14, color: theme.textMuted, marginTop: 6 },
-  price: { fontSize: 16, color: theme.textMuted, marginTop: 8, marginBottom: 16 },
+  root: { flex: 1, backgroundColor: theme.doodle.paper },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.doodle.paper },
+  photo: { width: '100%', height: 160, borderRadius: 12, borderWidth: 2.5, borderColor: theme.doodle.ink, marginBottom: 12 },
+  photoFallback: { backgroundColor: theme.doodle.paper2, alignItems: 'center', justifyContent: 'center' },
+  name: { fontFamily: theme.fontBold, fontSize: 20, color: theme.doodle.ink },
+  desc: { fontFamily: theme.font, fontSize: 14, color: theme.doodle.inkSoft, marginTop: 5 },
+  price: { fontFamily: theme.fontBold, fontSize: 16, color: theme.doodle.coral, marginTop: 8, marginBottom: 16 },
   group: { marginBottom: 16 },
-  groupTitle: { fontWeight: '700', marginBottom: 8 },
-  hint: { fontSize: 12, color: theme.danger, marginBottom: 6 },
+  groupTitle: { fontFamily: theme.fontBold, color: theme.doodle.ink, marginBottom: 8 },
+  hint: { fontFamily: theme.font, fontSize: 12, color: theme.doodle.coral, marginBottom: 6 },
+  groupCard: { transform: [{ rotate: '-0.3deg' }] },
+  groupCardInner: { paddingHorizontal: 13, paddingVertical: 3 },
   optRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 8, gap: 10 },
-  optRadio: { fontSize: 18, width: 24 },
-  optName: { flex: 1, fontSize: 15 },
-  optDelta: { color: theme.textMuted, fontSize: 13 },
+  optDivider: { borderTopWidth: 2, borderTopColor: theme.doodle.grid, borderStyle: 'dotted' },
+  optRadio: { fontSize: 17, width: 24, color: theme.doodle.inkSoft },
+  optRadioOn: { color: theme.doodle.coral },
+  optName: { flex: 1, fontFamily: theme.font, fontSize: 14, color: theme.doodle.ink },
+  optDelta: { fontFamily: theme.fontBold, color: theme.doodle.coral, fontSize: 13 },
+  notesWrap: { marginBottom: 8 },
   notes: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: theme.radius,
+    fontFamily: theme.font,
+    color: theme.doodle.ink,
     padding: 12,
     minHeight: 72,
     textAlignVertical: 'top',
   },
   qtyRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
-  stepper: { flexDirection: 'row', alignItems: 'center', gap: 16 },
-  stepBtn: { fontSize: 24, fontWeight: '700', color: ACCENT, paddingHorizontal: 8 },
-  qty: { fontSize: 18, fontWeight: '700', minWidth: 24, textAlign: 'center' },
-  cta: {
-    position: 'absolute',
-    left: theme.pad,
-    right: theme.pad,
-    bottom: theme.pad,
-    backgroundColor: ACCENT,
-    borderRadius: theme.radius,
-    padding: 16,
-    alignItems: 'center',
+  stepper: { flexDirection: 'row', alignItems: 'center', gap: 14 },
+  stepBtn: {
+    width: 28, height: 28, borderRadius: 999,
+    borderWidth: 2.5, borderColor: theme.doodle.ink,
+    backgroundColor: theme.doodle.yellowWash,
+    alignItems: 'center', justifyContent: 'center',
   },
-  ctaText: { color: '#fff', fontWeight: '700', fontSize: 16 },
+  stepBtnText: { fontFamily: theme.fontBold, fontSize: 16, color: theme.doodle.ink, lineHeight: 20 },
+  qty: { fontFamily: theme.fontBold, fontSize: 18, color: theme.doodle.ink, minWidth: 24, textAlign: 'center' },
+  cta: { position: 'absolute', left: theme.pad, right: theme.pad, bottom: theme.pad },
 });

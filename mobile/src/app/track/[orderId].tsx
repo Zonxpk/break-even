@@ -10,6 +10,10 @@ import { getOrder } from '../../api/orders';
 import { supabase } from '../../lib/supabase';
 import { SERVICE_CONFIGS } from '../../services/config';
 import { theme } from '../../ui/theme';
+import { PaperBackground } from '../../ui/doodle/PaperBackground';
+import { Sketch } from '../../ui/doodle/Sketch';
+import { CrayonCta } from '../../ui/doodle/CrayonCta';
+import { doodleHeader } from '../../ui/doodle/nav';
 import type { GagScriptRow, OrderRow, Service } from '../../types/db';
 import type { SabotageAction } from '../../engine/types';
 
@@ -74,46 +78,62 @@ export default function Track() {
   if (!order || !script || !path || !state || !userPin) {
     return (
       <View style={s.center}>
-        <ActivityIndicator color={theme.green} size="large" />
-        <Text style={{ marginTop: 10, color: theme.textMuted }}>กำลังตามหาไรเดอร์...</Text>
+        <PaperBackground />
+        <ActivityIndicator color={theme.doodle.coral} size="large" />
+        <Text style={s.loadingText}>กำลังตามหาไรเดอร์...</Text>
       </View>
     );
   }
 
   const cfg = order.service === 'date'
-    ? { trackingNoun: 'เดท', accent: '#E91E63' }
+    ? { trackingNoun: 'เดท', accent: theme.doodle.coral }
     : SERVICE_CONFIGS[order.service as Service] ?? SERVICE_CONFIGS.food;
   const rider = positionAt(path, state.progress);
   const lastChat = state.chat[state.chat.length - 1];
 
   return (
     <View style={s.root}>
-      <Stack.Screen options={{ headerShown: true, title: `ติดตาม${cfg.trackingNoun}` }} />
-      <TrackingMap
-        style={s.map}
-        userPin={userPin}
-        rider={rider}
-        path={path}
-        strokeColor={cfg.accent}
-        trackingNoun={cfg.trackingNoun}
-        incidentKind={state.incident?.kind}
-      />
+      <PaperBackground />
+      <Stack.Screen options={{ ...doodleHeader, title: `ติดตาม${cfg.trackingNoun}` }} />
+
+      <View style={s.top}>
+        <Text style={s.tag}>หายใจๆๆๆ</Text>
+        <Text style={s.title}>ตาม{cfg.trackingNoun} (ที่หายไป)</Text>
+        <Text style={s.eta}>
+          ถึงใน <Text style={s.etaHighlight}>{Math.round(state.etaMinutes)} นาที</Text>
+          {state.etaMinutes > 30 ? ' (โดยประมาณ... มากๆ)' : ''}
+        </Text>
+      </View>
+
+      <View style={s.mapFrame}>
+        <TrackingMap
+          style={s.map}
+          userPin={userPin}
+          rider={rider}
+          path={path}
+          strokeColor={theme.doodle.blue}
+          trackingNoun={cfg.trackingNoun}
+          incidentKind={state.incident?.kind}
+        />
+      </View>
 
       <View style={s.panel}>
-        <Text style={s.eta}>ถึงใน {Math.round(state.etaMinutes)} นาที{state.etaMinutes > 30 ? ' (โดยประมาณ... มากๆ)' : ''}</Text>
         {state.incident ? <Text style={s.incident}>⚠️ {incidentText(state.incident.kind)}</Text> : null}
         {lastChat ? (
-          <View style={s.chatBubble}>
-            <Text style={s.chatText}>💬 {lastChat.text}</Text>
-          </View>
+          <Sketch style={s.chatBubble} fill={theme.doodle.card} seed={13} radius={16}>
+            <View style={s.chatInner}>
+              <Text style={s.chatWho}>ไรเดอร์</Text>
+              <Text style={s.chatText}>{lastChat.text}</Text>
+            </View>
+          </Sketch>
         ) : null}
         {state.activeSabotage ? (
-          <Pressable
-            style={[s.sabotage, { borderColor: cfg.accent }]}
+          <CrayonCta
+            ghost
+            label={`📞 ${state.activeSabotage.label}`}
+            seed={61}
             onPress={() => setSabotageLog((l) => [...l, { action: state.activeSabotage!.action, atS: elapsedS }])}
-          >
-            <Text style={[s.sabotageText, { color: cfg.accent }]}>📞 {state.activeSabotage.label}</Text>
-          </Pressable>
+          />
         ) : null}
         {state.phase === 'failed' ? <Text style={s.failText}>{state.finale?.statusText}</Text> : null}
       </View>
@@ -130,15 +150,44 @@ function incidentText(kind: string): string {
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: theme.bg },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  root: { flex: 1, backgroundColor: theme.doodle.paper },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.doodle.paper },
+  loadingText: { fontFamily: theme.font, marginTop: 10, color: theme.doodle.inkSoft },
+
+  top: { paddingHorizontal: theme.pad, paddingTop: theme.pad, paddingBottom: 4 },
+  tag: {
+    alignSelf: 'flex-start',
+    fontFamily: theme.fontBold, fontSize: 13, color: '#fff',
+    backgroundColor: theme.doodle.coral,
+    borderWidth: 2.5, borderColor: theme.doodle.ink, borderRadius: 14,
+    paddingHorizontal: 11, paddingVertical: 3, overflow: 'hidden',
+    transform: [{ rotate: '1.5deg' }],
+  },
+  title: { fontFamily: theme.fontBold, fontSize: 22, color: theme.doodle.ink, marginTop: 10, lineHeight: 28 },
+  eta: { fontFamily: theme.fontBold, fontSize: 17, color: theme.doodle.coral, marginTop: 6 },
+  etaHighlight: { color: theme.doodle.coral, backgroundColor: theme.doodle.yellow },
+
+  // the prototype's .nb-map: white notebook card, 3px ink border, radius 10
+  mapFrame: {
+    flex: 1,
+    margin: theme.pad,
+    marginTop: 12,
+    borderWidth: 3,
+    borderColor: theme.doodle.ink,
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: theme.doodle.card,
+  },
   map: { flex: 1 },
-  panel: { padding: theme.pad, gap: 10, backgroundColor: theme.bg, borderTopLeftRadius: 20, borderTopRightRadius: 20, marginTop: -20 },
-  eta: { fontSize: 18, fontWeight: '800' },
-  incident: { color: '#B8860B', fontWeight: '600' },
-  chatBubble: { backgroundColor: theme.surface, borderRadius: theme.radius, padding: 12 },
-  chatText: { fontSize: 14 },
-  sabotage: { borderWidth: 2, borderRadius: theme.radius, padding: 14, alignItems: 'center' },
-  sabotageText: { fontWeight: '700' },
-  failText: { fontSize: 16, fontWeight: '800', color: theme.danger, textAlign: 'center', paddingVertical: 6 },
+
+  panel: { paddingHorizontal: theme.pad, paddingBottom: theme.pad, gap: 10 },
+  incident: { fontFamily: theme.fontBold, color: '#6a531a', fontSize: 14 },
+  chatBubble: { maxWidth: '88%', transform: [{ rotate: '-0.5deg' }] },
+  chatInner: { paddingHorizontal: 12, paddingVertical: 10 },
+  chatWho: { fontFamily: theme.fontBold, fontSize: 11, color: theme.doodle.inkSoft, marginBottom: 2 },
+  chatText: { fontFamily: theme.fontBold, fontSize: 14, color: theme.doodle.ink, lineHeight: 19 },
+  failText: {
+    fontFamily: theme.fontBold, fontSize: 16, color: theme.doodle.coral,
+    textAlign: 'center', paddingVertical: 6,
+  },
 });

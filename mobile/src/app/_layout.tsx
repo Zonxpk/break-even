@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Platform, View, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Stack, useRouter, useSegments } from 'expo-router';
+import { useFonts, Mali_600SemiBold, Mali_700Bold } from '@expo-google-fonts/mali';
 import { useAuth } from '../state/auth';
 import { theme } from '../ui/theme';
 
@@ -9,6 +10,7 @@ export default function RootLayout() {
   const { userId, loading, init } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const [fontsLoaded] = useFonts({ Mali_600SemiBold, Mali_700Bold });
 
   useEffect(() => {
     init();
@@ -19,6 +21,8 @@ export default function RootLayout() {
     const onAuthScreen = segments[0] === 'sign-in';
     if (userId && onAuthScreen) router.replace('/');
   }, [userId, loading, segments]);
+
+  if (!fontsLoaded) return null;
 
   const stack = (
     <Stack screenOptions={{ headerShown: false }}>

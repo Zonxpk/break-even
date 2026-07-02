@@ -11,6 +11,32 @@ export const theme = {
   pad: 16,
   /** Max app width on web — keeps desktop browsers in a phone-sized frame. */
   mobileWebWidth: 430,
+  /** Doodle font family — loaded in app/_layout via @expo-google-fonts/mali. */
+  font: 'Mali_600SemiBold',
+  fontBold: 'Mali_700Bold',
+  /**
+   * Doodle ("เบรค, อีเวน") design language — hand-drawn sketchbook look.
+   * Ported from prototypes/doodle.html. Used by the Home slice; legacy keys
+   * above remain for screens not yet migrated.
+   */
+  doodle: {
+    paper: '#FBF8F0',
+    paper2: '#F4EFE2',
+    card: '#FFFEFA',
+    grid: '#E4DCC8',
+    ink: '#3A3530',
+    inkSoft: '#7C746A',
+    pencil: '#5A5450',
+    coral: '#F2664B',
+    blue: '#4D8FC0',
+    yellow: '#F4C24A',
+    mint: '#6FBE9B',
+    grape: '#9B6FC0',
+    coralWash: '#FCE0DA',
+    blueWash: '#DCEAF4',
+    mintWash: '#DCEFE6',
+    yellowWash: '#FBEFC9',
+  },
   dating: {
     rose: '#FECDD3',
     rosePressed: '#FDA4AF',

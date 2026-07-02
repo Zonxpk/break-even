@@ -14,9 +14,11 @@ import { Stack, useRouter } from 'expo-router';
 import { fetchFoodPromos, fetchFoodRestaurants } from '../../../api/food';
 import { allCuisineTags, filterRestaurants } from '../../../food/search';
 import { theme } from '../../../ui/theme';
+import { PaperBackground } from '../../../ui/doodle/PaperBackground';
+import { Sketch } from '../../../ui/doodle/Sketch';
+import { CrayonCta } from '../../../ui/doodle/CrayonCta';
+import { doodleHeader } from '../../../ui/doodle/nav';
 import type { FoodPromo, FoodRestaurant } from '../../../types/db';
-
-const ACCENT = '#00B14F';
 
 export default function FoodRestaurantList() {
   const router = useRouter();
@@ -56,14 +58,18 @@ export default function FoodRestaurantList() {
 
   return (
     <View style={s.root}>
-      <Stack.Screen options={{ headerShown: true, title: 'สั่งอาหาร' }} />
-      <TextInput
-        style={s.search}
-        placeholder="ค้นหาร้านหรือประเภทอาหาร"
-        value={query}
-        onChangeText={setQuery}
-        testID="food-search"
-      />
+      <PaperBackground />
+      <Stack.Screen options={{ ...doodleHeader, title: 'สั่งอาหาร' }} />
+      <Sketch style={s.searchWrap} fill={theme.doodle.card} seed={3} radius={14}>
+        <TextInput
+          style={s.search}
+          placeholder="ค้นหาร้านหรือประเภทอาหาร"
+          placeholderTextColor={theme.doodle.inkSoft}
+          value={query}
+          onChangeText={setQuery}
+          testID="food-search"
+        />
+      </Sketch>
       {tags.length > 0 ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.chips}>
           {tags.map((tag) => {
@@ -79,27 +85,33 @@ export default function FoodRestaurantList() {
 
       {promos.length > 0 ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.promos}>
-          {promos.map((p) => (
+          {promos.map((p, i) => (
             <Pressable
               key={p.id}
-              style={s.promoCard}
               onPress={() => p.restaurant_id && router.push(`/order/food/${p.restaurant_id}`)}
             >
-              <Text style={s.promoTitle}>{p.title}</Text>
-              {p.subtitle ? <Text style={s.promoSub}>{p.subtitle}</Text> : null}
+              <Sketch
+                style={[s.promoCard, { transform: [{ rotate: i % 2 ? '0.7deg' : '-0.7deg' }] }]}
+                fill={theme.doodle.yellowWash}
+                seed={30 + i}
+                radius={14}
+              >
+                <View style={s.promoInner}>
+                  <Text style={s.promoTitle}>{p.title}</Text>
+                  {p.subtitle ? <Text style={s.promoSub}>{p.subtitle}</Text> : null}
+                </View>
+              </Sketch>
             </Pressable>
           ))}
         </ScrollView>
       ) : null}
 
       {loading ? (
-        <ActivityIndicator style={{ marginTop: 40 }} color={ACCENT} />
+        <ActivityIndicator style={{ marginTop: 40 }} color={theme.doodle.coral} />
       ) : error ? (
         <View style={s.center}>
           <Text style={s.muted}>{error}</Text>
-          <Pressable style={s.retry} onPress={load}>
-            <Text style={s.retryText}>ลองใหม่</Text>
-          </Pressable>
+          <CrayonCta label="ลองใหม่" seed={77} onPress={load} />
         </View>
       ) : filtered.length === 0 ? (
         <Text style={[s.muted, { marginTop: 40, textAlign: 'center' }]}>ยังไม่มีร้านเปิดในพื้นที่นี้</Text>
@@ -108,27 +120,31 @@ export default function FoodRestaurantList() {
           data={filtered}
           keyExtractor={(r) => r.id}
           contentContainerStyle={{ paddingBottom: 24 }}
-          renderItem={({ item }) => (
-            <Pressable style={s.card} onPress={() => router.push(`/order/food/${item.id}`)} testID={`restaurant-${item.id}`}>
-              {item.photo_url ? (
-                <Image source={{ uri: item.photo_url }} style={s.photo} />
-              ) : (
-                <View style={[s.photo, s.photoFallback]}>
-                  <Text style={{ fontSize: 28 }}>🍜</Text>
+          renderItem={({ item, index }) => (
+            <Pressable onPress={() => router.push(`/order/food/${item.id}`)} testID={`restaurant-${item.id}`}>
+              <Sketch style={s.card} fill={theme.doodle.card} seed={index + 1} radius={18}>
+                <View style={s.cardInner}>
+                  {item.photo_url ? (
+                    <Image source={{ uri: item.photo_url }} style={s.photo} />
+                  ) : (
+                    <View style={[s.photo, s.photoFallback]}>
+                      <Text style={{ fontSize: 28 }}>🍜</Text>
+                    </View>
+                  )}
+                  <View style={s.cardBody}>
+                    <View style={s.cardTop}>
+                      <Text style={s.name}>{item.name}</Text>
+                      {item.promo_badge ? <Text style={s.badge}>{item.promo_badge}</Text> : null}
+                    </View>
+                    <Text style={s.meta}>
+                      {item.rating ? `⭐ ${item.rating}` : ''}
+                      {item.review_count ? ` (${item.review_count})` : ''} · {item.eta_minutes} นาที · ส่ง ฿
+                      {Number(item.delivery_fee).toFixed(0)}
+                    </Text>
+                    <Text style={s.tags}>{item.cuisine_tags.join(' · ')}</Text>
+                  </View>
                 </View>
-              )}
-              <View style={s.cardBody}>
-                <View style={s.cardTop}>
-                  <Text style={s.name}>{item.name}</Text>
-                  {item.promo_badge ? <Text style={s.badge}>{item.promo_badge}</Text> : null}
-                </View>
-                <Text style={s.meta}>
-                  {item.rating ? `★ ${item.rating}` : ''}
-                  {item.review_count ? ` (${item.review_count})` : ''} · {item.eta_minutes} นาที · ส่ง ฿
-                  {Number(item.delivery_fee).toFixed(0)}
-                </Text>
-                <Text style={s.tags}>{item.cuisine_tags.join(' · ')}</Text>
-              </View>
+              </Sketch>
             </Pressable>
           )}
         />
@@ -138,54 +154,37 @@ export default function FoodRestaurantList() {
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: theme.bg, padding: theme.pad },
-  search: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: theme.radius,
-    padding: 12,
-    fontSize: 15,
-    marginBottom: 10,
-  },
-  chips: { marginBottom: 10, maxHeight: 40 },
+  root: { flex: 1, backgroundColor: theme.doodle.paper, padding: theme.pad },
+  searchWrap: { marginBottom: 10 },
+  search: { fontFamily: theme.font, padding: 12, fontSize: 15, color: theme.doodle.ink },
+  chips: { marginBottom: 10, maxHeight: 44, flexGrow: 0 },
   chip: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 999,
-    backgroundColor: theme.surface,
+    borderWidth: 2,
+    borderColor: theme.doodle.ink,
+    backgroundColor: theme.doodle.card,
     marginRight: 8,
   },
-  chipOn: { backgroundColor: ACCENT },
-  chipText: { fontSize: 13, color: theme.text },
-  chipTextOn: { color: '#fff', fontWeight: '600' },
-  promos: { marginBottom: 12, maxHeight: 72 },
-  promoCard: {
-    width: 200,
-    padding: 12,
-    marginRight: 10,
-    borderRadius: theme.radius,
-    backgroundColor: '#E8F7EE',
-  },
-  promoTitle: { fontWeight: '700', color: theme.greenDark },
-  promoSub: { fontSize: 12, color: theme.textMuted, marginTop: 4 },
-  card: {
-    flexDirection: 'row',
-    gap: 12,
-    padding: 12,
-    borderRadius: theme.radius,
-    backgroundColor: theme.surface,
-    marginBottom: 10,
-  },
-  photo: { width: 72, height: 72, borderRadius: 8 },
-  photoFallback: { backgroundColor: '#eee', alignItems: 'center', justifyContent: 'center' },
+  chipOn: { backgroundColor: theme.doodle.yellowWash, borderColor: theme.doodle.yellow },
+  chipText: { fontFamily: theme.fontBold, fontSize: 13, color: theme.doodle.ink },
+  chipTextOn: { color: '#6a531a' },
+  promos: { marginBottom: 12, maxHeight: 80, flexGrow: 0 },
+  promoCard: { width: 200, marginRight: 10 },
+  promoInner: { padding: 12 },
+  promoTitle: { fontFamily: theme.fontBold, color: theme.doodle.ink, fontSize: 13 },
+  promoSub: { fontFamily: theme.font, fontSize: 12, color: theme.doodle.inkSoft, marginTop: 2 },
+  card: { marginBottom: 10 },
+  cardInner: { flexDirection: 'row', gap: 12, padding: 12, alignItems: 'center' },
+  photo: { width: 64, height: 64, borderRadius: 10, borderWidth: 2, borderColor: theme.doodle.ink },
+  photoFallback: { backgroundColor: theme.doodle.paper2, alignItems: 'center', justifyContent: 'center' },
   cardBody: { flex: 1 },
   cardTop: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  name: { fontWeight: '700', fontSize: 16, flex: 1 },
-  badge: { fontSize: 11, fontWeight: '700', color: ACCENT },
-  meta: { fontSize: 13, color: theme.textMuted, marginTop: 4 },
-  tags: { fontSize: 12, color: theme.textMuted, marginTop: 2 },
+  name: { fontFamily: theme.fontBold, fontSize: 15, color: theme.doodle.ink, flex: 1 },
+  badge: { fontFamily: theme.fontBold, fontSize: 11, color: theme.doodle.coral },
+  meta: { fontFamily: theme.font, fontSize: 12, color: theme.doodle.inkSoft, marginTop: 3 },
+  tags: { fontFamily: theme.font, fontSize: 11, color: theme.doodle.inkSoft, marginTop: 2 },
   center: { alignItems: 'center', marginTop: 40, gap: 12 },
-  muted: { color: theme.textMuted },
-  retry: { backgroundColor: ACCENT, paddingHorizontal: 20, paddingVertical: 10, borderRadius: theme.radius },
-  retryText: { color: '#fff', fontWeight: '700' },
+  muted: { fontFamily: theme.font, color: theme.doodle.inkSoft },
 });
