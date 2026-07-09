@@ -24,7 +24,9 @@ export default function Confirm() {
     setBusy(true);
     try {
       const order = await placeOrder({ service: cfg.key, items });
-      router.replace(`/track/${order.id}`);
+      // Drop the browse→confirm stack so back from track goes home, not a stale order screen.
+      if (router.canDismiss()) router.dismissAll();
+      router.push(`/track/${order.id}`);
     } catch {
       Alert.alert('ขออภัย', 'สั่งไม่สำเร็จ ลองใหม่อีกครั้ง');
       setBusy(false);

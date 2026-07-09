@@ -25,7 +25,9 @@ export default function FoodConfirm() {
     try {
       const order = await placeOrder({ service: 'food', items: cart.orderPayload() });
       cart.clear();
-      router.replace(`/track/${order.id}`);
+      // Drop the browse→cart→confirm stack so back from track goes home, not the now-empty cart.
+      if (router.canDismiss()) router.dismissAll();
+      router.push(`/track/${order.id}`);
     } catch {
       Alert.alert('ขออภัย', 'สั่งไม่สำเร็จ ลองใหม่อีกครั้ง');
       setBusy(false);

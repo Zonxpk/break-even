@@ -14,8 +14,8 @@ import { PaperBackground } from '../../ui/doodle/PaperBackground';
 import { Sketch } from '../../ui/doodle/Sketch';
 import { CrayonCta } from '../../ui/doodle/CrayonCta';
 import { doodleHeader } from '../../ui/doodle/nav';
-import type { GagScriptRow, OrderRow, Service } from '../../types/db';
-import type { SabotageAction } from '../../engine/types';
+import type { FoodOrderLinePayload, GagScriptRow, OrderRow, Service } from '../../types/db';
+import type { MoveMode, SabotageAction } from '../../engine/types';
 
 function fakeEndpoints(seed: number): { from: LatLng; to: LatLng } {
   const j = (n: number) => ((seed >> n) % 100) / 100 - 0.5;
@@ -90,6 +90,8 @@ export default function Track() {
     : SERVICE_CONFIGS[order.service as Service] ?? SERVICE_CONFIGS.food;
   const rider = positionAt(path, state.progress);
   const lastChat = state.chat[state.chat.length - 1];
+  const foodLines = order.service === 'food' ? (order.items_json as FoodOrderLinePayload[]) : [];
+  const shopName = foodLines[0]?.restaurant_name;
 
   return (
     <View style={s.root}>
@@ -103,6 +105,7 @@ export default function Track() {
           ถึงใน <Text style={s.etaHighlight}>{Math.round(state.etaMinutes)} นาที</Text>
           {state.etaMinutes > 30 ? ' (โดยประมาณ... มากๆ)' : ''}
         </Text>
+        <Text style={s.rider}>🛵 ไรเดอร์: {moveText(state.currentMove)}</Text>
       </View>
 
       <View style={s.mapFrame}>
@@ -118,6 +121,19 @@ export default function Track() {
       </View>
 
       <View style={s.panel}>
+        {foodLines.length > 0 ? (
+          <Sketch style={s.orderCard} fill={theme.doodle.card} seed={7} radius={14}>
+            <View style={s.orderInner}>
+              {shopName ? <Text style={s.shopName}>{shopName}</Text> : null}
+              {foodLines.map((l, i) => (
+                <View key={i} style={s.lineRow}>
+                  <Text style={s.lineName}>{l.name} × {l.quantity}</Text>
+                  <Text style={s.linePrice}>฿{Number(l.line_total).toFixed(0)}</Text>
+                </View>
+              ))}
+            </View>
+          </Sketch>
+        ) : null}
         {state.incident ? <Text style={s.incident}>⚠️ {incidentText(state.incident.kind)}</Text> : null}
         {lastChat ? (
           <Sketch style={s.chatBubble} fill={theme.doodle.card} seed={13} radius={16}>
@@ -139,6 +155,14 @@ export default function Track() {
       </View>
     </View>
   );
+}
+
+function moveText(move: MoveMode): string {
+  switch (move) {
+    case 'route_to_user': return 'กำลังมุ่งหน้าหาคุณ';
+    case 'wrong_turn': return 'เลี้ยวผิดซอย (อีกแล้ว)';
+    case 'wrong_direction': return 'มุ่งหน้าไปผิดทาง';
+  }
 }
 
 function incidentText(kind: string): string {
@@ -166,6 +190,14 @@ const s = StyleSheet.create({
   title: { fontFamily: theme.fontBold, fontSize: 22, color: theme.doodle.ink, marginTop: 10, lineHeight: 28 },
   eta: { fontFamily: theme.fontBold, fontSize: 17, color: theme.doodle.coral, marginTop: 6 },
   etaHighlight: { color: theme.doodle.coral, backgroundColor: theme.doodle.yellow },
+  rider: { fontFamily: theme.fontBold, fontSize: 14, color: theme.doodle.inkSoft, marginTop: 6 },
+
+  orderCard: { transform: [{ rotate: '-0.4deg' }] },
+  orderInner: { paddingHorizontal: 12, paddingVertical: 8 },
+  shopName: { fontFamily: theme.fontBold, fontSize: 14, color: theme.doodle.ink, marginBottom: 4 },
+  lineRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 12, paddingVertical: 2 },
+  lineName: { fontFamily: theme.font, fontSize: 13, color: theme.doodle.inkSoft, flex: 1 },
+  linePrice: { fontFamily: theme.fontBold, fontSize: 13, color: theme.doodle.inkSoft },
 
   // the prototype's .nb-map: white notebook card, 3px ink border, radius 10
   mapFrame: {
