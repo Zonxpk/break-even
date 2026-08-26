@@ -9,6 +9,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   ScrollView,
+  useWindowDimensions,
 } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { fetchFoodPromos, fetchFoodRestaurants } from '../../../api/food';
@@ -22,6 +23,8 @@ import type { FoodPromo, FoodRestaurant } from '../../../types/db';
 
 export default function FoodRestaurantList() {
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  const promoCardWidth = Math.max(156, Math.min(200, Math.floor((width - theme.pad * 2 - 10) / 2)));
   const [restaurants, setRestaurants] = useState<FoodRestaurant[]>([]);
   const [promos, setPromos] = useState<FoodPromo[]>([]);
   const [query, setQuery] = useState('');
@@ -71,7 +74,7 @@ export default function FoodRestaurantList() {
         />
       </Sketch>
       {tags.length > 0 ? (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.chips}>
+        <View style={s.chips}>
           {tags.map((tag) => {
             const on = activeTags.includes(tag);
             return (
@@ -80,7 +83,7 @@ export default function FoodRestaurantList() {
               </Pressable>
             );
           })}
-        </ScrollView>
+        </View>
       ) : null}
 
       {promos.length > 0 ? (
@@ -96,7 +99,10 @@ export default function FoodRestaurantList() {
               onPress={() => p.restaurant_id && router.push(`/order/food/${p.restaurant_id}`)}
             >
               <Sketch
-                style={[s.promoCard, { transform: [{ rotate: i % 2 ? '0.7deg' : '-0.7deg' }] }]}
+                style={[
+                  s.promoCard,
+                  { width: promoCardWidth, transform: [{ rotate: i % 2 ? '0.7deg' : '-0.7deg' }] },
+                ]}
                 fill={theme.doodle.yellowWash}
                 seed={30 + i}
                 radius={14}
@@ -162,23 +168,28 @@ const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: theme.doodle.paper, padding: theme.pad },
   searchWrap: { marginBottom: 10 },
   search: { fontFamily: theme.font, padding: 12, fontSize: 15, color: theme.doodle.ink },
-  chips: { marginBottom: 10, maxHeight: 44, flexGrow: 0 },
+  chips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    columnGap: 8,
+    rowGap: 7,
+    marginBottom: 13,
+  },
   chip: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 11,
+    paddingVertical: 5,
     borderRadius: 999,
     borderWidth: 2,
     borderColor: theme.doodle.ink,
     backgroundColor: theme.doodle.card,
-    marginRight: 8,
   },
   chipOn: { backgroundColor: theme.doodle.yellowWash, borderColor: theme.doodle.yellow },
   chipText: { fontFamily: theme.fontBold, fontSize: 13, color: theme.doodle.ink },
   chipTextOn: { color: '#6a531a' },
-  promos: { marginBottom: 8, maxHeight: 96, flexGrow: 0 },
-  promosContent: { paddingVertical: 4 },
-  promoCard: { width: 200, minHeight: 72, marginRight: 10 },
-  promoInner: { padding: 12 },
+  promos: { marginBottom: 14, maxHeight: 102, flexGrow: 0 },
+  promosContent: { paddingTop: 3, paddingBottom: 7 },
+  promoCard: { minHeight: 76, marginRight: 10 },
+  promoInner: { paddingHorizontal: 12, paddingVertical: 11 },
   promoTitle: { fontFamily: theme.fontBold, color: theme.doodle.ink, fontSize: 13 },
   promoSub: { fontFamily: theme.font, fontSize: 12, color: theme.doodle.inkSoft, marginTop: 2 },
   card: { marginBottom: 10 },
