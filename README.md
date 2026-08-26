@@ -6,6 +6,18 @@ When? looks like a delivery / mobility / lifestyle super app, then turns familia
 
 **Live:** https://break-even-beta.vercel.app
 
+## See it in action
+
+A normal-looking super app experience that gets stranger the deeper you go. Here is the food flow from the live production build:
+
+<p align="center">
+  <img src="docs/screenshots/01-main.jpg" alt="When? main menu" width="31%" />
+  <img src="docs/screenshots/02-food.jpg" alt="Food delivery restaurant list" width="31%" />
+  <img src="docs/screenshots/03-food-detail.jpg" alt="Restaurant menu detail" width="31%" />
+</p>
+
+**Main menu → food delivery → restaurant detail.** The UI keeps one hand-drawn product language from discovery through ordering instead of treating each joke as a separate demo.
+
 ## Why this project exists
 
 This is a product-engineering playground for exploring how far a coherent system can stretch a joke without becoming a collection of disconnected screens. The core challenge was to make every feature feel like part of one believable consumer app while sharing the same data model, failure logic, visual language, and operational backend.
