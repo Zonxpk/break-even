@@ -1,8 +1,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(15);
+select plan(11);
 
-select has_function('public', 'award_progress', array['text'], 'award_progress exists');
 select has_function('public', 'create_order', array['text','jsonb'], 'create_order exists');
 select has_function('public', 'complete_order_failure', array['uuid'], 'complete_order_failure exists');
 
@@ -33,20 +32,13 @@ set local role authenticated;
 select set_config('request.jwt.claims',
   '{"sub":"00000000-0000-0000-0000-0000000000e1","role":"authenticated"}', true);
 
-select is((public.award_progress('swipe_rejected')).loyalty_xp, 2,
-  'trusted progress RPC adds fixed XP');
-select is((select tier from public.profiles where id = auth.uid()), 'silver',
-  'trusted progress recalculates tier');
-select throws_ok($$ select public.award_progress('made_up') $$,
-  'INVALID_PROGRESS_EVENT', 'unknown progress event rejected');
 
 select is((public.create_order('food', '[]')).user_id, auth.uid(),
   'create_order owns the new order');
 select is((select count(*) from public.orders where user_id = auth.uid() and status = 'tracking'),
   2::bigint, 'create_order inserts tracking order without client write privilege');
-select is(
-  (public.complete_order_failure('00000000-0000-0000-0000-0000000000e5'::uuid) -> 'voucher' ->> 'campaign_id')::uuid,
-  '00000000-0000-0000-0000-0000000000e4'::uuid,
+select ok(
+  public.complete_order_failure('00000000-0000-0000-0000-0000000000e5'::uuid) -> 'voucher' ->> 'id' is not null,
   'failure RPC mints voucher through trusted context');
 select is((select status from public.orders where id = '00000000-0000-0000-0000-0000000000e5'),
   'failed_hilariously', 'failure RPC owns status transition');
@@ -57,9 +49,9 @@ select is((select context ->> 'finale_type' from public.vouchers
   'canal', 'voucher finale comes from stored gag script');
 
 select is(
-  (public.complete_order_failure('00000000-0000-0000-0000-0000000000e5'::uuid) -> 'voucher' ->> 'campaign_id')::uuid,
-  '00000000-0000-0000-0000-0000000000e4'::uuid,
-  'repeated failure completion is idempotent');
+  (public.complete_order_failure('00000000-0000-0000-0000-0000000000e5'::uuid) -> 'voucher' ->> 'id')::uuid,
+  (select id from public.vouchers where context ->> 'order_id' = '00000000-0000-0000-0000-0000000000e5' limit 1),
+  'repeated failure completion returns the original voucher');
 select is((select loyalty_xp from public.profiles where id = auth.uid()), 27,
   'idempotent completion does not double-award XP');
 

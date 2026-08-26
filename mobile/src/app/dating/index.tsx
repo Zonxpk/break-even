@@ -3,7 +3,6 @@ import { View, Text, Pressable, StyleSheet, Alert } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createMatch, fetchPersonas } from '../../api/personas';
-import { awardProgress } from '../../api/progress';
 import { deckForToday } from '../../dating/deck';
 import { fakeDistanceKm } from '../../dating/distanceJoke';
 import { resolveSwipe } from '../../dating/swipe';
@@ -16,7 +15,7 @@ import type { Persona } from '../../types/db';
 export default function DatingDeck() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { profile, userId, refreshProfile } = useAuth();
+  const { profile, userId } = useAuth();
   const [deck, setDeck] = useState<Persona[]>([]);
   const [swipedCount, setSwipedCount] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -37,8 +36,6 @@ export default function DatingDeck() {
 
     try {
       if (direction === 'left') {
-        await awardProgress('swipe_rejected').catch(() => null);
-        refreshProfile();
         Alert.alert('เขาปัดซ้ายคุณ 💔', '+2 แต้มความเจ็บปวด');
       } else {
         if (isSuper) {

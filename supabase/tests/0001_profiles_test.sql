@@ -35,21 +35,21 @@ select set_config('request.jwt.claims',
 select is((select count(*) from public.profiles), 1::bigint,
   'user sees exactly one profile (their own)');
 
-update public.profiles set loyalty_xp = 50
+update public.profiles set nickname = 'owner-renamed'
  where id = '00000000-0000-0000-0000-0000000000a1';
 select is(
-  (select loyalty_xp from public.profiles
+  (select nickname from public.profiles
     where id = '00000000-0000-0000-0000-0000000000a1'),
-  50, 'owner can update own xp (v1 client-trust per spec §15)');
+  'owner-renamed', 'owner can update own nickname');
 
 -- cross-user write attempt is silently filtered by RLS (0 rows touched)
-update public.profiles set loyalty_xp = 999
+update public.profiles set nickname = 'forbidden'
  where id = '00000000-0000-0000-0000-0000000000a2';
 reset role;
 select is(
-  (select loyalty_xp from public.profiles
+  (select nickname from public.profiles
     where id = '00000000-0000-0000-0000-0000000000a2'),
-  0, 'cross-user update touches nothing');
+  null::text, 'cross-user update touches nothing');
 
 select * from finish();
 rollback;

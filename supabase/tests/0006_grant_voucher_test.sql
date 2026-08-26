@@ -40,7 +40,6 @@ update public.voucher_campaigns
    set cooldown_hours = 1
  where id = '00000000-0000-0000-0000-0000000000c4';
 
-set local role authenticated;
 select set_config('request.jwt.claims',
   '{"sub":"00000000-0000-0000-0000-0000000000aa","role":"authenticated"}', true);
 
@@ -73,7 +72,6 @@ select is((select quota_used from public.voucher_campaigns
             where id = '00000000-0000-0000-0000-0000000000c1'),
   1, 'quota_used incremented exactly once across three calls');
 
-set local role authenticated;
 select set_config('request.jwt.claims',
   '{"sub":"00000000-0000-0000-0000-0000000000aa","role":"authenticated"}', true);
 

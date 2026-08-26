@@ -5,7 +5,6 @@ import {
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { fetchAnchors } from '../../../api/content';
 import { getMatch, updateMatch } from '../../../api/personas';
-import { awardProgress } from '../../../api/progress';
 import { applyBeatChoice, nextBeat } from '../../../dating/chat';
 import { chatAffectionGain } from '../../../dating/affectionDrip';
 import { clearChatSession, loadChatSession, saveChatSession } from '../../../dating/chatSession';
@@ -15,13 +14,11 @@ import AffectionBar from '../../../dating/ui/AffectionBar';
 import ChatBubble from '../../../dating/ui/ChatBubble';
 import SpotPicker from '../../../ui/SpotPicker';
 import { theme } from '../../../ui/theme';
-import { useAuth } from '../../../state/auth';
 import type { GagAnchor } from '../../../types/db';
 
 export default function DatingChat() {
   const { matchId } = useLocalSearchParams<{ matchId: string }>();
   const router = useRouter();
-  const { refreshProfile } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [match, setMatch] = useState<Awaited<ReturnType<typeof getMatch>> | null>(null);
@@ -53,10 +50,6 @@ export default function DatingChat() {
   const beat = match?.personas ? nextBeat(match, match.personas) : null;
   const canSend = input.trim().length > 0 && !sending;
 
-  async function grantBeatXp() {
-    await awardProgress('story_beat').catch(() => null);
-    refreshProfile();
-  }
 
   async function send() {
     if (!canSend || !match?.personas || !matchId) return;
@@ -84,7 +77,6 @@ export default function DatingChat() {
     const affection = Math.max(0, match.affection + delta);
     const beats_done = [...match.beats_done, beat.id];
     await updateMatch(matchId, { affection, beats_done });
-    await grantBeatXp();
     await reload();
   }
 
