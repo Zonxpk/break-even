@@ -29,4 +29,7 @@ jobs:
         run: npm run typecheck
       - name: Expo web export
         working-directory: mobile
+        env:
+          EXPO_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          EXPO_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key
         run: npm run build
