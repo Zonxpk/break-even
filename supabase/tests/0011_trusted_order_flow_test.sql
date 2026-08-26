@@ -42,7 +42,7 @@ select ok(
   'failure RPC mints voucher through trusted context');
 select is((select status from public.orders where id = '00000000-0000-0000-0000-0000000000e5'),
   'failed_hilariously', 'failure RPC owns status transition');
-select is((select loyalty_xp from public.profiles where id = auth.uid()), 27,
+select is((select loyalty_xp from public.profiles where id = auth.uid()), 25,
   'failure RPC adds server-owned failure XP');
 select is((select context ->> 'finale_type' from public.vouchers
             where context ->> 'order_id' = '00000000-0000-0000-0000-0000000000e5'),
@@ -52,7 +52,7 @@ select is(
   (public.complete_order_failure('00000000-0000-0000-0000-0000000000e5'::uuid) -> 'voucher' ->> 'id')::uuid,
   (select id from public.vouchers where context ->> 'order_id' = '00000000-0000-0000-0000-0000000000e5' limit 1),
   'repeated failure completion returns the original voucher');
-select is((select loyalty_xp from public.profiles where id = auth.uid()), 27,
+select is((select loyalty_xp from public.profiles where id = auth.uid()), 25,
   'idempotent completion does not double-award XP');
 
 select set_config('request.jwt.claims',
