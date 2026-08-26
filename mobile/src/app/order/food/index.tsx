@@ -60,7 +60,7 @@ export default function FoodRestaurantList() {
     setActiveTags((t) => (t.includes(tag) ? t.filter((x) => x !== tag) : [...t, tag]));
 
   return (
-    <View style={s.root}>
+    <ScrollView style={s.root} contentContainerStyle={s.rootContent}>
       <PaperBackground />
       <Stack.Screen options={{ ...doodleHeader, title: 'สั่งอาหาร' }} />
       <Sketch style={s.searchWrap} fill={theme.doodle.card} seed={3} radius={14}>
@@ -130,6 +130,7 @@ export default function FoodRestaurantList() {
         <FlatList
           data={filtered}
           keyExtractor={(r) => r.id}
+          scrollEnabled={false}
           contentContainerStyle={{ paddingBottom: 24 }}
           renderItem={({ item, index }) => (
             <Pressable onPress={() => router.push(`/order/food/${item.id}`)} testID={`restaurant-${item.id}`}>
@@ -160,12 +161,13 @@ export default function FoodRestaurantList() {
           )}
         />
       )}
-    </View>
+    </ScrollView>
   );
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: theme.doodle.paper, padding: theme.pad },
+  root: { flex: 1, backgroundColor: theme.doodle.paper },
+  rootContent: { padding: theme.pad, paddingBottom: 24 },
   searchWrap: { marginBottom: 10 },
   search: { fontFamily: theme.font, padding: 12, fontSize: 15, color: theme.doodle.ink },
   chips: {
