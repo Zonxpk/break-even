@@ -1,10 +1,26 @@
 .worktrees/
 .superpowers/
+
+# Local secrets / environment files
 .env
+.env.*
+**/.env
+**/.env.*
+!**/.env.example
+
+# Private keys / signing credentials
+*.pem
+*.key
+*.p8
+*.p12
+*.jks
+**/.npmrc
+*credentials*.json
+*service-account*.json
+*service_account*.json
+
 supabase/.temp/
-supabase/functions/.env
-mobile/.env
-.vercel
+.vercel/
 .cursor/
 .understand-anything/intermediate/
 .understand-anything/.trash-*/
