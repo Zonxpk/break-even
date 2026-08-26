@@ -84,7 +84,12 @@ export default function FoodRestaurantList() {
       ) : null}
 
       {promos.length > 0 ? (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.promos}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={s.promos}
+          contentContainerStyle={s.promosContent}
+        >
           {promos.map((p, i) => (
             <Pressable
               key={p.id}
@@ -170,8 +175,9 @@ const s = StyleSheet.create({
   chipOn: { backgroundColor: theme.doodle.yellowWash, borderColor: theme.doodle.yellow },
   chipText: { fontFamily: theme.fontBold, fontSize: 13, color: theme.doodle.ink },
   chipTextOn: { color: '#6a531a' },
-  promos: { marginBottom: 12, maxHeight: 80, flexGrow: 0 },
-  promoCard: { width: 200, marginRight: 10 },
+  promos: { marginBottom: 8, maxHeight: 96, flexGrow: 0 },
+  promosContent: { paddingVertical: 4 },
+  promoCard: { width: 200, minHeight: 72, marginRight: 10 },
   promoInner: { padding: 12 },
   promoTitle: { fontFamily: theme.fontBold, color: theme.doodle.ink, fontSize: 13 },
   promoSub: { fontFamily: theme.font, fontSize: 12, color: theme.doodle.inkSoft, marginTop: 2 },
