@@ -3,8 +3,7 @@ import { View, Text, Pressable, StyleSheet, Alert } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createMatch, fetchPersonas } from '../../api/personas';
-import { supabase } from '../../lib/supabase';
-import { XP, tierForXp } from '../../balance/balance';
+import { awardProgress } from '../../api/progress';
 import { deckForToday } from '../../dating/deck';
 import { fakeDistanceKm } from '../../dating/distanceJoke';
 import { resolveSwipe } from '../../dating/swipe';
@@ -38,12 +37,8 @@ export default function DatingDeck() {
 
     try {
       if (direction === 'left') {
-        const { data: prof } = await supabase.from('profiles').select('loyalty_xp').eq('id', userId).single();
-        if (prof) {
-          const xp = prof.loyalty_xp + XP.swipe_rejected;
-          await supabase.from('profiles').update({ loyalty_xp: xp, tier: tierForXp(xp) }).eq('id', userId);
-          refreshProfile();
-        }
+        await awardProgress('swipe_rejected').catch(() => null);
+        refreshProfile();
         Alert.alert('เขาปัดซ้ายคุณ 💔', '+2 แต้มความเจ็บปวด');
       } else {
         if (isSuper) {

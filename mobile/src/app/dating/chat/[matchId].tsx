@@ -5,8 +5,7 @@ import {
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { fetchAnchors } from '../../../api/content';
 import { getMatch, updateMatch } from '../../../api/personas';
-import { supabase } from '../../../lib/supabase';
-import { XP, tierForXp } from '../../../balance/balance';
+import { awardProgress } from '../../../api/progress';
 import { applyBeatChoice, nextBeat } from '../../../dating/chat';
 import { chatAffectionGain } from '../../../dating/affectionDrip';
 import { clearChatSession, loadChatSession, saveChatSession } from '../../../dating/chatSession';
@@ -55,13 +54,7 @@ export default function DatingChat() {
   const canSend = input.trim().length > 0 && !sending;
 
   async function grantBeatXp() {
-    const { data: userData } = await supabase.auth.getUser();
-    const userId = userData.user?.id;
-    if (!userId) return;
-    const { data: prof } = await supabase.from('profiles').select('loyalty_xp').eq('id', userId).single();
-    if (!prof) return;
-    const xp = prof.loyalty_xp + XP.story_beat;
-    await supabase.from('profiles').update({ loyalty_xp: xp, tier: tierForXp(xp) }).eq('id', userId);
+    await awardProgress('story_beat').catch(() => null);
     refreshProfile();
   }
 

@@ -23,7 +23,7 @@ export default function Fail() {
       const items = order.items_json as Array<{ match_id?: string; persona_id?: string; persona_name?: string }>;
       const matchId = items[0]?.match_id;
       const personaName = items[0]?.persona_name ?? 'เขา';
-      const r = await failOrder(order, kind ?? 'lost', { personaId: items[0]?.persona_id }).catch(() => ({ voucher: null, rateLimited: false }));
+      const r = await failOrder(order).catch(() => ({ voucher: null, rateLimited: false }));
       if (order.service === 'date' && matchId) {
         await appendApology(matchId, personaName, 'ขอโทษนะ วันนี้ไปไม่ถึงจริงๆ แต่ยังคุยกันได้นะ 💔');
       }
