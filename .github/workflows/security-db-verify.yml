@@ -1,0 +1,20 @@
+name: Security DB verify
+
+on:
+  push:
+    branches:
+      - security/public-release
+
+permissions:
+  contents: read
+
+jobs:
+  db-security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Start Supabase
+        run: npx --yes supabase@2.115.0 start
+      - name: Run database tests
+        run: npx --yes supabase@2.115.0 test db
