@@ -31,5 +31,5 @@ jobs:
         working-directory: mobile
         env:
           EXPO_PUBLIC_SUPABASE_URL: https://example.supabase.co
-          EXPO_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key
+          EXPO_PUBLIC_SUPABASE_ANON_KEY: eyJjaS1kdW1teS1oZWFkZXI.e30.Y2ktZHVtbXktc2lnbmF0dXJl
         run: npm run build
