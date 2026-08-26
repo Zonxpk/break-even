@@ -1,4 +1,4 @@
-name: Security DB verify
+name: Security verify
 
 on:
   push:
@@ -9,12 +9,24 @@ permissions:
   contents: read
 
 jobs:
-  db-security:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Start Supabase
         run: npx --yes supabase@2.115.0 start
-      - name: Run database tests
+      - name: Database tests
         run: npx --yes supabase@2.115.0 test db
+      - name: Install mobile dependencies
+        working-directory: mobile
+        run: npm ci --no-audit --no-fund
+      - name: Jest
+        working-directory: mobile
+        run: npm test -- --runInBand
+      - name: TypeScript
+        working-directory: mobile
+        run: npm run typecheck
+      - name: Expo web export
+        working-directory: mobile
+        run: npm run build
